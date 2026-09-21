@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111027">
+    <title>Caught! | Caso 01</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <style>.brand-mark{width:64px;height:64px;display:block;overflow:hidden;border-radius:17px;background:#000;transform:rotate(-4deg)}.brand-mark img{width:100%;height:100%;display:block;object-fit:cover}.couple-portraits{display:grid;grid-template-columns:1fr 1fr;height:100%;background:#201d3c}.couple-portraits img{width:100%;height:100%;object-fit:cover}.couple-portraits img:first-child{object-position:48% 28%}.couple-portraits img:last-child{object-position:50% 25%}</style>
+    <main class="app-shell" aria-live="polite">
+      <section id="start-screen" class="screen start-screen">
+        <div class="grain">
+        </div>
+        <p class="eyebrow">MISTERIO INTERACTIVO · CASO 01</p>
+        <div class="brand-lockup">
+          <span class="brand-mark">
+            <img src="./img/logo.jpeg" alt="Logo de Caught: teléfono y lupa blancos con corazón rosa sobre fondo negro">
+          </span>
+          <h1>CAUGHT<span>!</span>
+        </h1>
+      </div>
+      <p class="tagline">Nada es lo que parece. Todo deja una pista.</p>
+      <article class="case-preview">
+        <div class="preview-photo">
+<img src="./img/IMG_5711.JPG.jpeg" alt="Martín y Lucía frente a la ciudad">        </div>
+        <div class="case-preview-copy">
+          <p class="case-number">EXPEDIENTE 01</p>
+          <h2>El ticket de las 23:15</h2>
+          <p>Una cena cancelada, una mentira y una prueba que parece imposible de explicar.</p>
+          <div class="case-meta">
+            <span>◷ 03:00 min</span>
+            <span>⌕ Deducción</span>
+          </div>
+        </div>
+      </article>
+      <button id="start-button" class="button button-primary">Ver expediente <span>→</span>
+    </button>
+    <p class="fiction-note">Caso y personajes ficticios. Investigá hechos, no suposiciones.</p>
+  </section>
+  <section id="briefing-screen" class="screen briefing-screen hidden">
+    <button class="icon-button back-to-start" aria-label="Volver al inicio">←</button>
+    <div class="scene-image couple-portraits">
+  <img src="./img/IMG_5729.JPG.jpeg" alt="Lucía">
+    <img src="./img/IMG_5730.JPG.jpeg" alt="Martín">
+    </div>
+    <p class="eyebrow">01 · LA SITUACIÓN</p>
+    <h2>Una ausencia que no encaja.</h2>
+    <p class="briefing-copy">Hoy era el aniversario de Lucía y Martín. Él canceló a último momento: dijo que seguía en la oficina cerrando un balance. A la mañana siguiente, Lucía encuentra un ticket de Bar Central, emitido a las <strong>23:15</strong>, para una mesa de dos.</p>
+    <aside class="tip">
+      <span>✦</span>
+      <span>
+        <strong>Tu misión</strong> · Reconstruí la noche comparando horarios, mensajes y fotos. Una sospecha no es una prueba.</span>
+      </aside>
+      <button id="characters-button" class="button button-primary">Conocer protagonistas <span>→</span>
+    </button>
+  </section>
+  <section id="characters-screen" class="screen characters-screen hidden">
+    <button class="icon-button back-to-briefing" aria-label="Volver a la situación">←</button>
+    <p class="eyebrow">02 · PERSONAJES</p>
+    <h2>¿Quiénes forman parte del caso?</h2>
+    <div class="character-grid">
+      <article class="character-card featured">
+      <img src="./img/IMG_5730.JPG.jpeg" alt="Retrato de Martín">
+        <div>
+          <p class="character-role">PERSONA INVESTIGADA</p>
+          <h3>Martín</h3>
+          <p>Canceló la cena. Asegura que estuvo trabajando hasta tarde.</p>
+        </div>
+      </article>
+      <article class="character-card">
+      <img src="./img/IMG_5729.JPG.jpeg" alt="Retrato de Lucía">
+        <div>
+          <p class="character-role">JUGADORA</p>
+          <h3>Lucía</h3>
+          <p>Encontró el ticket y quiere entender qué ocurrió.</p>
+        </div>
+      </article>
+      <article class="character-card">
+    <img src="./img/IMG_5724.JPG.jpeg" alt="Retrato de Nico">
+        <div>
+          <p class="character-role">CONTACTO CLAVE</p>
+          <h3>Nico</h3>
+          <p>Hermano de Lucía. Tiene un chat con Martín.</p>
+        </div>
+      </article>
+      <article class="character-card">
+    <img src="./img/IMG_5731.JPG.jpeg" alt="Retrato de Valentina">
+        <div>
+          <p class="character-role">AMIGA EN COMÚN</p>
+          <h3>Valentina</h3>
+          <p>Es amiga de Lucía y Martín desde hace años.</p>
+        </div>
+      </article>
+    </div>
+    <button id="enter-case-button" class="button button-primary">Iniciar investigación <span>→</span>
+  </button>
+</section>
+<section id="game-screen" class="screen game-screen hidden">
+  <header class="game-header">
+    <div>
+      <p class="case-number">CASO 01 · EN CURSO</p>
+      <h2>El ticket de las 23:15</h2>
+    </div>
+    <div id="timer" class="timer" aria-label="Tiempo restante">03:00</div>
+  </header>
+  <div class="progress-wrap">
+    <div id="progress-bar" class="progress-bar">
+    </div>
+  </div>
+  <p id="objective" class="objective">Revisá las pistas antes de emitir una conclusión. El tiempo ya empezó.</p>
+  <nav class="tabs" aria-label="Secciones del caso">
+    <button class="tab active" data-panel="evidence-panel">Pistas <b id="clue-count">0/3</b>
+  </button>
+  <button class="tab" data-panel="dialogue-panel">Preguntar <b>!</b>
+</button>
+<button class="tab" data-panel="notes-panel">Libreta</button>
+</nav>
+<section id="evidence-panel" class="panel active">
+  <p class="section-label">ELEMENTOS INVESTIGABLES</p>
+  <div class="evidence-list">
+    <button class="evidence-card" data-clue="ticket">
+      <span class="evidence-icon receipt-icon">≡</span>
+      <span>
+        <strong>Ticket de Bar Central</strong>
+        <small>Consumo para dos · 23:15</small>
+      </span>
+      <i>→</i>
+    </button>
+    <button class="evidence-card" data-clue="chat">
+      <span class="evidence-icon chat-icon">•••</span>
+      <span>
+        <strong>Chat recuperado</strong>
+        <small>Martín y Nico · 22:41</small>
+      </span>
+      <i>›</i>
+    </button>
+    <button class="evidence-card image-evidence" data-clue="photo">
+  <img src="./img/evidencia.jpeg" alt="Fotografía encontrada en la galería">
+
+  <span>
+        <strong>Foto de la galería</strong>
+        <small>Parque Central · 18:12</small>
+      </span>
+      <i>›</i>
+    </button>
+  </div>
+  <button id="solve-button" class="button button-secondary" disabled>Presentar conclusión <span>→</span>
+</button>
+</section>
+<section id="dialogue-panel" class="panel">
+  <p class="section-label">CONVERSACIONES</p>
+  <div id="dialogue-log" class="dialogue-log">
+    <div class="message message-other">
+      <span>Martín</span>
+      <p>Perdón por cancelar. Seguía en la oficina cerrando el balance.</p>
+      <time>23:22</time>
+    </div>
+  </div>
+  <div id="dialogue-options" class="dialogue-options">
+    <button data-dialogue="office">¿Por qué el ticket dice 23:15?</button>
+    <button data-dialogue="nico">Preguntarle a Nico por el chat.</button>
+  </div>
+</section>
+<section id="notes-panel" class="panel">
+  <p class="section-label">TU LIBRETA</p>
+  <div id="notes-empty" class="notes-empty">Abrí una pista para registrar una observación.</div>
+  <ul id="notes-list" class="notes-list">
+  </ul>
+</section>
+</section>
+<section id="result-screen" class="screen result-screen hidden">
+  <div id="result-symbol" class="result-symbol">✓</div>
+  <p id="result-kicker" class="eyebrow">CASO RESUELTO</p>
+  <h2 id="result-title">Miraste todos los detalles.</h2>
+  <p id="result-copy">
+  </p>
+  <div id="result-summary" class="result-summary">
+  </div>
+  <button id="restart-button" class="button button-primary">Jugar otra vez <span>↻</span>
+</button>
+</section>
+</main>
+<div id="clue-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card">
+    <button id="close-modal" class="icon-button" aria-label="Cerrar">×</button>
+    <p id="modal-type" class="eyebrow">EVIDENCIA</p>
+    <h2 id="modal-title">
+    </h2>
+    <div id="modal-content">
+    </div>
+    <button id="save-clue-button" class="button button-primary">Guardar en libreta</button>
+  </div>
+</div>
+<div id="conclusion-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="conclusion-title">
+  <div class="modal-card conclusion-card">
+    <button id="close-conclusion" class="icon-button" aria-label="Cerrar">×</button>
+    <p class="eyebrow">CONCLUSIÓN FINAL</p>
+    <h2 id="conclusion-title">¿Qué ocurrió esa noche?</h2>
+    <p>Elegí la explicación que mejor coincida con todas las pistas.</p>
+    <div class="conclusion-options">
+      <button data-answer="accuse">Martín se reunió con otra persona y mintió sobre la oficina.</button>
+      <button data-answer="surprise">Martín y Nico se reunieron para organizar una sorpresa de aniversario.</button>
+      <button data-answer="work">Martín estuvo toda la noche trabajando.</button>
+    </div>
+  </div>
+</div>
+<script src="script.js">
+</script>
+</body>
+</html>
