@@ -2,7 +2,7 @@
 
 ## Descripción del proyecto
 
-CAUGHT! es un videojuego de investigación y misterio en el que el jugador debe analizar pistas, conversaciones, imágenes y diferentes situaciones para descubrir qué está ocurriendo.
+CAUGHT! es un videojuego de investigación y misterio con fines educativos, en el que el jugador debe analizar pistas, conversaciones, imágenes y diferentes situaciones para descubrir qué está ocurriendo.
 
 El objetivo del juego es fomentar la observación, la deducción y la toma de decisiones mediante casos ficticios.
 
