@@ -2,27 +2,51 @@
 
 ## Descripción del proyecto
 
+<<<<<<< HEAD
 CAUGHT! es un videojuego de investigación y misterio con fines educativos, en el que el jugador debe analizar pistas, conversaciones, imágenes y diferentes situaciones para descubrir qué está ocurriendo.
+=======
+**CAUGHT!** es un videojuego de investigación y misterio en el que el jugador debe analizar pistas y tomar decisiones para descubrir qué ocurrió en cada caso.
+>>>>>>> 02f598a (docs: update README description)
 
-El objetivo del juego es fomentar la observación, la deducción y la toma de decisiones mediante casos ficticios.
+Durante la investigación se presentan diferentes evidencias, como conversaciones, fotografías, mensajes y horarios. El jugador deberá relacionar esta información, encontrar posibles contradicciones entre los personajes y utilizar su razonamiento para llegar a una conclusión.
+
+El videojuego cuenta con distintos personajes y sospechosos relacionados con la historia. Su propuesta combina investigación, misterio, deducción y exploración mediante una interfaz sencilla y fácil de comprender.
+
+Todos los casos, personajes y evidencias de **CAUGHT!** son ficticios. El proyecto no utiliza información real de parejas, dispositivos, ubicaciones ni redes sociales.
+
+Además, su desarrollo permite aplicar conocimientos de programación web, diseño de interfaces, organización de archivos, control de versiones y trabajo colaborativo.
 
 ## Integrantes y roles
 
+<<<<<<< HEAD
 - Lautaro: [Analista de negocio y Programador]
 - Kimberly: [Project Manager y Diseñador]
 - Morena: [Marketing y Diseñador]
 - Malena: [Analista Funcional y Diseñador]
 - Ayrton: [Programador y Analista de negocio]
+=======
+- Kim: [Project-Manager]
+- Lautaro: [Analista-de-Negocio/Programador]
+- Malena: [Analista-Funcional]
+- Morena: [Analista-de-Marketing/Diseñador]
+- Ayrton:[Programador]
+>>>>>>> 02f598a (docs: update README description)
 
 ## Tecnologías utilizadas
 
-- HTML5
+- HTML5 Estructuras de las diferentes pantallas del video juegos
 - CSS3
 - JavaScript
 - Visual Studio Code
+- Live Server
 - Git
+- GitBash
 - GitHub
+<<<<<<< HEAD
 - Codex/Claude
+=======
+- Codex
+>>>>>>> 02f598a (docs: update README description)
 
 ## Instrucciones para ejecutar el proyecto
 
