@@ -8,11 +8,11 @@ El objetivo del juego es fomentar la observación, la deducción y la toma de de
 
 ## Integrantes y roles
 
-- Lautaro: [Analista de negocios y Programador]
+- Lautaro: [Analista de negocio y Programador]
 - Kimberly: [Project Manager y Diseñador]
 - Morena: [Marketing y Diseñador]
 - Malena: [Analista Funcional y Diseñador]
-- Ayrton: [Programador y Analista negocio]
+- Ayrton: [Programador y Analista de negocio]
 
 ## Tecnologías utilizadas
 
