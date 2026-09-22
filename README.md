@@ -8,9 +8,11 @@ El objetivo del juego es fomentar la observación, la deducción y la toma de de
 
 ## Integrantes y roles
 
-- Lautaro: [colocar rol]
-- Kim: [colocar rol]
-- Integrante 3: [colocar rol]
+- Lautaro: [Analista de negocios y Programador]
+- Kimberly: [Project Manager y Diseñador]
+- Morena: [Marketing y Diseñador]
+- Malena: [Analista Funcional y Diseñador]
+- Ayrton: [Programador y Analista negocio]
 
 ## Tecnologías utilizadas
 
@@ -20,6 +22,7 @@ El objetivo del juego es fomentar la observación, la deducción y la toma de de
 - Visual Studio Code
 - Git
 - GitHub
+- Codex/Claude
 
 ## Instrucciones para ejecutar el proyecto
 
