@@ -2,11 +2,7 @@
 
 ## Descripción del proyecto
 
-<<<<<<< HEAD
 CAUGHT! es un videojuego de investigación y misterio con fines educativos, en el que el jugador debe analizar pistas, conversaciones, imágenes y diferentes situaciones para descubrir qué está ocurriendo.
-=======
-**CAUGHT!** es un videojuego de investigación y misterio en el que el jugador debe analizar pistas y tomar decisiones para descubrir qué ocurrió en cada caso.
->>>>>>> 02f598a (docs: update README description)
 
 Durante la investigación se presentan diferentes evidencias, como conversaciones, fotografías, mensajes y horarios. El jugador deberá relacionar esta información, encontrar posibles contradicciones entre los personajes y utilizar su razonamiento para llegar a una conclusión.
 
@@ -18,23 +14,16 @@ Además, su desarrollo permite aplicar conocimientos de programación web, dise�
 
 ## Integrantes y roles
 
-<<<<<<< HEAD
+
 - Lautaro: [Analista de negocio y Programador]
 - Kimberly: [Project Manager y Diseñador]
 - Morena: [Marketing y Diseñador]
 - Malena: [Analista Funcional y Diseñador]
 - Ayrton: [Programador y Analista de negocio]
-=======
-- Kim: [Project-Manager]
-- Lautaro: [Analista-de-Negocio/Programador]
-- Malena: [Analista-Funcional]
-- Morena: [Analista-de-Marketing/Diseñador]
-- Ayrton:[Programador]
->>>>>>> 02f598a (docs: update README description)
 
 ## Tecnologías utilizadas
 
-- HTML5 Estructuras de las diferentes pantallas del video juegos
+- HTML5 
 - CSS3
 - JavaScript
 - Visual Studio Code
@@ -42,11 +31,8 @@ Además, su desarrollo permite aplicar conocimientos de programación web, dise�
 - Git
 - GitBash
 - GitHub
-<<<<<<< HEAD
 - Codex/Claude
-=======
-- Codex
->>>>>>> 02f598a (docs: update README description)
+
 
 ## Instrucciones para ejecutar el proyecto
 
