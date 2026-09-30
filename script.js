@@ -1,141 +1,74 @@
-const screens = document.querySelectorAll('.screen');
-const tabs = document.querySelectorAll('.tab');
-const panels = document.querySelectorAll('.panel');
-const openedClues = new Set();
-let activeClue = null;
-const CASE_TIME_SECONDS = 180;
-let remainingSeconds = CASE_TIME_SECONDS;
-let timerId = null;
-
-const clues = {
-  ticket: {
-    type: 'TICKET ENCONTRADO', title: 'Ticket de Bar Central',
-    note: 'El ticket marca las 23:15 y corresponde a una mesa para dos. Parece contradecir la excusa de la oficina.',
-    content: `<div class="clue-content receipt">BAR CENTRAL<br>VIERNES · 23:15<br>--------------------------<br>Mesa para dos&nbsp;&nbsp;&nbsp; $12.800<br>Dos bebidas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $5.400<br>--------------------------<br>PAGO APROBADO<br><br><small>Un ticket aislado no explica con quién estuvo Martín ni por qué.</small></div>`
-  },
-  chat: {
-    type: 'CHAT RECUPERADO', title: 'Conversación con Nico',
-    note: 'A las 22:41, Martín y Nico acuerdan encontrarse en Bar Central y no revelar el plan todavía.',
-    content: `<div class="clue-content chat-sample"><div class="bubble">Martín: ¿Podés llegar antes de las once?</div><div class="bubble right">Nico: Sí, llevo las opciones del viaje.</div><div class="bubble">Martín: Perfecto. No le digas nada todavía, quiero que sea sorpresa.</div><small>Viernes · 22:41 · Parte de la conversación fue eliminada</small></div>`
-  },
-  photo: {
-    type: 'EVIDENCIA 03 · FOTOGRAFÍA', title: 'Foto de la galería',
-    note: 'La imagen muestra a Lucía y Valentina esa tarde; confirma que Valentina no estaba con Martín en el bar.',
-content: `<div class="clue-content photo-clue"><img src="./img/evidencia.jpeg" alt="Lucía y Valentina paseando por el parque"><p>La metadata indica <strong>Parque Central · 18:12</strong>. Valentina aparece con Lucía durante la tarde y no hay ninguna señal que la vincule con el encuentro de las 23:15.</p><small>La imagen descarta una teoría, pero no resuelve el caso por sí sola.</small></div>`
-  }
+'use strict';
+// Nueva copia: conserva las pantallas y estilos base, amplía las aplicaciones.
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const state={saved:new Set(),visited:new Set(),asked:new Set(),app:null,clue:null,pending:null,confirmed:null,remaining:180,paused:false,finished:false,started:false,timer:null,returnFocus:null};
+const people={
+ martin:{name:'Martín',role:'Pareja de Lucía',photo:'IMG_5730.JPG.jpeg',intro:'Perdón por cancelar la cena. Seguía en la oficina con el balance.',q:'¿Por qué encontré un ticket de Bar Central?',reply:'Pasé por el bar. Tendría que haberte dicho la verdad sobre la oficina.'},
+ lucia:{name:'Lucía',role:'Pareja de Martín · protagonista',photo:'IMG_5729.JPG.jpeg',intro:'A las 23:00 Martín me dijo que seguía en la oficina.',q:'Revisar lo que ocurrió',reply:'Al día siguiente encontré el ticket en su campera. Necesito entender la contradicción.'},
+ nico:{name:'Nico',role:'Hermano de Lucía y amigo de Martín',photo:'IMG_5724.JPG.jpeg',intro:'¿Qué necesitás saber? No sé nada de lo que hizo Martín ese viernes.',q:'¿Hablaste con Martín ese viernes?',reply:'No hablé con él ese día. No tengo idea de lo que hizo.'},
+ valentina:{name:'Valentina Ríos',role:'Amiga en común · asesora de viajes',photo:'IMG_5731.JPG.jpeg',intro:'Lo nuestro ya está confirmado. Que Lucía no se entere todavía.',q:'¿Puedo ver tu conversación con Martín?',clue:'chat'},
+ ricardo:{name:'Ricardo Acosta',role:'Dueño de Bar Central',photo:'person_01.png',intro:'Martín viene al bar de vez en cuando.',q:'¿Reconocés este ticket de las 23:15?',reply:'Sí, corresponde a una mesa para dos. Martín pagó. Paula atendió esa mesa.'},
+ nicolas:{name:'Nicolás Peralta',role:'Compañero de oficina de Martín',photo:'person_03.png',intro:'Trabajamos juntos en el balance.',q:'¿A qué hora terminó el trabajo?',reply:'El balance se envió a las 20:40. Vi salir a Martín a las 21:05. No sé adónde fue.'},
+ camila:{name:'Camila Torres',role:'Amiga de Lucía y Martín',photo:'person_06.png',intro:'Vi a Martín con una mujer cerca de la oficina.',q:'¿Cuándo? ¿Viste la foto completa?',reply:'A las 18:30. Al mirar la foto completa reconocí a Sofía, su supervisora. No era una foto del bar.'},
+ sofia:{name:'Sofía Méndez',role:'Supervisora de Martín',photo:'person_07.png',intro:'Martín y yo hablamos de la entrega del balance.',q:'¿Le pediste quedarse hasta la noche?',reply:'No. Hablamos a las 18:30, antes de que yo saliera. La entrega era antes de las 21:00.'},
+ diego:{name:'Diego Salas',role:'Amigo de Martín desde la escuela',photo:'person_08.png',intro:'Conozco a Martín desde la escuela.',q:'¿Por qué conoce Bar Central?',reply:'Le recomendé ese bar porque se puede conversar tranquilo. No sabía con quién iba a reunirse.'},
+ paula:{name:'Paula Benítez',role:'Encargada de Bar Central',photo:'person_09.png',intro:'Conozco a Martín como cliente.',q:'¿A quién atendiste esa noche?',reply:'Atendí a Martín y a una mujer. Ella tenía folletos de viaje y hablaban de fechas. Los reconocería si los viera de nuevo.'},
+ julian:{name:'Julián Costa',role:'Compañero de Martín en fotografía',photo:'person_10.png',intro:'Compartimos un taller de fotografía.',q:'¿Sabés algo de la noche del viernes?',reply:'Pasé cerca de Bar Central a las 23:10. Vi a Martín por la ventana, pero no pude identificar a la otra persona.'}
 };
+const evidence={
+ ticket:{title:'Ticket de Bar Central',type:'DOCUMENTO',html:'<div class="receipt">BAR CENTRAL<br>VIERNES · 23:15<br>--------------------<br>Mesa para dos: $12.800<br>Dos bebidas: $5.400<br>--------------------<br>PAGO APROBADO</div><p class="modal-explanation">Encontrado en la campera de Martín. Comparalo con el mensaje en el que dijo seguir en la oficina.</p>'},
+ chat:{title:'Conversación con Valentina',type:'CHAT COMPLETO',html:'<div class="chat-preview"><div class="bubble">Martín · 22:41<br>¿Podés llegar antes de las once? Nos vemos en Bar Central.</div><div class="bubble right">Valentina · 22:41<br>Sí, traigo las opciones del viaje. Revisamos la reserva para vos y Lucía.</div><div class="bubble">Martín · 22:42<br>No le digas nada todavía. Quiero que sea sorpresa de aniversario.</div></div><p class="modal-explanation">Valentina comparte la conversación archivada. No había sido eliminada.</p>'},
+ reservation:{title:'Reserva confirmada',type:'CORREO',html:'<p><strong>De:</strong> Valentina Ríos<br><strong>Para:</strong> Martín<br><strong>Viernes · 17:18</strong></p><p class="modal-explanation">Martín: la reserva del viaje para vos y Lucía quedó confirmada. Nos vemos esta noche en Bar Central para cerrar los últimos detalles.</p><div class="receipt">RESERVA CONFIRMADA<br>Pasajeros: Martín y Lucía</div><p class="modal-explanation">¡Que disfruten la sorpresa de aniversario!<br>Valentina</p>'},
+ photo:{title:'Foto clave del parque',type:'FOTOGRAFÍA',html:'<img class="modal-photo key-evidence-photo" src="img/evidencia.jpeg" alt="Fotografía del parque encontrada en la galería"><p class="modal-explanation"><strong>Parque Central · viernes · 18:12</strong></p><p class="modal-explanation">La hora sitúa esta imagen en la tarde. No corresponde al encuentro del bar a las 23:15 ni demuestra dónde estaban sus protagonistas por la noche. Compará su contexto con el chat y la reserva.</p>'}
 
-function showScreen(id) {
-  screens.forEach(screen => screen.classList.toggle('hidden', screen.id !== id));
-}
-
-function selectTab(panelId) {
-  tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.panel === panelId));
-  panels.forEach(panel => panel.classList.toggle('active', panel.id === panelId));
-}
-
-function updateClueStatus() {
-  const count = openedClues.size;
-  document.getElementById('clue-count').textContent = `${count}/3`;
-  document.getElementById('solve-button').disabled = count < 3;
-  document.getElementById('notes-empty').classList.toggle('hidden', count > 0);
-}
-
-function openClue(id) {
-  activeClue = id;
-  const clue = clues[id];
-  document.getElementById('modal-type').textContent = clue.type;
-  document.getElementById('modal-title').textContent = clue.title;
-  document.getElementById('modal-content').innerHTML = clue.content;
-  document.getElementById('save-clue-button').textContent = openedClues.has(id) ? 'Evidencia guardada ✓' : 'Guardar en notas';
-  document.getElementById('clue-modal').classList.remove('hidden');
-}
-
-function saveClue() {
-  if (!openedClues.has(activeClue)) {
-    openedClues.add(activeClue);
-    const clue = clues[activeClue];
-    const item = document.createElement('li');
-    item.innerHTML = `<strong>${clue.title}</strong>${clue.note}`;
-    document.getElementById('notes-list').append(item);
-    document.querySelector(`[data-clue="${activeClue}"]`).classList.add('viewed');
-    updateClueStatus();
-  }
-  document.getElementById('clue-modal').classList.add('hidden');
-}
-
-function startTimer() {
-  clearInterval(timerId);
-  remainingSeconds = CASE_TIME_SECONDS;
-  renderTimer();
-  timerId = setInterval(() => {
-    remainingSeconds--;
-    renderTimer();
-    if (remainingSeconds <= 0) {
-      clearInterval(timerId);
-      endCase(false, 'Se acabó el tiempo', 'No alcanzaste a revisar toda la información. En Caught! siempre podés volver a analizar las pistas y probar otra teoría.');
-    }
-  }, 1000);
-}
-
-function renderTimer() {
-  const minutes = Math.floor(remainingSeconds / 60);
-  const seconds = String(remainingSeconds % 60).padStart(2, '0');
-  const timer = document.getElementById('timer');
-  timer.textContent = `${minutes}:${seconds}`;
-  timer.classList.toggle('urgent', remainingSeconds <= 60);
-  document.getElementById('progress-bar').style.width = `${Math.max(0, remainingSeconds / CASE_TIME_SECONDS * 100)}%`;
-}
-
-function addDialogue(kind) {
-  const options = document.getElementById('dialogue-options');
-  const messages = {
-    office: ['¿Por qué el ticket de Bar Central dice 23:15?', 'No seguía en la oficina. Te mentí porque no quería arruinar una sorpresa.'],
-    nico: ['Nico, ¿por qué aparece un chat eliminado con Martín?', 'Nos vimos para elegir el viaje de aniversario. Él quería contártelo cuando estuviera listo.']
-  };
-  const [question, answer] = messages[kind];
-  const log = document.getElementById('dialogue-log');
-  const speaker = kind === 'nico' ? 'Nico' : 'Martín';
-  log.insertAdjacentHTML('beforeend', `<div class="message message-self"><span>Vos</span><p>${question}</p><time>23:24</time></div><div class="message message-other"><span>${speaker}</span><p>${answer}</p><time>23:24</time></div>`);
-  document.querySelector(`[data-dialogue="${kind}"]`).disabled = true;
-  document.querySelector(`[data-dialogue="${kind}"]`).style.opacity = '.45';
-  options.querySelectorAll('button:disabled').length === 2 && (document.getElementById('objective').textContent = 'Contrastá las respuestas con el ticket, el chat y la fotografía antes de decidir.');
-}
-
-function endCase(success, title, copy) {
-  clearInterval(timerId);
-  document.getElementById('result-symbol').textContent = success ? '✓' : '×';
-  document.getElementById('result-symbol').classList.toggle('fail', !success);
-  document.getElementById('result-kicker').textContent = success ? 'CASO RESUELTO' : 'TEORÍA INCOMPLETA';
-  document.getElementById('result-title').textContent = title;
-  document.getElementById('result-copy').textContent = copy;
-  document.getElementById('result-summary').innerHTML = success ? '<strong>La clave del caso:</strong><br>El ticket demuestra que Martín estuvo en el bar, pero el chat y la foto explican con quién: se reunió con Nico para planear un viaje sorpresa de aniversario.' : '<strong>Consejo de detective:</strong><br>El ticket parece sospechoso, pero una sola pista no alcanza. La conclusión correcta debe explicar también el chat y la fotografía.';
-  showScreen('result-screen');
-}
-
-function resetGame() {
-  openedClues.clear(); activeClue = null; clearInterval(timerId);
-  document.querySelectorAll('.evidence-card').forEach(card => card.classList.remove('viewed'));
-  document.getElementById('notes-list').innerHTML = '';
-  document.getElementById('dialogue-log').innerHTML = '<div class="message message-other"><span>Martín</span><p>Perdón por cancelar. Seguía en la oficina cerrando el balance.</p><time>23:22</time></div>';
-  document.querySelectorAll('[data-dialogue]').forEach(button => { button.disabled = false; button.style.opacity = '1'; });
-  document.getElementById('objective').textContent = 'Martín dejó su celular desbloqueado. Tenés 30 segundos para revisar las pistas.';
-  updateClueStatus();
-  showScreen('start-screen');
-}
-
-document.getElementById('start-button').addEventListener('click', () => showScreen('briefing-screen'));
-document.querySelector('.back-to-start').addEventListener('click', () => showScreen('start-screen'));
-document.getElementById('characters-button').addEventListener('click', () => showScreen('characters-screen'));
-document.querySelector('.back-to-briefing').addEventListener('click', () => showScreen('briefing-screen'));
-document.getElementById('enter-case-button').addEventListener('click', () => { showScreen('game-screen'); startTimer(); });
-tabs.forEach(tab => tab.addEventListener('click', () => selectTab(tab.dataset.panel)));
-document.querySelectorAll('[data-clue]').forEach(card => card.addEventListener('click', () => openClue(card.dataset.clue)));
-document.getElementById('close-modal').addEventListener('click', () => document.getElementById('clue-modal').classList.add('hidden'));
-document.getElementById('save-clue-button').addEventListener('click', saveClue);
-document.querySelectorAll('[data-dialogue]').forEach(button => button.addEventListener('click', () => addDialogue(button.dataset.dialogue)));
-document.getElementById('solve-button').addEventListener('click', () => document.getElementById('conclusion-modal').classList.remove('hidden'));
-document.getElementById('close-conclusion').addEventListener('click', () => document.getElementById('conclusion-modal').classList.add('hidden'));
-document.querySelectorAll('[data-answer]').forEach(button => button.addEventListener('click', () => { document.getElementById('conclusion-modal').classList.add('hidden'); const correct = button.dataset.answer === 'surprise'; endCase(correct, correct ? 'El detalle hacía la diferencia.' : 'Esa teoría no explica todas las pistas.', correct ? 'Martín no estaba ocultando una infidelidad: junto a Nico organizaba un viaje sorpresa de aniversario.' : 'Revisá cómo se relacionan el ticket, el chat y la fotografía antes de acusar a Martín.'); }));
-document.getElementById('restart-button').addEventListener('click', resetGame);
-updateClueStatus();
+};
+const gallery=['IMG_5711.JPG.jpeg','IMG_5724.JPG.jpeg','IMG_5725.JPG.jpeg','IMG_5726.JPG.jpeg','IMG_5728.JPG.jpeg','IMG_5729.JPG.jpeg','IMG_5730.JPG.jpeg','IMG_5731.JPG.jpeg','evidencia.jpeg'];
+const icons={messages:'<path d="M4 5h24v17H13l-7 6v-6H4z"/><path d="M9 11h14M9 16h10"/>',gallery:'<rect x="4" y="4" width="24" height="24" rx="4"/><circle cx="11" cy="11" r="2"/><path d="m5 25 8-9 5 5 4-6 6 9"/>',camera:'<path d="M3 9h6l3-4h8l3 4h6v18H3z"/><circle cx="16" cy="18" r="6"/>',instagram:'<rect x="4" y="4" width="24" height="24" rx="7"/><circle cx="16" cy="16" r="6"/><circle cx="24" cy="8" r="1"/>',mail:'<rect x="3" y="6" width="26" height="20" rx="3"/><path d="m4 8 12 10L28 8"/>',phone:'<path d="M6 4h6l2 7-4 3c2 4 4 6 8 8l3-4 7 2v6c-1 6-11 2-17-4S0 6 6 4z"/>',calculator:'<rect x="6" y="3" width="20" height="26" rx="3"/><path d="M10 8h12M10 15h3M19 15h3M10 21h3M19 21h3"/>',maps:'<path d="m3 7 8-3 10 4 8-3v22l-8 3-10-4-8 3zM11 4v22M21 8v22"/>',notes:'<rect x="6" y="3" width="20" height="26" rx="2"/><path d="M11 10h10M11 16h10M11 22h7"/>'};
+const apps=[['messages','Chats','#24a566'],['gallery','Galería','#ef5769'],['camera','Cámara','#546575'],['instagram','Instagram','#d42b9c'],['mail','Mail','#168ed1'],['phone','Teléfono','#25aa70'],['calculator','Calculadora','#687286'],['maps','Maps','#65a850'],['notes','Notas','#d9a622']];
+function showScreen(id){if(id==='resolution-screen'&&state.saved.size!==4)return;$$('.screen').forEach(e=>e.classList.toggle('active',e.id===id));const isPhone=['game-screen','resolution-screen'].includes(id);$('.phone-frame').classList.toggle('game-mode',isPhone);document.body.classList.toggle('investigating',isPhone);document.body.classList.toggle('character-mode',id==='characters-screen');}
+function update(){ $('#clue-count').textContent=`${state.saved.size}/4`;$('#case-file-button').setAttribute('aria-label',`${state.saved.size} de 4 pistas guardadas`);$('#solve-button').disabled=state.saved.size!==4;$('#solve-button').innerHTML=state.saved.size===4?'Sacar conclusión <span>→</span>':'Sacar conclusión <span>🔒</span>';$('#objective').textContent=state.saved.size===4?'Ya podés comparar las pruebas y sacar tu conclusión.':'Explorá las aplicaciones y guardá las pistas que encuentres.';}
+function toast(s){$('#toast').textContent=s;$('#toast').classList.add('show');clearTimeout(state.toastTimer);state.toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),2100);}
+function reset(){clearInterval(state.timer);state.saved.clear();state.visited.clear();state.asked.clear();Object.assign(state,{app:null,clue:null,pending:null,confirmed:null,remaining:180,paused:false,finished:false,started:false});$$('.modal-overlay').forEach(e=>e.classList.remove('open'));$('#confirm-bar').hidden=true;$$('[data-answer]').forEach(e=>e.classList.remove('selected'));$('#pause-label').textContent='Pausar';$('#pause-timer').setAttribute('aria-label','Pausar tiempo');closeApp();update();renderTimer();showScreen('start-screen');}
+function beginCase(){if(state.started)return;state.started=true;showScreen('game-screen');state.timer=setInterval(()=>{if(state.paused||state.finished)return;state.remaining=Math.max(0,state.remaining-1);renderTimer();if(!state.remaining){state.pending=null;finish('timeout');}},1000);}
+function renderTimer(){$('#timer').textContent=`${Math.floor(state.remaining/60)}:${String(state.remaining%60).padStart(2,'0')}`;$('#timer').classList.toggle('urgent',state.remaining<=60);}
+function head(title,sub=''){return `<header class="app-view-header"><button class="btn-icon" data-action="home" aria-label="Volver al inicio del teléfono">←</button><div><h3>${title}</h3><p>${sub}</p></div></header>`;}
+function shell(title,sub,body){return head(title,sub)+`<div class="app-view-body">${body}</div>`;}
+function personRow(id){let p=people[id];return `<button class="person-button" data-person="${id}"><img src="img/${p.photo}" alt=""><span><strong>${p.name}</strong><small>${p.role}</small></span><i>›</i></button>`;}
+function clueButton(id,label){return `<button class="btn btn-primary" data-clue="${id}">${label||evidence[id].title} <span>→</span></button>`;}
+function closeApp(){state.app=null;$('.phone-frame').classList.remove('app-open');$('#app-home').classList.remove('hidden');$('#app-view').classList.remove('active');$('#app-view').innerHTML='';}
+function openApp(id){if(!apps.some(a=>a[0]===id))return;state.app=id;$('.phone-frame').classList.add('app-open');$('#app-home').classList.add('hidden');$('#app-view').classList.add('active');const renderers={
+ messages:()=>shell('Chats','Conversaciones', ['nico','martin','valentina','nicolas','camila','sofia','diego','ricardo','paula','julian','lucia'].map(personRow).join('')),
+ gallery:()=>shell('Galería','Recientes · 9 imágenes',`<div class="photo-grid">${gallery.map((f,i)=>`<button data-photo="${i}" class="${i===8?'key-gallery-photo':''}" aria-label="${i===8?'Abrir foto clave del parque':'Abrir foto '+(i+1)}"><img src="img/${f}" alt="Foto ${i+1}">${i===8?'<span>Foto del parque · 18:12</span>':''}</button>`).join('')}</div><p class="muted">Abrí una imagen para verla completa.</p>`),
+ notes:()=>shell('Notas','Registro de Lucía',`<div class="notes-paper"><h4>La cena cancelada</h4><p>“A las 23:00 Martín dijo que seguía en la oficina. Encontré un ticket en su campera al día siguiente.”</p></div><p></p>${clueButton('ticket','Ver ticket encontrado')}<p class="muted">Pistas guardadas: ${state.saved.size}/4. Una pista repetida no suma otra vez.</p>`),
+ phone:()=>shell('Teléfono','Contactos del caso',Object.keys(people).map(personRow).join('')),
+ mail:()=>shell('Mail','Bandeja de entrada',`<button class="person-button" data-clue="reservation"><span class="avatar avatar-violet">V</span><span><strong>Valentina Ríos</strong><small>Confirmación · viernes 17:18</small></span><i>›</i></button><button class="person-button" data-mail="balance"><span class="avatar avatar-violet">N</span><span><strong>Nicolás Peralta</strong><small>Balance enviado · 20:40</small></span><i>›</i></button><button class="person-button" data-mail="sofia"><span class="avatar avatar-violet">S</span><span><strong>Sofía Méndez</strong><small>Horario de entrega</small></span><i>›</i></button>`),
+ camera:()=>shell('Cámara','Cámara del juego',`<div class="camera-preview"><div><span style="font-size:52px">◎</span><p>Un ticket sobre la mesa.</p><p>Registrá el documento para examinarlo.</p></div></div><p></p><button class="btn btn-primary" data-action="capture">Fotografiar ticket <span>◎</span></button><p class="muted">Escena ficticia. No se utiliza la cámara de tu dispositivo.</p>`),
+ instagram:()=>shell('Instagram','Publicaciones de contactos',`<article class="instagram-post"><h4>valentina.viajes</h4><img src="img/IMG_5731.JPG.jpeg" alt="Valentina"><p>Preparando escapadas especiales.</p><p class="photo-meta">Viernes · 18:01</p><button class="question" data-person="valentina">Consultar a Valentina</button></article><article class="instagram-post"><h4>martin.fotos</h4><img src="img/IMG_5711.JPG.jpeg" alt="Martín y Lucía"><p>Momentos compartidos.</p><button class="question" data-photo="0">Ver imagen completa</button></article><button class="person-button" data-person="camila"><span><strong>Mensaje de Camila</strong><small>Una foto cerca de la oficina.</small></span><i>›</i></button>`),
+ calculator:()=>shell('Calculadora','',`<output id="calc-display" class="calculator-display" aria-live="polite">0</output><div class="calc-grid">${['C','⌫','%','÷','7','8','9','×','4','5','6','−','1','2','3','+','0','.','='].map(s=>`<button class="${'÷×−+=C'.includes(s)?'op':''}" data-calc="${s}">${s}</button>`).join('')}</div>`),
+ maps:()=>shell('Maps','Lugares del caso',`<div class="map-surface" role="group" aria-label="Mapa ficticio"><button data-map="bar">Bar Central</button><button data-map="office">Oficina</button></div><div class="map-details" id="map-details"><strong>Elegí un lugar</strong><p>Explorá las ubicaciones mencionadas en las conversaciones.</p></div><p class="muted">Mapa ficticio. Una ubicación guardada no demuestra presencia.</p>`)
+};$('#app-view').innerHTML=renderers[id]();if(id==='calculator')calcExpression='';}
+function openPerson(id){const p=people[id];if(!p)return;const asked=state.asked.has(id);$('#app-view').innerHTML=shell(p.name,p.role,`<div class="contact-heading"><img class="contact-portrait" src="img/${p.photo}" alt="${p.name}"></div><div class="bubble">${p.intro}</div>${asked&&p.reply?`<div class="bubble right">${p.q}</div><div class="bubble">${p.reply}</div>`:''}${p.clue?clueButton(p.clue,p.q):`<button class="question" data-question="${id}" ${asked?'disabled':''}>${asked?'✓ Conversación revisada':p.q}</button>`}<button class="question" data-action="contacts">Volver a ${state.app==='phone'?'contactos':'chats'}</button>`);}
+function photoView(i){if(!gallery[i])return;$('#app-view').innerHTML=shell('Fotografía',i===8?'Parque Central · viernes 18:12':'Archivo personal',`<div class="photo-detail"><img class="full-photo" src="img/${gallery[i]}" alt="${i===8?'Foto del parque':'Fotografía del archivo personal'}"><p class="neutral">${i===8?'Esta imagen corresponde a la tarde. No demuestra dónde estuvieron sus protagonistas a las 23:15.':'Una foto aislada necesita contexto. Contrastá las imágenes con los mensajes y horarios.'}</p>${i===8?clueButton('photo',state.saved.has('photo')?'Revisar pista guardada':'Examinar foto clave'):''}<button class="question" data-action="gallery">Volver a la galería</button></div>`);}
+function openClue(id){if(!evidence[id]||state.finished)return;state.visited.add(id);state.clue=id;state.returnFocus=document.activeElement;$('#modal-title').textContent=evidence[id].title;$('#modal-type').textContent=evidence[id].type;$('#modal-content').innerHTML=evidence[id].html;$('#save-clue-button').disabled=state.saved.has(id);$('#save-clue-button').textContent=state.saved.has(id)?'Pista ya guardada':'Guardar pista +';$('#clue-modal').classList.add('open');$('#clue-modal [data-close]').focus();}
+function closeModal(){ $('#clue-modal').classList.remove('open');state.clue=null;if(state.returnFocus?.isConnected)state.returnFocus.focus();}
+function save(){if(!state.clue||!state.visited.has(state.clue)||state.finished)return;let id=state.clue;let before=state.saved.size;state.saved.add(id);update();closeModal();toast(state.saved.size===before?'Esta pista ya estaba guardada.':`Pista guardada · ${state.saved.size}/4`);}
+function finish(answer){state.finished=true;clearInterval(state.timer);closeModal();$('#confirm-bar').hidden=true;const result={surprise:['CASO RESUELTO','El detalle hacía la diferencia.','Martín se reunió con Valentina para organizar en secreto un viaje sorpresa de aniversario para Lucía.','El chat y la reserva explican el motivo. La foto de las 18:12 no corresponde al encuentro nocturno. El testimonio de Paula corrobora que la acompañante era una mujer con folletos de viaje. La sorpresa no elimina el daño de la mentira ni de la cena cancelada.'],accuse:['TEORÍA INCOMPLETA','Descubriste la mentira, pero no el motivo.','Martín sí mintió y sí estuvo con alguien esa noche, pero no fue una infidelidad.','La persona que lo acompañaba era Valentina Ríos, asesora de viajes y amiga en común. Estaban organizando juntos el viaje sorpresa de aniversario para Lucía. El chat y la reserva lo confirman.'],work:['CONCLUSIÓN INCORRECTA','Los horarios no coinciden.','Martín no estuvo toda la noche trabajando.','El balance se envió a las 20:40 y Nicolás lo vio salir a las 21:05. El ticket de las 23:15 y el testimonio de Paula lo vinculan con el bar.'],timeout:['TIEMPO AGOTADO','La investigación quedó pendiente.','Se terminó el tiempo antes de confirmar una conclusión.','Volvé a investigar y contrastá la información de las aplicaciones. También podés pausar el tiempo mientras revisás las pruebas.']}[answer];if(!result)return;$('#result-kicker').textContent=result[0];$('#result-title').textContent=result[1];$('#result-copy').textContent=result[2];$('#result-summary').textContent=result[3];$('#result-symbol').textContent=answer==='surprise'?'✓':'×';$('#result-symbol').classList.toggle('fail',answer!=='surprise');$('#result-answer').textContent=answer==='timeout'?'No confirmaste ninguna respuesta.':`Tu conclusión: ${state.confirmed}`;let e=180-state.remaining;$('#result-stats').innerHTML=`<div class="stat"><b>${state.saved.size}/4</b><span>Pistas guardadas</span></div><div class="stat"><b>${Math.floor(e/60)}:${String(e%60).padStart(2,'0')}</b><span>Tiempo empleado</span></div>`;showScreen('result-screen');$('.phone-frame').classList.remove('app-open');}
+let calcExpression='';
+function calculate(input){const tokens=input.match(/\d*\.?\d+|[+\-*/]/g);if(!tokens||tokens.join('')!==input)throw Error();let i=0;const number=()=>{let sign=1;if(tokens[i]==='-'){sign=-1;i++;}const n=Number(tokens[i++]);if(!Number.isFinite(n))throw Error();return n*sign;};const term=()=>{let n=number();while(['*','/'].includes(tokens[i])){let op=tokens[i++],v=number();if(op==='/'&&v===0)throw Error();n=op==='*'?n*v:n/v;}return n;};let n=term();while(['+','-'].includes(tokens[i])){let op=tokens[i++],v=term();n=op==='+'?n+v:n-v;}if(i!==tokens.length||!Number.isFinite(n))throw Error();return String(Number(n.toPrecision(12)));}
+function calc(key){try{if(key==='C')calcExpression='';else if(key==='⌫')calcExpression=calcExpression.slice(0,-1);else if(key==='=')calcExpression=calculate(calcExpression);else if(key==='%')calcExpression=String(Number(calculate(calcExpression))/100);else if(calcExpression.length<32)calcExpression+=({'×':'*','÷':'/','−':'-'}[key]||key);$('#calc-display').textContent=calcExpression||'0';}catch{$('#calc-display').textContent='Error';calcExpression='';}}
+document.addEventListener('DOMContentLoaded',()=>{
+ $('#app-home').innerHTML=apps.map(([id,label,color])=>`<button class="app-icon ${id}" data-app="${id}" style="--app-color:${color}"><span><svg viewBox="0 0 32 32" aria-hidden="true">${icons[id]}</svg></span><b>${label}</b></button>`).join('');
+ $('#character-cards').innerHTML=Object.values(people).map(p=>`<article class="character-card"><img src="img/${p.photo}" alt="${p.name}"><div><h3>${p.name}</h3><small>${p.role}</small></div></article>`).join('');reset();$('#loading-screen').classList.add('hide');
+ $('#start-button').onclick=()=>showScreen('briefing-screen');$('#characters-button').onclick=()=>showScreen('characters-screen');$('#enter-case-button').onclick=beginCase;$$('[data-screen]').forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
+ $$('[data-app]').forEach(b=>b.onclick=()=>openApp(b.dataset.app));$('#case-file-button').onclick=()=>toast(`${state.saved.size}/4 pistas guardadas. ${state.saved.size===4?'Ya podés sacar tu conclusión.':'Seguí investigando.'}`);
+ $('#pause-timer').onclick=()=>{state.paused=!state.paused;$('#pause-label').textContent=state.paused?'Continuar':'Pausar';$('#pause-timer').setAttribute('aria-label',state.paused?'Reanudar tiempo':'Pausar tiempo');toast(state.paused?'Tiempo pausado. Podés seguir explorando.':'Tiempo reanudado.');};
+ $('#solve-button').onclick=()=>{if(state.saved.size!==4||state.finished)return;showScreen('resolution-screen');};
+ $$('[data-answer]').forEach(b=>b.onclick=()=>{if(state.saved.size!==4||state.finished)return;state.pending=b.dataset.answer;$$('[data-answer]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b));});$('#confirm-bar').hidden=false;});
+ $('#cancel-answer-button').onclick=()=>{state.pending=null;$('#confirm-bar').hidden=true;$$('[data-answer]').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false');});};
+ $('#confirm-answer-button').onclick=()=>{if(!state.pending||state.saved.size!==4||state.finished)return;state.confirmed=$(`[data-answer="${state.pending}"]`).textContent;finish(state.pending);};
+ $('#restart-button').onclick=reset;$('#save-clue-button').onclick=save;$$('[data-close]').forEach(b=>b.onclick=closeModal);$('#clue-modal').onclick=e=>{if(e.target===$('#clue-modal'))closeModal();};
+ document.addEventListener('keydown',e=>{if(!$('#clue-modal').classList.contains('open'))return;if(e.key==='Escape')closeModal();if(e.key==='Tab'){const els=[...$('#clue-modal').querySelectorAll('button:not(:disabled)')];let first=els[0],last=els.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+ $('#app-view').onclick=e=>{let b=e.target.closest('button');if(!b)return;let d=b.dataset;if(d.clue)openClue(d.clue);if(d.person)openPerson(d.person);if(d.question){state.asked.add(d.question);openPerson(d.question);}if(d.photo!==undefined)photoView(Number(d.photo));if(d.calc)calc(d.calc);if(d.map){$('#map-details').innerHTML=d.map==='bar'?'<strong>Bar Central</strong><p>El lugar del ticket. Diego se lo recomendó a Martín para conversar.</p>':'<strong>Oficina</strong><p>El balance se envió a las 20:40. Contrastá la salida con Nicolás.</p>';}
+ if(d.mail){$('#app-view').innerHTML=shell(d.mail==='balance'?'Balance enviado':'Horario de entrega','Correo laboral',`<p><strong>${d.mail==='balance'?'Nicolás Peralta · viernes 20:40':'Sofía Méndez · viernes 18:25'}</strong></p><p>${d.mail==='balance'?'Martín, el balance quedó enviado. Gracias por la ayuda.':'La entrega del balance es antes de las 21:00. No hace falta quedarse después de terminar.'}</p><button class="question" data-action="mail">Volver a Mail</button>`);}
+ if(d.action==='home')closeApp();if(d.action==='contacts')openApp(state.app==='phone'?'phone':'messages');if(d.action==='gallery')openApp('gallery');if(d.action==='mail')openApp('mail');if(d.action==='capture')openClue('ticket');};
+});
