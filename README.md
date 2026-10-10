@@ -1,4 +1,4 @@
-#CAUGHT!
+# CAUGHT!
 
 ## Descripción del proyecto
 
@@ -33,15 +33,20 @@ El caso implementado es **El ticket de las 23:15**. El jugador dispone de cinco 
 
 ## Organización del proyecto
 
-La interfaz, los estilos, la lógica de las aplicaciones, los datos y las imágenes se organizan según su función. En la versión entregada, las aplicaciones se reúnen en **apps.js** y el contenido del caso se reúne en **data.js**.
+La interfaz, los estilos, la lógica, los datos y los recursos se organizan en carpetas según su función. Esta estructura corresponde a la entrega actual:
 
 ```text
-CAUGHT-instagram-whatsapp/
-├── index.html
-├── style.css
-├── script.js
-├── apps.js
-├── data.js
+CAUGHT!/
+├── index/
+│   └── index.html
+├── css/
+│   └── style.css
+├── js/
+│   ├── script.js
+│   └── apps/
+│       └── apps.js
+├── data/
+│   └── casos.js
 ├── fonts/
 ├── img/
 │   ├── personajes/
@@ -53,19 +58,39 @@ CAUGHT-instagram-whatsapp/
 
 ### Función de los archivos y carpetas
 
-- **index.html:** estructura de las pantallas y elementos de la interfaz.
-- **style.css:** estilos, adaptación de tamaños y animaciones del videojuego.
-- **script.js:** lógica principal, navegación, cronómetro, pistas, preguntas, veredictos y reinicio.
-- **apps.js:** lógica de WhatsApp, Instagram, llamadas y contactos, notas, calendario, mapa, correo y galería. También contiene calculadora y ajustes.
-- **data.js:** contenido del caso, personajes, pistas, chats y mensajes, perfiles y publicaciones, contactos, llamadas, notas, calendario, ubicaciones, correos, galería, preguntas, opciones y conclusiones.
-- **img/personajes/:** imágenes de los personajes.
-- **img/evidencias/:** imágenes utilizadas como evidencias.
-- **img/interfaz/:** iconos y recursos de la interfaz.
-- **img/fondos/:** fondos del juego.
-- **fonts/:** fuentes locales.
-- **README.md:** documentación general del proyecto.
+- `index/index.html`: estructura de las pantallas y elementos de la interfaz.
+- `css/style.css`: estilos, adaptación a distintos tamaños de pantalla y animaciones.
+- `js/script.js`: lógica principal, navegación, cronómetro, pistas, preguntas, veredictos y reinicio.
+- `js/apps/apps.js`: lógica de WhatsApp, Instagram, llamadas y contactos, notas, calendario, mapa, correo, galería, calculadora y ajustes.
+- `data/casos.js`: contenido del caso, personajes, pistas, conversaciones, perfiles, publicaciones, contactos, llamadas, notas, calendario, ubicaciones, correos, galería, preguntas, opciones y conclusiones.
+- `img/personajes/`: imágenes de los personajes.
+- `img/evidencias/`: imágenes utilizadas como evidencias.
+- `img/interfaz/`: iconos y recursos de la interfaz.
+- `img/fondos/`: fondos del juego.
+- `fonts/`: fuentes locales utilizadas por los estilos.
+- `README.md`: documentación general del proyecto.
 
-La estructura propuesta con index/index.html, css/styles.css, js/apps/apps.js y data/casos.js es una organización alternativa. Esos nombres y rutas no corresponden al paquete actual; moverlos requiere actualizar las referencias del proyecto.
+## Instrucciones para iniciar el proyecto
+
+1. Descargar y descomprimir el ZIP, o clonar el repositorio.
+2. Abrir en Visual Studio Code la carpeta raíz `CAUGHT!`, que contiene `index`, `css`, `js`, `data`, `img`, `fonts` y este README.
+3. Instalar la extensión **Live Server**, si todavía no está instalada.
+4. En el explorador de Visual Studio Code, abrir la carpeta `index`.
+5. Hacer clic derecho sobre `index.html` y elegir **Open with Live Server**.
+6. El navegador abrirá el juego en una dirección local que termina en `/index/index.html`. Pulsar **Comenzar historia** para iniciar el recorrido.
+
+La carpeta completa debe conservarse al copiar o entregar el proyecto. No basta con copiar únicamente el HTML.
+
+Desde `index/index.html`, las rutas de carga de los archivos principales son:
+
+```html
+<link rel="stylesheet" href="../css/style.css">
+<script src="../data/casos.js" defer></script>
+<script src="../js/script.js" defer></script>
+<script src="../js/apps/apps.js" defer></script>
+```
+
+`../` indica que la ruta sube desde la carpeta `index` a la carpeta raíz del proyecto. Los scripts se cargan en este orden: datos del caso, lógica principal y aplicaciones. Las imágenes se referencian desde el HTML con `../img/`; las rutas del CSS se resuelven desde la carpeta `css`, por ejemplo, `../fonts/` para las fuentes locales.
 
 ## Criterios de redacción
 
@@ -161,7 +186,7 @@ En Pistas encontradas, cada fila simula su carga y se revela consecutivamente de
 
 ## Publicación y dispositivos
 
-La versión entregada es local. Para compartir un enlace hay que publicar la carpeta completa en un alojamiento que admita sitios HTML, CSS y JavaScript. index.html debe estar en la raíz publicada.
+La versión entregada es local. Para compartir un enlace hay que publicar la carpeta completa en un alojamiento que admita sitios HTML, CSS y JavaScript. En esta estructura, la página de entrada es `index/index.html`: el enlace del juego debe terminar en `/index/index.html`, salvo que el alojamiento configure una redirección. Deben publicarse todas las carpetas del proyecto conservando sus rutas.
 
 Un mismo enlace puede abrirse en computadora y celular. La interfaz incluye reglas de adaptación, pero la comprobación completa de la versión final en dispositivos móviles reales queda pendiente de la prueba de la usuaria.
 
