@@ -1,608 +1,1180 @@
+/* STYLE.CSS: todos los estilos están reunidos en este archivo.
+   Las reglas posteriores ajustan las anteriores para conservar la estética aprobada. */
+
+/* ============================================================
+   PALETA Y TIPOGRAFÍA
+   Define los colores y las familias de letra del juego.
+   ============================================================ */
 :root {
-  --ink:#111027;
-  --panel:#1a1834;
-  --panel2:#27224b;
-  --paper:#fff8ee;
-  --muted:#bdb8d6;
-  --pink:#ff5d91;
-  --yellow:#ffcf5b;
-  --line:rgba(255,255,255,.13);
-  font-family:"Space Grotesk",sans-serif;
-  color:var(--paper);
-  background:var(--ink)
-}
-* {
-  box-sizing:border-box
-}
-body {
-  margin:0;
-  min-width:320px;
-  background:radial-gradient(circle at 90% 0,#352961,transparent 31rem),var(--ink)
-}
-button {
-  font:inherit;
-  cursor:pointer
-}
-.app-shell {
-  width:min(100%,620px);
-  min-height:100vh;
-  margin:auto;
-  padding:20px;
-  position:relative
-}
-.screen {
-  min-height:calc(100vh - 40px);
-  display:flex;
-  flex-direction:column;
-  animation:in .35s ease
-}
-.hidden {
-  display:none!important
-}
-.eyebrow,.case-number,.section-label,.character-role {
-  font:500 .7rem "DM Mono",monospace;
-  letter-spacing:.13em;
-  color:var(--pink);
-  margin:0 0 .7rem
-}
-h1,h2,h3,p {
-  margin-top:0
-}
-h1 {
-  font-size:clamp(3.4rem,13vw,5.2rem);
-  line-height:.9;
-  letter-spacing:-.1em;
-  margin:0
-}
-h1 span {
-  color:var(--pink)
-}
-h2 {
-  font-size:clamp(1.8rem,6vw,2.5rem);
-  line-height:1.02;
-  letter-spacing:-.06em;
-  margin:.15rem 0 1rem
-}
-h3 {
-  font-size:1.2rem;
-  margin:0 0 .35rem
-}
-.start-screen {
-  justify-content:center;
-  text-align:center;
-  gap:18px
-}
-.grain {
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity:.15;
-  background-image:radial-gradient(#fff .5px,transparent .5px);
-  background-size:7px 7px
-}
-.brand-lockup {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px
-}
-.brand-mark {
-  width:58px;
-  height:58px;
-  display:grid;
-  place-items:center;
-  border-radius:18px;
-  background:var(--pink);
-  box-shadow:6px 6px 0 var(--yellow);
-  color:var(--ink);
-  font-weight:700;
-  font-size:2rem;
-  transform:rotate(-7deg)
-}
-.tagline {
-  color:var(--muted);
-  margin:0
-}
-.case-preview {
-  overflow:hidden;
-  text-align:left;
-  background:var(--paper);
-  color:var(--ink);
-  border-radius:22px;
-  box-shadow:8px 8px 0 rgba(255,93,145,.75)
-}
-.preview-photo {
-  height:150px
-}
-.preview-photo img,.scene-image img {
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block
-}
-.case-preview-copy {
-  padding:20px
-}
-.case-preview h2 {
-  font-size:1.7rem
-}
-.case-preview p:not(.case-number) {
-  color:#514c63;
-  margin-bottom:16px
-}
-.case-meta {
-  display:flex;
-  gap:10px;
-  font:500 .72rem "DM Mono",monospace
-}
-.case-meta span {
-  padding:6px 8px;
-  background:#eeeafa;
-  border-radius:7px
-}
-.button {
-  width:100%;
-  border:0;
-  border-radius:13px;
-  padding:16px 19px;
-  font-weight:700;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  transition:.2s
-}
-.button:hover {
-  transform:translateY(-2px);
-  filter:brightness(1.08)
-}
-.button-primary {
-  background:var(--pink);
-  color:var(--ink);
-  box-shadow:4px 4px 0 var(--yellow)
-}
-.button-secondary {
-  background:var(--yellow);
-  color:var(--ink);
-  margin-top:18px
-}
-.button:disabled {
-  opacity:.42;
-  cursor:not-allowed;
-  box-shadow:none
-}
-.fiction-note {
-  font-size:.78rem;
-  color:#938dab;
-  margin:0
-}
-.briefing-screen,.characters-screen {
-  padding-top:26px
-}
-.icon-button {
-  width:42px;
-  height:42px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:rgba(255,255,255,.06);
-  color:var(--paper);
-  font-size:1.4rem;
-  margin-bottom:20px
-}
-.scene-image {
-  height:190px;
-  border-radius:20px;
-  overflow:hidden;
-  margin-bottom:22px
-}
-.briefing-copy {
-  color:#ded9ec;
-  line-height:1.6;
-  font-size:1.02rem
-}
-.briefing-copy strong {
-  color:var(--yellow)
-}
-.tip {
-  margin-top:auto;
-  background:rgba(255,255,255,.07);
-  border-left:3px solid var(--yellow);
-  border-radius:0 12px 12px 0;
-  padding:14px;
-  display:flex;
-  gap:10px;
-  color:#ded9ec;
-  font-size:.9rem;
-  line-height:1.4
-}
-.tip span:first-child {
-  color:var(--yellow)
-}
-.briefing-screen .button,.characters-screen .button {
-  margin-top:22px
-}
-.character-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px
-}
-.character-card {
-  overflow:hidden;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:16px
-}
-.character-card img {
-  height:150px;
-  width:100%;
-  display:block;
-  object-fit:cover
-}
-.character-card>div {
-  padding:12px
-}
-.character-card p:last-child {
-  color:var(--muted);
-  font-size:.78rem;
-  line-height:1.35;
-  margin:0
-}
-.character-role {
-  font-size:.56rem;
-  margin-bottom:.35rem
-}
-.game-screen {
-  padding-top:15px
-}
-.game-header {
-  display:flex;
-  justify-content:space-between;
-  gap:12px
-}
-.game-header h2 {
-  font-size:1.5rem;
-  margin:0
-}
-.timer {
-  font:500 1rem "DM Mono",monospace;
-  color:var(--yellow);
-  border:1px solid rgba(255,207,91,.45);
-  border-radius:10px;
-  padding:9px;
-  height:min-content
-}
-.timer.urgent {
-  color:var(--pink);
-  border-color:var(--pink)
-}
-.progress-wrap {
-  height:5px;
-  margin:18px 0;
-  background:#312d50;
-  border-radius:5px;
-  overflow:hidden
-}
-.progress-bar {
-  height:100%;
-  width:100%;
-  background:linear-gradient(90deg,var(--yellow),var(--pink));
-  transition:width 1s linear
-}
-.objective {
-  color:#cbc6dc;
-  font-size:.9rem;
-  line-height:1.4;
-  margin-bottom:20px
-}
-.tabs {
-  display:flex;
-  border-bottom:1px solid var(--line)
-}
-.tab {
-  border:0;
-  background:transparent;
-  color:#9993b4;
-  padding:11px 10px;
-  border-bottom:3px solid transparent;
-  font-size:.84rem
-}
-.tab.active {
-  color:var(--paper);
-  border-color:var(--pink)
-}
-.tab b {
-  font:500 .65rem "DM Mono",monospace;
-  background:var(--pink);
-  color:var(--ink);
-  border-radius:5px;
-  padding:2px 4px
-}
-.panel {
-  display:none;
-  padding-top:20px
-}
-.panel.active {
-  display:block
-}
-.evidence-list {
-  display:grid;
-  gap:10px
-}
-.evidence-card {
-  min-height:75px;
-  text-align:left;
-  color:var(--paper);
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:14px;
-  padding:11px;
-  display:flex;
-  align-items:center;
-  gap:12px
-}
-.evidence-card:hover,.evidence-card.viewed {
-  border-color:var(--pink);
-  background:var(--panel2)
-}
-.evidence-icon {
-  width:42px;
-  height:42px;
-  display:grid;
-  place-items:center;
-  border-radius:10px;
-  font-size:1.3rem;
-  flex:none
-}
-.receipt-icon {
-  background:#ece7df;
-  color:#27233d
-}
-.chat-icon {
-  background:#38557b
-}
-.evidence-card strong,.evidence-card small {
-  display:block
-}
-.evidence-card small {
-  color:var(--muted);
-  font-size:.76rem;
-  margin-top:3px
-}
-.evidence-card i {
-  font-style:normal;
-  font-size:1.8rem;
-  color:var(--pink);
-  margin-left:auto
-}
-.image-evidence img {
-  width:42px;
-  height:42px;
-  object-fit:cover;
-  border-radius:10px
-}
-.dialogue-log {
-  display:grid;
-  gap:12px
-}
-.message {
-  max-width:85%;
-  padding:11px 13px;
-  border-radius:13px;
-  font-size:.88rem;
-  line-height:1.35
-}
-.message span,.message time {
-  font:500 .66rem "DM Mono",monospace;
-  color:var(--muted)
-}
-.message p {
-  margin:3px 0
-}
-.message-other {
-  background:var(--panel);
-  border-top-left-radius:3px
-}
-.message-self {
-  background:#53345d;
-  margin-left:auto;
-  border-top-right-radius:3px
-}
-.dialogue-options,.conclusion-options {
-  display:grid;
-  gap:9px;
-  margin-top:18px
-}
-.dialogue-options button,.conclusion-options button {
-  background:transparent;
-  border:1px solid rgba(255,93,145,.6);
-  color:var(--paper);
-  padding:12px;
-  border-radius:11px;
-  text-align:left;
-  font-size:.87rem
-}
-.dialogue-options button:hover,.conclusion-options button:hover {
-  background:rgba(255,93,145,.16)
-}
-.notes-empty {
-  color:var(--muted);
-  border:1px dashed var(--line);
-  padding:20px;
-  border-radius:12px;
-  text-align:center;
-  font-size:.9rem
-}
-.notes-list {
-  padding:0;
-  margin:0;
-  display:grid;
-  gap:10px;
-  list-style:none
-}
-.notes-list li {
-  padding:13px;
-  border-left:3px solid var(--yellow);
-  background:var(--panel);
-  font-size:.85rem;
-  line-height:1.4;
-  color:#d4cfe4
-}
-.notes-list strong {
-  display:block;
-  color:var(--paper);
-  margin-bottom:4px
-}
-.modal {
-  position:fixed;
-  z-index:10;
-  inset:0;
-  background:rgba(4,3,14,.75);
-  backdrop-filter:blur(8px);
-  display:grid;
-  place-items:end center;
-  padding:16px
-}
-.modal-card {
-  position:relative;
-  width:min(100%,580px);
-  max-height:88vh;
-  overflow:auto;
-  background:var(--paper);
-  color:var(--ink);
-  border-radius:22px 22px 14px 14px;
-  padding:26px;
-  box-shadow:0 -8px 0 var(--pink)
-}
-.modal-card .icon-button {
-  position:absolute;
-  right:14px;
-  top:14px;
-  color:var(--ink);
-  background:#eeeaf2;
-  border:0;
-  margin:0
-}
-.modal-card .button {
-  margin-top:20px
-}
-.clue-content {
-  margin:17px 0
-}
-.receipt {
-  font:500 .86rem "DM Mono",monospace;
-  padding:18px;
-  background:#e9e5de;
-  line-height:1.65;
-  transform:rotate(-1deg)
-}
-.chat-sample {
-  display:grid;
-  gap:8px
-}
-.bubble {
-  background:#e8e2ee;
-  padding:10px;
-  border-radius:11px;
-  max-width:80%;
-  font-size:.85rem
-}
-.bubble.right {
-  background:#f9c9da;
-  margin-left:auto
-}
-.chat-sample small,.photo-clue small {
-  display:block;
-  color:#696377;
-  margin-top:8px
-}
-.photo-clue img {
-  width:100%;
-  height:185px;
-  object-fit:cover;
-  border-radius:12px
-}
-.photo-clue p {
-  font-size:.9rem;
-  line-height:1.45
-}
-.result-screen {
-  justify-content:center;
-  text-align:center
-}
-.result-symbol {
-  width:82px;
-  height:82px;
-  margin:0 auto 18px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:var(--yellow);
-  color:var(--ink);
-  font-size:3rem;
-  font-weight:700;
-  box-shadow:5px 5px 0 var(--pink)
-}
-.result-symbol.fail {
-  background:var(--pink)
-}
-.result-screen>p:not(.eyebrow) {
-  color:#d6d1e5;
-  line-height:1.5
-}
-.result-summary {
-  text-align:left;
-  background:var(--panel);
-  border-radius:14px;
-  padding:17px;
-  color:#d9d4e9;
-  line-height:1.45;
-  font-size:.9rem;
-  margin:12px 0 23px
-}
-.result-summary strong {
-  color:var(--yellow)
-}
-@keyframes in {
-  from {
-    opacity:0;
-    transform:translateY(8px)
-  }
-  to {
-    opacity:1;
-    transform:none
-  }
-
-}
-@media(min-width:580px) {
-  .app-shell {
-    padding:30px
-  }
-  .screen {
-    min-height:calc(100vh - 60px)
-  }
-  .character-card img {
-    height:190px
-  }
-  .preview-photo {
-    height:190px
-  }
-
-}
-@media(max-width:380px) {
-  .app-shell {
-    padding:15px
-  }
-  .screen {
-    min-height:calc(100vh - 30px)
-  }
-  .character-card img {
-    height:120px
-  }
-  .character-card>div {
-    padding:9px
-  }
-  .character-card p:last-child {
-    font-size:.7rem
-  }
-
+  --black: #000000;
+  --indigo-dark: #23185d;
+  --indigo: #3e3186;
+  --purple: #6300b1;
+  --magenta: #e6007f;
+  --white: #ffffff;
+  --ink: #15102f;
+  --sans: "Open Sans", Arial, sans-serif;
+  --display: "League Spartan", "Arial Black", Impact, sans-serif;
 }
 
+
+/* ============================================================
+   PANTALLAS Y COMPONENTES GENERALES
+   Estilos de portada, expediente, botones y tarjetas de presentación.
+   ============================================================ */
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+html:has(body.phone-open), body.phone-open { height: 100dvh; overflow: hidden; }
+body { margin: 0; min-width: 320px; color: var(--white); font-family: var(--sans); background: var(--indigo-dark); }
+body.phone-open { height: 100dvh; overflow: hidden; }
+button { font: inherit; }
+button:focus-visible { outline: 3px solid var(--white); outline-offset: 4px; }
+.screen { display: none; min-height: 100dvh; }
+.screen.active { display: flex; }
+.eyebrow { margin: 0; color: var(--magenta); font-size: 12px; font-weight: 800; letter-spacing: .13em; }
+.button { border: 0; color: var(--white); font-family: var(--sans); font-size: 19px; font-weight: 800; cursor: pointer; transition: transform .16s ease, filter .16s ease; }
+.button:hover { filter: brightness(1.08); transform: translateY(-2px); }
+.button:active { transform: translateY(1px); }
+.button-primary { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 17px 22px; border-radius: 14px; background: linear-gradient(120deg, var(--purple), var(--magenta)); box-shadow: 0 9px 0 #100329; }
+.button-start { min-width: 345px; padding: 18px 40px; border: 5px solid var(--black); border-radius: 999px; background: var(--magenta); box-shadow: 0 5px 0 var(--black); font-size: clamp(21px, 2.1vw, 36px); }
+.back-button { width: 42px; height: 42px; display: grid; place-items: center; margin: 0 0 12px; padding: 0; border: 0; border-radius: 50%; color: var(--white); background: var(--indigo); font-size: 35px; line-height: 1; cursor: pointer; }
+
+/* Portada: página 20 del documento de identidad visual. */
+.landing { position: relative; align-items: center; justify-content: center; overflow: hidden; background: radial-gradient(circle at 62% 54%, #39227a 0, var(--indigo-dark) 48%, #1d154d 100%); }
+.landing::before { position: absolute; inset: 0; content: ""; opacity: .28; background: radial-gradient(circle at 45% 48%, #5c3da0 0 1px, transparent 2px); background-size: 4px 4px; }
+.landing-copy { position: relative; z-index: 1; width: min(56vw, 940px); margin-right: 8vw; text-align: center; }
+.landing h1 { margin: 0; color: var(--white); font-family: var(--display); font-size: clamp(76px, 12.5vw, 202px); letter-spacing: -.075em; line-height: .85; text-shadow: 9px 9px 0 #8d4dff; }
+.landing p { margin: 38px 0 38px; font-size: clamp(20px, 2.3vw, 38px); font-weight: 800; }
+.landing-art { position: absolute; z-index: 1; right: 8.5%; bottom: 13%; width: clamp(220px, 27vw, 470px); overflow: visible; filter: drop-shadow(12px 15px 0 #7142db) drop-shadow(0 16px 20px #10082b99); }
+
+/* Tarjetas de presentación definidas en las páginas 11 a 14. */
+.case-intro, .characters, .form-screen, .result-screen { align-items: center; justify-content: center; padding: 48px 24px; background: radial-gradient(circle at 16% 8%, #60309a 0, transparent 30%), var(--indigo-dark); }
+.case-intro { align-items: flex-start; justify-content: flex-start; padding-top: 20px; }
+.case-intro .desktop-panel { margin: 0 auto; }
+.case-intro > .desktop-panel > .eyebrow { display: block; margin-bottom: 22px; }
+.desktop-panel { width: min(900px, 100%); }
+.case-card { display: grid; grid-template-columns: 180px 1fr; gap: 30px; align-items: center; padding: 28px; border: 3px solid var(--white); border-radius: 26px; background: var(--indigo); box-shadow: 12px 12px 0 #120631; }
+.case-mark { display: grid; min-height: 175px; place-items: center; border: 3px solid var(--magenta); border-radius: 18px; color: var(--magenta); background: #17103b; font: 900 104px/1 var(--display); }
+.case-card h2, .characters h2, .form-card h2, .result-card h2 { margin: 7px 0 13px; font-family: var(--display); font-size: clamp(34px, 5vw, 58px); letter-spacing: -.035em; }
+.case-card p:not(.eyebrow) { max-width: 520px; margin: 0; color: #f1ecff; font-size: 18px; line-height: 1.65; }
+.mission-card { display: flex; gap: 9px; margin: 26px 0; padding: 18px 20px; border-left: 6px solid var(--magenta); border-radius: 0 15px 15px 0; background: #312270; font-size: 17px; }
+.mission-card strong { color: var(--white); }
+.mission-card span { color: #ded4fb; }
+
+.characters .desktop-panel { max-width: 1000px; }
+.character-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 24px 0 28px; }
+.character-grid article { overflow: hidden; padding: 11px 11px 16px; border-radius: 18px; color: var(--ink); background: var(--white); box-shadow: 0 7px 0 #130530; }
+.portrait { height: 150px; margin-bottom: 12px; border-radius: 12px; background: linear-gradient(145deg, #d84cae, #28165f); }
+.portrait-two { background: linear-gradient(145deg, #e7b87c, #743373); }
+.portrait-three { background: linear-gradient(145deg, #83b0d1, #3a3d88); }
+.portrait-four { background: linear-gradient(145deg, #ce74cf, #3e1674); }
+.character-grid p { margin: 0 0 5px; color: var(--purple); font-size: 10px; font-weight: 900; letter-spacing: .12em; }
+.character-grid h3 { margin: 0 0 5px; font-size: 21px; }
+.character-grid small { color: #5b5772; font-size: 13px; }
+
+
+/* ============================================================
+   TELÉFONO Y DISEÑO DE LAS APLICACIONES
+   Marco del teléfono, barra de estado, galería, mensajes, formularios y adaptación a distintos tamaños.
+   ============================================================ */
+/* Teléfono, grilla y paleta de aplicaciones: páginas 21 y 22. */
+.phone-stage { align-items: center; justify-content: center; height: 100dvh; min-height: 0; padding: 8px 24px; overflow: hidden; background: radial-gradient(circle at 50% 15%, #3e3186, transparent 48%), var(--indigo-dark); }
+.phone-shell { width: auto; max-width: calc(100vw - 48px); height: min(980px, calc(100dvh - 16px)); min-height: 0; aspect-ratio: 56 / 98; position: relative; overflow: hidden; padding: 52px 39px 104px; border: 10px solid var(--black); border-radius: 68px; background: radial-gradient(ellipse at 110% 18%, #2f4d90 0 3%, transparent 27%), radial-gradient(ellipse at -11% 76%, #4164ac 0 2%, transparent 30%), radial-gradient(ellipse at 50% 106%, #25458a 0 4%, transparent 32%), linear-gradient(145deg, #1b2343 0, #040407 47%, #101c3a 100%); box-shadow: 0 0 0 4px #fff1e5, 0 20px 40px #08041799; }
+.phone-shell::before, .phone-shell::after { position: absolute; z-index: 0; content: ""; pointer-events: none; border: 2px solid #6e9effcc; border-radius: 50%; filter: blur(.2px); }
+.phone-shell::before { width: 670px; height: 1050px; top: -150px; right: -435px; transform: rotate(-24deg); box-shadow: inset 0 0 18px #2f68d9, 0 0 18px #2f68d9; }
+.phone-shell::after { width: 680px; height: 910px; bottom: -610px; left: -370px; transform: rotate(33deg); box-shadow: inset 0 0 19px #2f68d9, 0 0 19px #2f68d9; }
+.phone-shell > * { position: relative; z-index: 1; }
+.dynamic-island { position: absolute; z-index: 2; top: 0; left: 50%; width: 165px; height: 34px; transform: translateX(-50%); border-radius: 0 0 24px 24px; background: #000; }
+.phone-status { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; }
+.status-icons { letter-spacing: 2px; }
+.weather-card { display: flex; align-items: center; gap: 23px; height: 153px; margin: 34px 0 34px; padding: 22px 28px; overflow: hidden; border-radius: 43px; color: #020207; background: linear-gradient(120deg, #8bc7ec 0, #4c8ece 47%, #d7edf9 100%); box-shadow: inset 0 0 45px #ffffff77; }
+.sun { color: #ffcc17; font-size: 66px; text-shadow: 0 3px #e6a701; }
+.weather-card b, .weather-card strong { display: block; font-family: var(--sans); font-weight: 900; }
+.weather-card b { font-size: 22px; }.weather-card strong { font-size: 44px; line-height: 1; }
+.app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 20px; }
+.app-icon { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 0; border: 0; color: var(--white); background: transparent; font-size: 12px; cursor: pointer; }
+.app-icon span { width: 76px; height: 76px; display: grid; place-items: center; border-radius: 50%; color: var(--white); background: linear-gradient(145deg, #b31ac9, #7a0bc1); box-shadow: inset -5px -5px 10px #31065a77, inset 4px 4px 9px #ffffff39; font-size: 42px; font-weight: 800; line-height: 1; }
+.app-icon.map span { background: linear-gradient(145deg, #4f4d89, #9a81ad); }.app-icon.calendar span { color: #263866; background: linear-gradient(145deg, #fff, #9d9d9d); }.app-icon.instagram span, .app-icon.notes span { background: linear-gradient(145deg, #ec007e, #ff75d9); }.app-icon.calculator span { background: linear-gradient(145deg, #313131, #030303); }.app-icon.settings span { background: linear-gradient(145deg, #9a66cd, #59338d); }
+.app-icon b { font-weight: 500; text-shadow: 0 1px #000; }
+.dock { position: absolute; right: 38px; bottom: 38px; left: 38px; display: flex; justify-content: space-around; align-items: center; height: 88px; border-radius: 31px; background: #0d1530dc; }
+.dock button { width: 64px; height: 64px; padding: 0; border: 0; border-radius: 50%; color: var(--white); background: linear-gradient(145deg, #b31ac9, #7a0bc1); cursor: pointer; font-size: 39px; }.dock button:first-child { background: linear-gradient(145deg, #e6007f, #ff75d9); }.dock button:nth-child(2) { background: linear-gradient(145deg, #8c6ac4, #4b2a80); }
+.case-file, .conclusion-button { position: absolute; right: 31px; left: 31px; z-index: 3; }
+.case-file { bottom: 112px; display: none; padding: 10px; border: 1px solid #ffffff55; border-radius: 10px; color: var(--white); background: #15112cd9; cursor: pointer; font-size: 11px; }.case-file b { float: right; color: #ff75d9; }
+.conclusion-button { bottom: 30px; display: none; }
+
+.app-view { display: none; position: absolute; z-index: 5; inset: 52px 22px 22px; min-height: 0; padding: 24px; overflow: hidden; border-radius: 31px; color: var(--ink); background: #f8f7fc; box-shadow: 0 13px 35px #00000077; }
+.app-view.open { display: flex; flex-direction: column; }
+.app-view header { display: flex; align-items: center; gap: 13px; }.app-view header button { width: 34px; height: 34px; border: 0; border-radius: 50%; color: var(--white); background: var(--purple); font-size: 23px; cursor: pointer; }.app-view header p { margin: 0; font-size: 20px; font-weight: 800; }.app-view header small { color: #625c78; }
+.gallery-layout { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-content: start; gap: 7px; margin-top: 18px; padding: 0 2px 14px 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #8a5dcc transparent; }.gallery-layout .tile { min-width: 0; aspect-ratio: 1; min-height: 76px; border: 0; border-radius: 8px; background: linear-gradient(135deg, #e6007f, #653ab6); box-shadow: inset 0 0 0 1px #ffffff22; cursor: pointer; }.gallery-layout .tile:nth-child(3n + 2) { background: linear-gradient(135deg, #fed056, #e64c9d); }.gallery-layout .tile:nth-child(3n) { background: linear-gradient(135deg, #79b9dc, #4d529e); }.gallery-layout .tile:hover, .gallery-layout .tile:focus-visible { outline: 3px solid #ffffffaa; outline-offset: -3px; transform: scale(.98); }.gallery-layout::-webkit-scrollbar { width: 5px; }.gallery-layout::-webkit-scrollbar-thumb { border-radius: 999px; background: #8a5dcc; }
+.calendar-layout { margin-top: 20px; }.calendar-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }.calendar-nav b { font-size: 21px; }.calendar-nav button { width: 32px; height: 32px; border: 0; border-radius: 50%; color: var(--white); background: var(--purple); font-size: 26px; line-height: 1; cursor: pointer; }.calendar-week, .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }.calendar-week { margin-bottom: 9px; }.calendar-week span { display: grid; height: 25px; place-items: center; color: #746e85; font-size: 12px; font-weight: 800; }.calendar-day, .calendar-blank { display: grid; height: 34px; place-items: center; padding: 0; border: 0; border-radius: 50%; color: var(--ink); background: transparent; font-size: 13px; cursor: pointer; }.calendar-day:hover { background: #e7dcf7; }.calendar-day.selected { color: var(--white); background: var(--magenta); box-shadow: 0 3px 8px #e6007f66; }.calendar-clue { margin-top: 23px; padding: 15px; border-left: 5px solid var(--magenta); border-radius: 0 13px 13px 0; background: #eee8f8; }.calendar-clue .eyebrow { margin: 0 0 6px; font-size: 10px; }.calendar-clue h4 { margin: 0 0 5px; font-size: 15px; }.calendar-clue span { color: #746e85; font-size: 12px; }
+.calculator-layout { margin-top: auto; }.calculator-layout output { display: block; margin: 22px 0 13px; padding: 25px 15px; border-radius: 13px; background: #e8e6f2; font-size: 42px; text-align: right; }.calculator-layout div { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }.calculator-layout button { aspect-ratio: 1; border: 0; border-radius: 50%; color: var(--ink); background: #e9e7f1; font-size: 20px; }.calculator-layout button:nth-child(4n), .calculator-layout button:last-child { color: var(--white); background: var(--purple); }
+.settings-layout, .rows-layout { margin: 24px 0 0; padding: 0; list-style: none; }.settings-layout li, .rows-layout div { display: flex; justify-content: space-between; align-items: center; padding: 17px 3px; border-bottom: 1px solid #dedbe9; font-weight: 700; }.settings-layout i { width: 38px; height: 22px; border-radius: 999px; background: #b8b3ca; }.settings-layout li:nth-child(2) i { background: var(--magenta); }.settings-layout em { color: #746e85; font-size: 25px; font-style: normal; }.rows-layout small { color: #7b748e; font-weight: 500; }
+.map-layout { height: 76%; position: relative; margin-top: 20px; overflow: hidden; border-radius: 16px; background: repeating-linear-gradient(0deg, transparent 0 45px, #d4dceb 45px 51px), repeating-linear-gradient(90deg, #dfead9 0 62px, #fff 62px 69px); }.map-layout span { position: absolute; top: 38%; left: 30%; z-index: 1; padding: 10px; border-radius: 999px; color: var(--white); background: var(--magenta); font-weight: 800; }.map-layout i { position: absolute; top: 22%; right: 21%; width: 23px; height: 23px; border-radius: 50% 50% 50% 0; background: var(--purple); transform: rotate(-45deg); }.map-layout b { position: absolute; right: 12px; bottom: 12px; color: #5e5871; }
+.profile-layout { display: grid; place-items: center; gap: 10px; margin-top: 22px; }.profile-layout > div { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(145deg, #e6007f, #633dae); }.profile-layout > span { color: #756e86; font-size: 12px; }.profile-layout section { width: 100%; height: 125px; border-radius: 10px; background: linear-gradient(135deg, #eeb7d4, #7854b0); }.profile-layout section:last-child { background: linear-gradient(135deg, #86b9dd, #4a417b); }
+.instagram-layout { display: flex; flex: 1; min-height: 0; flex-direction: column; margin: 14px -8px -8px; }.ig-content { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #b9b0ce transparent; }.ig-content::-webkit-scrollbar { width: 4px; }.ig-content::-webkit-scrollbar-thumb { background: #b9b0ce; border-radius: 999px; }.ig-stories { display: flex; gap: 11px; padding: 4px 8px 15px; overflow-x: auto; scrollbar-width: none; }.ig-stories::-webkit-scrollbar { display: none; }.ig-stories button { display: grid; gap: 5px; min-width: 58px; padding: 0; border: 0; color: #4e485e; background: transparent; font-size: 9px; cursor: pointer; }.ig-stories i { width: 55px; height: 55px; display: grid; place-items: center; border: 3px solid #e6007f; border-radius: 50%; color: var(--white); background: linear-gradient(145deg, #ff7a54, #b000bc); font-size: 18px; font-style: normal; }.ig-feed { display: grid; gap: 18px; }.ig-feed article { overflow: hidden; border-top: 1px solid #e1ddea; border-bottom: 1px solid #e1ddea; }.ig-feed header { display: flex; align-items: center; gap: 8px; padding: 10px; }.ig-feed header i { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; color: var(--white); background: #7c4dc1; font-size: 11px; font-style: normal; }.ig-feed header b { font-size: 11px; }.ig-feed header span { margin-left: auto; }.ig-photo { height: 230px; background: linear-gradient(135deg, #eb91bf, #6b43a3); }.ig-photo.photo-2, .ig-photo.photo-5 { background: linear-gradient(135deg, #74b9e6, #434880); }.ig-photo.photo-3 { background: linear-gradient(135deg, #f6bc4b, #e8598d); }.ig-photo.photo-4 { background: linear-gradient(135deg, #84469d, #17133c); }.ig-feed footer { padding: 9px 11px; font-size: 17px; }.ig-feed footer p { margin: 7px 0 0; font-size: 11px; }.ig-search { display: flex; align-items: center; gap: 6px; margin: 3px 8px 12px; padding: 8px 10px; border-radius: 9px; background: #eeeaf4; }.ig-search input { width: 100%; border: 0; outline: 0; background: transparent; font: 12px var(--sans); }.ig-explore { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }.ig-explore button { min-height: 105px; border: 0; background: linear-gradient(135deg, #e58cba, #67409b); cursor: pointer; }.ig-explore button:nth-child(3n) { background: linear-gradient(135deg, #72b3df, #40528d); }.ig-explore button:nth-child(4n) { background: linear-gradient(135deg, #f5c754, #e85e8d); }.ig-message-empty { display: grid; place-items: center; align-content: center; height: 100%; padding: 25px; text-align: center; }.ig-message-empty span { width: 66px; height: 66px; display: grid; place-items: center; border: 2px solid var(--ink); border-radius: 50%; font-size: 30px; }.ig-message-empty h4 { margin: 16px 0 7px; }.ig-message-empty p { max-width: 210px; margin: 0; color: #746e85; font-size: 12px; line-height: 1.5; }.ig-profile-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 13px; }.ig-profile-grid i { aspect-ratio: 1; background: linear-gradient(135deg, #e58cba, #67409b); }.ig-profile-grid i:nth-child(3n) { background: linear-gradient(135deg, #72b3df, #40528d); }.ig-profile-grid i:nth-child(4n) { background: linear-gradient(135deg, #f5c754, #e85e8d); }.ig-nav { display: grid; grid-template-columns: repeat(4, 1fr); padding: 9px 4px 3px; border-top: 1px solid #e2deeb; background: #f8f7fc; }.ig-nav button { border: 0; color: #3b334f; background: transparent; font-size: 23px; cursor: pointer; }.ig-nav button.active { color: var(--magenta); }
+.ig-inbox { padding: 4px 8px 12px; }.ig-inbox-title { display: flex; align-items: center; justify-content: space-between; padding: 4px 2px 14px; font-size: 20px; }.ig-inbox-title button { border: 0; color: var(--ink); background: transparent; font-size: 22px; cursor: pointer; }.ig-inbox-search { margin-bottom: 9px; padding: 9px 11px; border-radius: 9px; color: #777087; background: #eeeaf4; font-size: 12px; }.ig-chat-row { width: 100%; display: flex; align-items: center; gap: 10px; padding: 11px 3px; border: 0; color: var(--ink); background: transparent; text-align: left; cursor: pointer; }.ig-chat-row:hover { background: #f0ebf8; }.ig-chat-row i { width: 43px; height: 43px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; color: var(--white); background: linear-gradient(145deg, #e6007f, #643fa2); font-style: normal; font-size: 16px; }.ig-chat-row:nth-of-type(2n) i { background: linear-gradient(145deg, #72b3df, #40528d); }.ig-chat-row span { display: grid; gap: 4px; }.ig-chat-row b { font-size: 13px; }.ig-chat-row small { color: #777087; font-size: 10px; }.ig-chat-row em { width: 8px; height: 8px; margin-left: auto; border-radius: 50%; background: var(--magenta); }
+.ig-profile-screen { min-height: 100%; margin: -14px -8px 0; padding: 14px 0 0; overflow: hidden; color: var(--white); background: radial-gradient(ellipse at 85% -18%, #37276b, transparent 42%), #05091d; }.ig-profile-screen > header { display: grid; grid-template-columns: 35px 1fr 35px; align-items: center; padding: 2px 15px 15px; }.ig-profile-screen > header h4 { margin: 0; font-size: 26px; }.ig-profile-screen > header button { border: 0; color: #a34eff; background: transparent; font-size: 27px; cursor: pointer; }.ig-profile-screen > header button:last-child { font-size: 20px; }.ig-profile-summary { display: grid; grid-template-columns: 88px repeat(3, 1fr); align-items: center; gap: 6px; padding: 5px 15px 19px; text-align: center; }.ig-avatar { width: 83px; height: 83px; position: relative; display: grid; place-items: center; border: 3px solid #e600c2; border-radius: 50%; background: linear-gradient(145deg, #e7e1ff, #9f87ed 52%, #37215e 53%); font-size: 34px; }.ig-avatar b { width: 30px; height: 30px; position: absolute; right: -4px; bottom: 0; display: grid; place-items: center; border-radius: 50%; background: var(--magenta); font-size: 22px; }.ig-profile-summary strong, .ig-profile-summary small { display: block; }.ig-profile-summary strong { font-size: 22px; }.ig-profile-summary small { margin-top: 3px; font-size: 9px; }.ig-profile-lines { display: grid; gap: 9px; padding: 0 15px 20px; }.ig-profile-lines i { height: 14px; border-radius: 999px; background: linear-gradient(90deg, #5f3cc3 0 35%, transparent 35%); }.ig-profile-lines i:last-child { background: linear-gradient(90deg, #5f3cc3 0 72%, transparent 72%); }.ig-profile-tab { margin: 0 15px; padding: 11px 0 7px; border-top: 1px solid #5c259e; color: var(--magenta); font-size: 26px; text-align: center; }.ig-profile-tab::after { display: block; width: 46px; height: 3px; margin: 5px auto 0; border-radius: 999px; content: ""; background: #ba45ed; }.ig-profile-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin: 0; }.ig-profile-grid i { aspect-ratio: 1; display: grid; place-items: center; color: var(--white); background: linear-gradient(180deg, #ece8ff 0 57%, #937dd1 58% 72%, #4c3679 73%); font-size: 31px; font-style: normal; }.ig-profile-grid i:nth-child(4n) { background: linear-gradient(180deg, #d9e8ff 0 55%, #7798cc 56% 72%, #314a80 73%); }
+.app-view.instagram-open { color: var(--white); background: radial-gradient(ellipse at 88% 3%, #392b79, transparent 40%), #090522; }.app-view.instagram-open > header { position: relative; z-index: 2; padding-bottom: 8px; }.app-view.instagram-open > header p { color: var(--white); }.app-view.instagram-open > header small { color: #c2b6e1; }.app-view.instagram-open > header button { background: var(--purple); }.app-view.instagram-open .instagram-layout { color: var(--white); }.app-view.instagram-open .ig-content { scrollbar-color: #7147b3 transparent; }.app-view.instagram-open .ig-stories button { color: #e8e0f9; }.app-view.instagram-open .ig-feed article { border-color: #3e287b; }.app-view.instagram-open .ig-feed header { color: var(--white); }.app-view.instagram-open .ig-feed header i { background: linear-gradient(145deg, #c400bd, #6438a4); }.app-view.instagram-open .ig-feed footer { color: var(--white); }.app-view.instagram-open .ig-search, .app-view.instagram-open .ig-inbox-search { color: #ded3f5; background: #342166; }.app-view.instagram-open .ig-search input { color: var(--white); }.app-view.instagram-open .ig-search input::placeholder { color: #d4c7ec; }.app-view.instagram-open .ig-explore button { border-radius: 2px; }.app-view.instagram-open .ig-nav { border-color: #38226e; background: #130a32; }.app-view.instagram-open .ig-nav button { color: #a880df; }.app-view.instagram-open .ig-nav button.active { color: var(--magenta); }.app-view.instagram-open .ig-inbox-title, .app-view.instagram-open .ig-chat-row { color: var(--white); }.app-view.instagram-open .ig-inbox-title button { color: #cd9dff; }.app-view.instagram-open .ig-chat-row:hover { background: #2a1958; }.app-view.instagram-open .ig-chat-row small { color: #baadda; }.app-view.instagram-open .ig-message-empty { color: var(--white); }.app-view.instagram-open .ig-message-empty p { color: #c8bce2; }.app-view.instagram-open .ig-message-empty span { border-color: #ba8cff; }.app-view.instagram-open .profile-layout { color: var(--white); }.app-view.instagram-open .profile-layout > span { color: #c8bce2; }
+.app-view.mail-open { padding: 0; color: #090909; background: #fff; }.mail-layout { display: flex; flex: 1; min-height: 0; flex-direction: column; }.mail-inbox > header { display: grid; grid-template-columns: 45px 1fr 45px; align-items: center; padding: 19px 18px 14px; border: 0; text-align: center; }.mail-inbox > header b { font-size: 26px; font-weight: 500; }.mail-inbox > header button, .mail-detail > header button { border: 0; color: #090909; background: transparent; cursor: pointer; }.mail-inbox > header button:first-child { font-size: 47px; font-weight: 200; line-height: .5; }.mail-inbox > header button:last-child { font-size: 30px; }.mail-list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #777 transparent; }.mail-row { width: 100%; display: grid; grid-template-columns: 53px 1fr auto; align-items: center; gap: 8px; padding: 10px 18px; border: 0; border-bottom: 3px solid #6d6d6d; color: #090909; background: #fff; text-align: left; cursor: pointer; }.mail-row:hover { background: #f2f1f8; }.mail-row i, .mail-account i, .mail-from i { display: grid; place-items: center; border-radius: 50%; color: #fff; background: linear-gradient(180deg, #e9e7ff 0 56%, #bcaefa 57% 71%, #4d398b 72%); font-style: normal; }.mail-row i { width: 48px; height: 48px; font-size: 18px; }.mail-row span { display: grid; gap: 5px; }.mail-row b { font-size: 16px; }.mail-row small { font-size: 11px; }.mail-row em { align-self: center; font-size: 9px; font-style: normal; white-space: nowrap; }.mail-menu-background { position: absolute; z-index: 1; inset: 0; overflow: hidden; background: #fff; }.mail-menu { width: 72%; position: absolute; z-index: 3; inset: 0 auto 0 0; padding: 22px 17px; background: #fff; box-shadow: 18px 0 32px #0003; }.mail-close-menu { width: 42px; height: 42px; align-self: flex-end; border: 0; color: #111; background: transparent; font-size: 42px; font-weight: 200; line-height: .7; cursor: pointer; }.mail-account { display: flex; align-items: center; gap: 12px; margin: 10px 0 28px; padding-bottom: 24px; border-bottom: 3px solid #6d6d6d; }.mail-account i { width: 72px; height: 72px; flex: 0 0 auto; font-size: 25px; }.mail-account b, .mail-account small { display: block; }.mail-account b { margin-bottom: 7px; font-size: 20px; font-weight: 500; }.mail-account small { font-size: 12px; }.mail-menu nav { display: grid; gap: 13px; }.mail-menu nav button { border: 0; color: #151515; background: transparent; text-align: left; font: 17px var(--sans); cursor: pointer; }.mail-detail { padding: 20px 25px 24px; }.mail-detail > header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 34px; }.mail-detail > header > button { font-size: 44px; font-weight: 200; line-height: .5; }.mail-detail > header div { display: flex; gap: 12px; }.mail-detail > header div button { font-size: 23px; }.mail-detail h3 { margin: 0 0 30px; font-size: 28px; font-weight: 500; }.mail-from { display: grid; grid-template-columns: 69px 1fr auto; align-items: start; gap: 12px; }.mail-from i { width: 69px; height: 69px; font-size: 23px; }.mail-from b, .mail-from small { display: block; }.mail-from b { margin: 3px 0 5px; font-size: 19px; }.mail-from small { margin: 4px 0; font-size: 12px; }.mail-from em { margin-top: 14px; font-size: 10px; font-style: normal; white-space: nowrap; }.mail-copy { display: grid; gap: 16px; margin: 33px 0; }.mail-copy span { height: 8px; border-radius: 999px; background: #b5b5b5; }.mail-copy span:nth-child(2) { width: 90%; }.mail-copy span:nth-child(3) { width: 98%; }.mail-copy span:nth-child(4) { width: 72%; }.mail-detail footer { display: flex; justify-content: space-between; gap: 10px; margin-top: auto; }.mail-detail footer button { padding: 11px 16px; border: 2px solid #111; border-radius: 999px; color: #111; background: #fff; font: 13px var(--sans); cursor: pointer; }
+.app-view.whatsapp-open { color: var(--white); background: radial-gradient(ellipse at 92% 1%, #392a76, transparent 43%), linear-gradient(145deg, #17103c, #07041c); }.app-view.whatsapp-open > header { padding-bottom: 14px; border-bottom: 1px solid #4a2a8b; }.app-view.whatsapp-open > header p { color: var(--white); }.app-view.whatsapp-open > header small { color: #c2b5de; }.app-view.whatsapp-open > header button { background: var(--purple); }.wa-layout { display: flex; flex: 1; min-height: 0; flex-direction: column; margin: 12px -7px -8px; }.wa-title { display: flex; justify-content: space-between; align-items: center; padding: 0 7px 13px; font-size: 23px; }.wa-title span { color: #c389ff; font-size: 20px; }.wa-search { display: flex; align-items: center; gap: 7px; margin: 0 7px 9px; padding: 10px 12px; border-radius: 12px; color: #cabcdf; background: #382269; font-size: 12px; }.wa-search input { width: 100%; border: 0; outline: 0; color: var(--white); background: transparent; font: inherit; }.wa-search input::placeholder { color: #cabcdf; }.wa-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #8b56c4 transparent; }.wa-scroll::-webkit-scrollbar { width: 4px; }.wa-scroll::-webkit-scrollbar-thumb { background: #8b56c4; border-radius: 999px; }.wa-row { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 7px; border: 0; color: var(--white); background: transparent; text-align: left; cursor: pointer; }.wa-row:hover { background: #2a1959; }.wa-row i { width: 43px; height: 43px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; color: var(--white); background: linear-gradient(180deg, #e8e2ff 0 57%, #9279db 58% 72%, #4b367d 73%); font-style: normal; }.wa-row span { display: grid; gap: 4px; }.wa-row b { font-size: 13px; }.wa-row small { color: #bbadd8; font-size: 10px; }.wa-row em { margin-left: auto; color: var(--magenta); font-size: 10px; font-style: normal; }.wa-no-results { padding: 25px 8px; color: #c7b9e2; text-align: center; font-size: 12px; }.wa-layout nav { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: auto; padding: 11px 4px 3px; border-radius: 21px 21px 0 0; background: #24144f; }.wa-layout nav button { display: grid; gap: 3px; justify-items: center; border: 0; color: #ba86f1; background: transparent; font-size: 24px; cursor: pointer; }.wa-layout nav button.active { color: var(--magenta); }.wa-layout nav small { font-size: 9px; font-weight: 800; }.wa-thread-head { display: grid; grid-template-columns: 29px 35px 1fr auto; align-items: center; gap: 8px; padding: 0 6px 12px; border-bottom: 1px solid #48277f; }.wa-thread-head button { border: 0; color: #d49fff; background: transparent; font-size: 30px; cursor: pointer; }.wa-thread-head > i { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: #8b70d0; font-style: normal; }.wa-thread-head b, .wa-thread-head small { display: block; }.wa-thread-head b { font-size: 13px; }.wa-thread-head small { color: #bbadd8; font-size: 9px; }.wa-thread-head > span { color: #c389ff; font-size: 15px; }.wa-thread-body { flex: 1; padding: 14px 8px; overflow-y: auto; background: radial-gradient(circle at 65% 20%, #38206f55, transparent 43%); }.wa-date { width: max-content; margin: 0 auto 16px; padding: 5px 9px; border-radius: 7px; color: #cdbfe8; background: #2e1b5f; font-size: 9px; }.wa-bubble { width: max-content; max-width: 80%; margin: 8px 0; padding: 9px 10px; border-radius: 9px 9px 9px 0; background: #38266d; font-size: 12px; }.wa-bubble.sent { margin-left: auto; border-radius: 9px 9px 0; background: #743075; }.wa-bubble small { display: block; margin-top: 4px; color: #d2c4eb; font-size: 8px; text-align: right; }.wa-compose { display: grid; grid-template-columns: 25px 1fr 30px; align-items: center; gap: 8px; padding: 9px 5px 3px; }.wa-compose input { min-width: 0; padding: 9px 11px; border: 0; border-radius: 999px; outline: 0; color: var(--white); background: #382269; font: 11px var(--sans); }.wa-compose input::placeholder { color: #cabcdf; }.wa-compose button { width: 30px; height: 30px; border: 0; border-radius: 50%; color: var(--white); background: var(--magenta); }.wa-profile-scroll { padding-bottom: 12px; }.wa-profile { padding: 12px 8px 24px; text-align: center; }.wa-profile > i { width: 88px; height: 88px; display: grid; place-items: center; margin: 0 auto 12px; border: 3px solid var(--magenta); border-radius: 50%; background: linear-gradient(180deg, #e8e2ff 0 57%, #9279db 58% 72%, #4b367d 73%); font-size: 32px; font-style: normal; }.wa-profile h4 { margin: 0 0 4px; font-size: 21px; }.wa-profile > small { color: #bcaed9; }.wa-profile > div { display: grid; gap: 8px; margin-top: 22px; text-align: left; }.wa-profile > div button { display: flex; justify-content: space-between; padding: 13px; border: 0; border-radius: 10px; color: var(--white); background: #2b1a58; cursor: pointer; }.wa-profile > div span { color: var(--magenta); font-size: 19px; }
+.empty-layout { flex: 1; display: grid; place-items: center; align-content: center; gap: 16px; text-align: center; }.empty-layout span { color: var(--magenta); font-size: 90px; font-weight: 800; }.empty-layout p { max-width: 260px; margin: 0; color: #5e5871; line-height: 1.5; }
+
+/* Galería, calculadora y notas: pantallas 23 a 26 de la etapa 12. */
+.gallery-layout button { border: 0; cursor: pointer; }.gallery-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }.gallery-detail > button { width: 34px; height: 34px; grid-column: 1 / -1; border: 0; border-radius: 50%; color: var(--white); background: var(--purple); font-size: 27px; cursor: pointer; }.gallery-full { grid-column: 1 / -1; height: 265px; border-radius: 12px; background: linear-gradient(135deg, #e6007f, #653ab6); }.gallery-detail > div:not(.gallery-full) { padding: 12px; border-radius: 10px; background: #eee8f8; }.gallery-detail p { margin: 0 0 5px; color: #746e85; font-size: 11px; }.gallery-detail b { font-size: 14px; }
+.app-view.calculator-open { z-index: 1; inset: 0; padding: 55px 36px 36px; border-radius: 0; color: #090909; background: #fff; box-shadow: none; }.calculator-layout { display: grid; flex: 1; min-height: 0; grid-template-rows: 42px minmax(85px, 1fr) minmax(285px, 1fr); margin: 0; }.app-view.calculator-open .calculator-close { width: 42px; height: 42px; align-self: start; justify-self: start; aspect-ratio: auto; border: 0; border-radius: 0; color: #090909; background: transparent; font-size: 48px; font-weight: 200; line-height: .55; text-align: left; cursor: pointer; }.app-view.calculator-open .calculator-layout output { display: flex; align-items: end; justify-content: end; min-height: 0; margin: 0; padding: 0 4px 20px; border: 0; border-radius: 0; color: #090909; background: transparent; box-shadow: none; font-size: clamp(42px, 11vw, 64px); }.calculator-layout .calculator-keys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 8px; min-height: 0; }.app-view.calculator-open .calculator-keys button { width: min(100%, 55px); min-width: 0; height: auto; min-height: 0; align-self: center; justify-self: center; aspect-ratio: 1; border: 1px solid #a5a5a5; border-radius: 50%; color: #090909; background: #c8c8c8; font-size: clamp(18px, 5vw, 30px); cursor: pointer; }.app-view.calculator-open .calculator-keys button:nth-child(4n) { color: #090909; border-color: #e6007f; background: #e6007f; }.app-view.calculator-open .calculator-keys button:hover { filter: brightness(.93); }
+.app-view.notes-open { color: var(--white); background: radial-gradient(ellipse at 92% 2%, #382a73, transparent 42%), linear-gradient(145deg, #17103c, #08051d); }.app-view.notes-open > header { padding-bottom: 14px; border-bottom: 1px solid #4b2e91; }.app-view.notes-open > header p { color: var(--white); }.app-view.notes-open > header small { color: #c4b8df; }.app-view.notes-open > header button { background: var(--purple); }.notes-layout { display: flex; flex: 1; min-height: 0; flex-direction: column; margin: 13px -7px -8px; }.notes-heading { display: flex; justify-content: space-between; align-items: center; padding: 0 8px 10px; font-size: 23px; }.notes-heading button { width: 34px; height: 34px; border: 0; border-radius: 50%; color: var(--white); background: var(--magenta); font-size: 24px; cursor: pointer; }.notes-count { padding: 0 8px 11px; color: #c8bce3; font-size: 11px; }.notes-list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #8b56c4 transparent; }.notes-list::-webkit-scrollbar { width: 4px; }.notes-list::-webkit-scrollbar-thumb { background: #8b56c4; border-radius: 999px; }.notes-list article { display: flex; justify-content: space-between; gap: 10px; padding: 14px 10px; border-top: 1px solid #492c88; }.notes-list h4 { margin: 0 0 5px; color: var(--white); font-size: 15px; }.notes-list p { margin: 0 0 6px; color: #c5b8df; font-size: 12px; }.notes-list small { color: var(--magenta); font-size: 10px; }.notes-list article button { align-self: center; width: 27px; height: 27px; border: 0; border-radius: 50%; color: #e8d6fa; background: #372264; cursor: pointer; font-size: 18px; }
+
+/* Formularios y resultados: páginas 7 a 9, 49 a 51. */
+.form-card, .result-card { width: min(530px, 100%); padding: 34px; border-radius: 28px; color: var(--ink); background: var(--white); box-shadow: 14px 14px 0 #120530; }
+.form-card .back-button { color: var(--white); }.answers { display: grid; gap: 12px; margin: 26px 0 16px; }.answers button { padding: 18px; border: 3px solid var(--purple); border-radius: 14px; color: var(--indigo-dark); background: var(--white); font-size: 18px; font-weight: 800; text-align: left; cursor: pointer; }.answers button.selected { color: var(--white); background: var(--purple); box-shadow: inset 0 0 0 3px #b997ff; }.form-error { margin: 0 0 16px; padding: 12px; border-radius: 10px; color: #9d0056; background: #ffe0f2; font-weight: 700; }
+.result-screen { background: radial-gradient(circle at 50% 38%, #643ca6, transparent 36%), var(--indigo-dark); }.result-card { text-align: center; }.result-badge { width: 88px; height: 88px; display: grid; place-items: center; margin: 20px auto; border-radius: 50%; color: var(--white); background: var(--magenta); box-shadow: 0 0 0 9px #f7c1e0; font-size: 44px; font-weight: 800; }.result-card > p:not(.eyebrow) { color: #625c78; }.result-answer { margin: 22px 0; padding: 16px; border-radius: 13px; color: var(--indigo-dark); background: #eeeaf8; font-weight: 800; }
+.toast { position: fixed; z-index: 20; bottom: 22px; left: 50%; padding: 11px 16px; transform: translate(-50%, 20px); border-radius: 999px; color: var(--white); background: #110628; box-shadow: 0 7px 20px #0007; opacity: 0; pointer-events: none; transition: .2s ease; }.toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+@media (max-width: 700px) {
+  .landing { flex-direction: column; justify-content: center; padding: 40px 24px; }.landing-copy { width: 100%; margin: 0; }.landing h1 { font-size: clamp(67px, 19vw, 100px); }.landing p { margin: 21px 0 26px; font-size: 22px; }.button-start { min-width: 0; padding: 13px 28px; border-width: 4px; font-size: 21px; }.landing-art { position: static; width: min(230px, 60vw); margin: 28px 0 0; }
+  .case-intro, .characters, .form-screen, .result-screen { padding: 28px 15px; }.case-card { grid-template-columns: 1fr; gap: 18px; padding: 18px; }.case-mark { min-height: 115px; }.case-card p:not(.eyebrow) { font-size: 15px; }.mission-card { font-size: 14px; }.character-grid { grid-template-columns: repeat(2, 1fr); }.portrait { height: 105px; }.phone-stage { height: 100dvh; padding: 8px 0; }.phone-shell { width: min(calc((100dvh - 16px) * .56), 100vw); height: calc(100dvh - 16px); aspect-ratio: 56 / 98; border-width: 5px; border-radius: 35px; padding: 43px 22px 84px; }.weather-card { height: 123px; margin: 25px 0; padding: 16px; border-radius: 30px; }.sun { font-size: 55px; }.weather-card b { font-size: 18px; }.weather-card strong { font-size: 37px; }.app-grid { gap: 20px 11px; }.app-icon span { width: 58px; height: 58px; font-size: 31px; }.dock { right: 20px; bottom: 20px; left: 20px; }.case-file, .conclusion-button { right: 22px; left: 22px; }.app-view { inset: 42px 12px 12px; }.form-card, .result-card { padding: 25px 20px; }
+}
+@media (max-height: 720px) and (min-width: 701px) {
+  .phone-shell { padding: 36px 22px 82px; border-width: 7px; border-radius: 45px; }
+  .dynamic-island { width: 122px; height: 28px; }
+  .weather-card { height: 112px; margin: 20px 0; padding: 15px 18px; border-radius: 30px; }
+  .sun { font-size: 46px; }.weather-card b { font-size: 17px; }.weather-card strong { font-size: 34px; }
+  .app-grid { gap: 18px 8px; }.app-icon { gap: 5px; font-size: 11px; }.app-icon span { width: 48px; height: 48px; font-size: 27px; }
+  .dock { right: 20px; bottom: 14px; left: 20px; height: 62px; border-radius: 22px; }.dock button { width: 46px; height: 46px; font-size: 28px; }
+  .app-view { inset: 34px 12px 12px; padding: 16px; }
+}
+/* Correcciones estéticas: identidad visual de la etapa 12. */
+.landing { background: #23185d; }
+.landing::before { display: none; }
+.landing h1 { font-size: clamp(76px,10.5vw,168px); letter-spacing: -.045em; text-shadow: 4px 4px #8d4dff; }
+.landing p { margin: 26px 0 22px; font-size: clamp(20px,2.5vw,36px); }
+.button-start { min-width: 0; border-width: 3px; box-shadow: none; padding: 15px 30px; }
+.landing-art { right: 13%; bottom: 16%; width: clamp(200px,23vw,360px); filter: drop-shadow(4px 5px 0 #7142db); }
+.app-icon span svg, .dock button svg { width: 76%; height: 76%; display: block; }
+.dock button { display: grid; place-items: center; }
+.app-icon span { box-shadow: inset 0 0 15px #ffffff15; }
+.app-view.gallery-open { background: #fff; padding: 22px 16px 16px; }
+.gallery-heading { flex: 0 0 auto; flex-direction: column; align-items: flex-start !important; gap: 9px !important; }
+.gallery-heading button { background: transparent !important; color: #111 !important; font-size: 37px !important; }
+.gallery-heading h2 { margin: 0 0 4px; font-size: 30px; letter-spacing: -.04em; line-height: 1.1; }
+.gallery-heading small { font-size: 11px; }
+.gallery-layout { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 18px; }
+.gallery-layout .tile { position: relative; min-height: 0; aspect-ratio: 4 / 5; padding: 0; border-radius: 12px; overflow: hidden; background: #d9d1ed; box-shadow: none; }
+.gallery-layout .tile:nth-child(7n + 1) { grid-column: 1 / -1; aspect-ratio: 16 / 10; }
+.gallery-layout .tile svg, .gallery-full svg { display: block; width: 100%; height: 100%; }
+.gallery-layout .tile:nth-child(3n + 2) svg { filter: hue-rotate(12deg); }
+.gallery-layout .tile:nth-child(3n) svg { filter: hue-rotate(-12deg); }
+.app-view.gallery-photo-open { color: #fff; background: #000; overflow-y: auto; }
+.gallery-detail { width: 100%; min-height: 0; }
+.gallery-detail > button { color: #fff; background: transparent; }
+.gallery-full { height: auto; aspect-ratio: 4 / 5; max-height: 55dvh; overflow: hidden; background: #d9d1ed; }
+.gallery-detail > div:not(.gallery-full) { padding: 10px 0; background: transparent; }
+.gallery-detail p { color: #b7b0c8; }
+@media (max-width:700px) { .landing h1 { font-size: clamp(67px,19vw,100px); } .landing-art { width: min(230px,60vw); } .gallery-heading h2 { font-size: 27px; } }
+@media (max-height:740px) { .app-icon span { width: clamp(38px,7.5dvh,58px); height: clamp(38px,7.5dvh,58px); } .weather-card { height: 16dvh; margin: 3dvh 0; } .app-grid { gap: 18px 8px; } }
+@media (prefers-reduced-motion:reduce) { *, *::before, *::after { transition: none !important; } }
+.gallery-layout { grid-auto-rows: max-content; }
+.gallery-layout .tile { height: auto; }
+.gallery-layout .tile svg { position: absolute; inset: 0; }
+.gallery-layout .tile:nth-child(7n + 1) svg { object-fit: fill; }
+
+/* Barra de estado y alineación de los íconos. */
+.status-icons { display: flex; align-items: center; gap: 6px; color: #fff; line-height: 1; letter-spacing: 0; }
+.status-wifi { display: block; width: 21px; height: 16px; }
+.status-battery { display: block; width: 26px; height: 14px; }
+.dock button[data-app="whatsapp"] svg { width: 76%; height: 76%; margin: 0; }
+
+/* ============================================================
+   APLICACIONES CON DATOS Y PARTIDA
+   Estilos de chats reales, contactos, evidencias, temporizador, libreta y resultados.
+   ============================================================ */
+/* Aplicaciones con datos y estado de la partida. */
+.dynamic-island { display: grid; place-items: center; height: 36px; }
+#timer { color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .05em; }
+.case-file { display: block; right: auto; left: 24px; bottom: 125px; width: calc(100% - 48px); background: #201342ee; font-size: 12px; }
+.conclusion-button { display: flex; bottom: 95px; padding: 8px 13px; font-size: 12px; box-shadow: none; border-radius: 10px; right: 24px; left: 24px; }
+.dock { bottom: 18px; height: 66px; }
+.dock button { width: 52px; height: 52px; }
+.character-grid { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.character-photo { width: 100%; height: 180px; object-fit: cover; object-position: 50% 28%; border-radius: 10px; }
+.character-grid article p { margin-top: 10px; }
+.characters { align-items: flex-start; }
+.characters .desktop-panel { padding-bottom: 12px; }
+.app-view.live-app { display: flex; flex-direction: column; inset: 54px 15px 12px; padding: 17px; background: #f9f7fc; color: #23183b; z-index: 5; }
+.app-header { flex: 0 0 auto; display: flex; align-items: center; gap: 10px; padding-bottom: 15px; border-bottom: 1px solid #ddd5ed; }
+.app-header h2 { margin: 0; font-size: 20px; line-height: 1.2; }
+.app-header small { display: block; margin-top: 4px; font-size: 11px; }
+.ui-icon { width: 25px; height: 25px; object-fit: contain; display: inline-block; vertical-align: middle; border-radius: 6px; }
+button { cursor: pointer; }
+button .ui-icon { pointer-events: none; }
+.icon-button { display: inline-grid; place-items: center; min-width: 30px; height: 32px; border: 0; border-radius: 8px; color: #fff; background: #3e3186; font-size: 25px; }
+.app-view.live-app header button { height: auto; width: auto; font-size: inherit; border-radius: 7px; background: transparent; color: inherit; }
+.app-header > .icon-button { padding: 0; width: 30px !important; height: 30px !important; }
+.app-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 10px 0; scrollbar-width: thin; }
+.content-row { display: flex; gap: 10px; align-items: center; width: 100%; border: 0; border-bottom: 1px solid #e1dbea; background: transparent; color: inherit; padding: 12px 2px; text-align: left; }
+.content-row:hover { background: #8e6bc016; }
+.content-row span { min-width: 0; flex: 1; display: grid; gap: 5px; }
+.content-row b { font-size: 13px; overflow-wrap: anywhere; }
+.content-row small { font-size: 11px; line-height: 1.5; overflow-wrap: anywhere; color: #786b91; }
+.content-row em { font-style: normal; color: #9667bf; }
+.avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; object-position: 50% 25%; flex: 0 0 auto; }
+
+/* BÚSQUEDA: campo común para filtrar chats, contactos, correo y lugares. */
+.app-search { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; background: #e9e2f4; padding: 8px; border-radius: 10px; margin: 12px 0 4px; }
+.app-search .ui-icon { width: 20px; height: 20px; }
+.app-search input { min-width: 0; width: 100%; font: inherit; font-size: 12px; border: 0; background: transparent; outline: none; color: inherit; }
+.app-tabs { display: flex; flex: 0 0 auto; gap: 4px; border-top: 1px solid #ddd5ed; padding-top: 9px; }
+.app-tabs button { flex: 1; min-width: 0; border: 0; border-radius: 7px; padding: 8px 3px; color: #79619d; background: transparent; font-size: 11px; }
+.app-tabs button.active { color: #e6007f; background: #e6007f12; font-weight: 800; }
+.instagram-tabs button { display: grid; gap: 4px; font-size: 20px; }
+.instagram-tabs small { font-size: 8px; }
+
+/* MENSAJES: cabecera del chat, burbujas recibidas/enviadas y botón de evidencia. */
+.thread-header { display: flex; align-items: center; gap: 10px; padding: 12px 0; flex: 0 0 auto; }
+.thread-header b { font-size: 13px; }
+.thread { display: flex; flex-direction: column; gap: 10px; }
+.message { flex: 0 0 auto; max-width: 90%; width: fit-content; padding: 11px 13px; border-radius: 14px 14px 14px 3px; background: #e7dff1; color: #29203a; }
+.message.sent { align-self: flex-end; background: #dac9f2; border-radius: 14px 14px 3px 14px; }
+.message p { margin: 0 0 8px; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.message small { display: block; font-size: 9px; color: #756488; }
+.evidence-button { display: block; border: 1px solid #e6007f; color: #bf0069; background: #fff; border-radius: 8px; padding: 7px 10px; margin-top: 10px; font-size: 11px; font-weight: 800; }
+.archive-hint { flex: 0 0 auto; font-size: 10px; color: #887698; line-height: 1.4; }
+
+/* WHATSAPP Y NOTAS: fondos oscuros y contraste de texto. */
+.whatsapp-live, .notes-live { background: linear-gradient(145deg,#24154f,#100821) !important; color: #fff !important; }
+.whatsapp-live .content-row, .notes-live .content-row { border-color: #49346c; }
+.whatsapp-live .content-row small, .notes-live .content-row small { color: #c0b0d6; }
+.whatsapp-live .app-header, .notes-live .app-header, .whatsapp-live .app-tabs { border-color: #49346c; }
+.whatsapp-live .app-search { color: #fff; background: #37235a; }
+.whatsapp-live .message { background: #37265d; color: #fff; }
+.whatsapp-live .message.sent { background: #743575; }
+.whatsapp-live .message small { color: #cab5dd; }
+
+/* INSTAGRAM Y PERFILES: avatares, publicaciones y actividad. */
+.profile-card { text-align: center; padding: 20px 0; }
+.profile-card > .avatar { width: 85px; height: 85px; border: 3px solid #e6007f; }
+.profile-card h3 { margin-bottom: 4px; }
+.profile-card p { font-size: 12px; }
+.profile-strip { display: flex; overflow-x: auto; gap: 12px; padding: 6px 0 15px; }
+.profile-strip button { display: grid; justify-items: center; gap: 4px; border: 0; color: inherit; background: transparent; padding: 0; }
+.profile-strip small { font-size: 9px; max-width: 65px; }
+.profile-strip .avatar { width: 48px; height: 48px; border: 2px solid #e6007f; }
+.real-post { border-top: 1px solid #e0d8eb; margin-bottom: 18px; }
+.real-post header { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+.real-post header small { font-size: 9px; }
+.post-user { display: flex; align-items: center; gap: 8px; border: 0; padding: 0; background: transparent; color: inherit; font-size: 11px; font-weight: 800; }
+.post-user .avatar { width: 26px; height: 26px; }
+.post-photo { width: 100%; max-height: 340px; object-fit: cover; }
+.post-copy { padding: 10px 0; }
+.post-copy p { font-size: 12px; line-height: 1.5; margin: 6px 0; }
+.post-copy small { display: block; font-size: 10px; line-height: 1.5; color: #76648c; }
+.like-button { border: 0; background: transparent; color: #e6007f; font-size: 24px; padding: 0; }
+.text-button { display: inline-flex; align-items: center; gap: 8px; padding: 9px; border: 0; color: inherit; background: transparent; font-size: 12px; }
+
+/* CONTACTOS: accesos a mensajes, llamadas y video. */
+.contact-actions { display: flex; justify-content: space-around; gap: 4px; }
+.contact-actions button { display: grid; gap: 4px; justify-items: center; font-size: 10px; color: inherit; background: transparent; border: 0; }
+
+/* CORREO: acciones del mensaje, carpetas y contenido. */
+.mail-toolbar { display: flex; align-items: center; gap: 8px; }
+.mail-folders { display: flex; flex: 0 0 auto; gap: 5px; margin-top: 10px; }
+.mail-folders button { flex: 1; border: 0; border-radius: 8px; padding: 8px 2px; background: #eee7f6; color: #5a4075; font-size: 10px; }
+.mail-folders .active { background: #3e3186; color: #fff; }
+.email-body { font-size: 14px; line-height: 1.8; padding-top: 20px; }
+.email-sender { overflow-wrap: anywhere; font-size: 12px; }
+
+/* GALERÍA: fotografías, vista ampliada y metadatos. */
+.real-gallery .tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.gallery-real-detail .photo-detail { display: block; width: 100%; max-height: 52dvh; object-fit: contain; margin-top: 12px; background: #171022; border-radius: 10px; }
+.gallery-real-detail p { font-size: 12px; line-height: 1.6; }
+.photo-meta { display: flex; justify-content: space-between; gap: 20px; }
+.photo-meta small, .photo-meta b { display: block; margin-bottom: 5px; font-size: 12px; }
+
+/* NOTAS: edición de título y contenido durante la sesión. */
+.note-editor label { display: grid; gap: 8px; margin: 12px 0; font-size: 12px; }
+.note-editor input, .note-editor textarea { min-width: 0; width: 100%; border: 1px solid #6b5197; color: #fff; border-radius: 8px; padding: 10px; background: #39255d; font: inherit; line-height: 1.7; resize: vertical; }
+.notes-tools { padding-top: 8px; }
+
+/* CALENDARIO: marca los días con eventos y muestra la reserva. */
+.has-event:not(.selected)::after { content: ""; width: 4px; height: 4px; border-radius: 50%; background: #e6007f; }
+.event-card { padding: 15px; border-radius: 12px; background: #eee4f8; }
+
+/* MAPA: ubicación esquemática y selección de lugares guardados. */
+.case-map { position: relative; height: 230px; border-radius: 15px; overflow: hidden; background: repeating-linear-gradient(25deg,transparent 0 45px,#fff 46px 54px,transparent 55px 95px),repeating-linear-gradient(115deg,#dbe8d5 0 58px,#fff 59px 68px); border: 1px solid #ccd8c5; }
+.map-pin { position: absolute; transform: translate(-50%,-50%); width: 28px; height: 28px; color: #fff; background: #5c3890; border: 3px solid #fff; border-radius: 50% 50% 50% 0; font-size: 10px; }
+.map-pin.selected { background: #e6007f; }
+.place-card { padding: 10px 15px; background: #eee5f6; border-radius: 10px; margin-top: 10px; }
+.place-card p { font-size: 12px; }
+
+/* CALCULADORA: pantalla y teclado de operaciones. */
+.functional-calculator { display: flex; flex: 1; min-height: 0; flex-direction: column; }
+.functional-calculator output { flex: 1; min-height: 48px; display: flex; align-items: flex-end; justify-content: flex-end; padding: 15px 0; font-size: 34px; overflow-wrap: anywhere; }
+.functional-calculator > div { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; }
+.functional-calculator button { width: 100%; aspect-ratio: 1; border-radius: 50%; background: #ddd; color: #111; border: 0; font-size: 19px; }
+.functional-calculator button:nth-child(4n) { background: #e6007f; color: #fff; }
+
+/* AJUSTES: interruptores y listado de tiempo de uso. */
+.settings-row { display: flex; width: 100%; gap: 10px; align-items: center; border: 0; border-bottom: 1px solid #ddd5ed; padding: 15px 0; color: inherit; background: transparent; font-size: 12px; }
+.settings-row i { width: 34px; height: 20px; border-radius: 20px; background: #bbb; margin-left: auto; position: relative; }
+.settings-row i::after { content: ""; position: absolute; width: 16px; height: 16px; border-radius: 50%; background: white; top: 2px; left: 2px; }
+.settings-row i.on { background: #e6007f; }
+.settings-row i.on::after { left: 16px; }
+.usage-row { display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid #ddd5ed; font-size: 12px; }
+.empty-state { color: #806c97; font-size: 12px; text-align: center; padding: 20px 0; }
+
+/* PISTAS: ventana de evidencia y libreta del expediente. */
+#clue-dialog { width: min(550px,calc(100vw - 32px)); max-height: calc(100dvh - 40px); overflow-y: auto; border: 2px solid #9252cf; padding: 28px; border-radius: 20px; background: #f9f6ff; color: #24123c; box-shadow: 0 20px 90px #0009; }
+#clue-dialog::backdrop { background: #100820bb; backdrop-filter: blur(4px); }
+#clue-dialog h2 { font-size: 28px; margin: 14px 0; padding-right: 20px; }
+#clue-dialog > p { font-size: 14px; line-height: 1.6; }
+.dialog-close { position: absolute; right: 12px; top: 12px; width: 30px; height: 30px; border: 0; border-radius: 50%; background: #3e3186; color: #fff; font-size: 25px; }
+.clue-content { display: flex; flex-direction: column; gap: 10px; padding-top: 10px; }
+.clue-photo { width: 100%; max-height: 400px; object-fit: contain; border-radius: 10px; background: #1d1234; }
+.locked-clue { padding: 15px 0; border-bottom: 1px solid #ddd5ed; color: #89799b; }
+.locked-clue b,.locked-clue small { display: block; font-size: 12px; margin: 5px 0; }
+#timeout-screen p:not(.eyebrow), #result-explanation { font-size: 15px; line-height: 1.7; }
+#result-progress { font-size: 12px; color: #78618f; }
+#resolution-screen h2 { font-size: clamp(25px,4vw,37px); line-height: 1.2; }
+#resolution-screen .answers button { font-size: 15px; }
+@media(max-width:700px) {
+ .character-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+ .character-photo { height: 170px; }
+ .phone-shell { max-width: 100vw; }
+ .app-view.live-app { inset: 43px 10px 10px; padding: 12px; }
+ .dock { bottom: 15px; height: 56px; }
+ .dock button { width: 44px; height: 44px; }
+ .case-file { bottom: 110px; left: 18px; width: calc(100% - 36px); }
+ .conclusion-button { bottom: 77px; left: 18px; right: 18px; }
+ .app-tabs button { font-size: 9px; }
+}
+@media(max-height:650px) {
+ .app-grid { gap: 15px 8px; }
+ .weather-card { margin: 2dvh 0 3dvh; }
+ .phone-shell { padding-top: 36px; }
+ .app-view.live-app { inset: 36px 10px 10px; padding: 12px; }
+ .dock { height: 48px; bottom: 12px; }
+ .dock button { width: 38px; height: 38px; }
+ .case-file { bottom: 93px; padding: 6px 10px; font-size: 10px; }
+ .conclusion-button { bottom: 65px; padding: 6px 10px; font-size: 10px; }
+ .character-photo { height: 150px; }
+ .app-header { padding-bottom: 9px; }
+ .app-header h2 { font-size: 17px; }
+ .functional-calculator > div { gap: 5px; }
+ .functional-calculator button { max-height: 46px; aspect-ratio: auto; height: 8dvh; font-size: 16px; }
+}
+.conclusion-button { width: auto; }
+
+@media(max-height:650px) { .app-view.live-app { top: 58px; } }
+@media(min-height:651px) { .app-view.live-app { top: 65px; } }
+
+/* ============================================================
+   ETAPA 12: FLUJO DE PANTALLAS
+   Portada → tarjeta de expediente → situación → personajes → pista principal →
+   teléfono → tiempo agotado → pistas encontradas → preguntas → resultados.
+   ============================================================ */
+.symbols { position: absolute; }
+.flow-screen { align-items: flex-start; justify-content: center; padding: 28px 20px 40px; background: var(--indigo-dark); }
+.flow-panel { display: flex; flex-direction: column; gap: 18px; width: min(500px, 100%); margin: 0 auto; }
+.flow-panel.wide { width: min(1000px, 100%); }
+.center-panel { align-items: center; text-align: center; }
+.flow-head { display: flex; align-items: center; gap: 10px; align-self: stretch; text-align: left; }
+.flow-head .back-button { flex: none; width: 36px; height: 36px; margin: 0; font-size: 28px; }
+.flow-screen .eyebrow { letter-spacing: .03em; font-size: 12px; font-weight: 700; }
+.scene { display: block; width: 100%; }
+.screen-title { margin: 0; font-size: clamp(24px, 4.5vw, 34px); font-weight: 800; line-height: 1.15; text-transform: uppercase; text-align: left; }
+.case-title { margin: 0; font-family: var(--display); font-size: clamp(30px, 6vw, 44px); line-height: 1.05; letter-spacing: -.02em; }
+
+/* Tarjeta de expediente (página 11) */
+.brand-mark { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.brand-icon { display: grid; place-items: center; width: 68px; height: 68px; overflow: hidden; border-radius: 17px; background: #000; box-shadow: 0 0 18px #e6007f88; }
+.brand-icon svg { width: 92%; height: 92%; filter: none; }
+.brand-mark h1 { margin: 0; font-family: var(--display); font-size: 46px; letter-spacing: -.03em; }
+.expediente-card { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center; padding: 14px; border-radius: 20px; background: var(--white); color: var(--ink); box-shadow: 0 8px 0 #120530; }
+.expediente-card .scene { aspect-ratio: 1; border-radius: 12px; }
+.expediente-n { margin: 0 0 2px; color: #5b5772; font-size: 11px; }
+.expediente-card h2 { margin: 0 0 6px; font-family: var(--display); font-size: 24px; line-height: 1.05; }
+.expediente-card p:not(.expediente-n) { margin: 0; color: #3d3860; font-size: 13px; line-height: 1.5; }
+
+/* La situación (página 12) */
+.situation-banner { width: 100%; height: auto; aspect-ratio: 4 / 1; border-radius: 14px; }
+.situation-label { margin: 0 0 -10px; color: #cfc6f5; font-size: 14px; }
+.situation-context { margin: 0; color: #ece6ff; font-size: 16px; line-height: 1.6; }
+.flow-screen .mission-card { margin: 0; }
+
+/* Personajes (página 13) */
+.flow-screen .character-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 0; }
+.flow-screen .character-grid article { padding: 10px 10px 14px; border-radius: 18px; color: var(--white); background: var(--indigo); box-shadow: none; }
+.flow-screen .character-photo { height: auto; aspect-ratio: 4 / 3; margin-bottom: 10px; object-position: 50% 22%; border-radius: 12px; }
+.flow-screen .character-grid p { color: var(--magenta); }
+.flow-screen .character-grid small { color: #d9d2f6; }
+@media (min-width: 900px) { .flow-screen .character-grid { grid-template-columns: repeat(4, 1fr); } }
+
+/* Pista principal (página 14) */
+.ticket { width: min(220px, 64%); aspect-ratio: 5 / 7; margin: 0; padding: 22px 14px 30px; color: #3b3560; background: #b9b4d8; font: 12px/1.5 "Courier New", monospace; text-align: center; -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 16px 100%; mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 16px 100%; }
+.ticket > b { display: block; font-size: 13px; letter-spacing: .08em; }
+.ticket hr { margin: 10px 0; border: 0; border-top: 1px dashed #3b3560; }
+.ticket p { display: flex; justify-content: space-between; gap: 8px; margin: 0; }
+
+/* Botón de las pantallas de cierre: píldora centrada con degradé magenta → violeta */
+.button-pill { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-width: 170px; padding: 14px 30px; border-radius: 999px; background: linear-gradient(120deg, var(--magenta), var(--purple)); }
+.title-pill { align-self: stretch; margin: 0; padding: 18px 24px; border-radius: 22px; color: var(--white); background: var(--magenta); font-size: clamp(22px, 5vw, 32px); font-weight: 800; line-height: 1.2; }
+
+/* Tiempo agotado (página 49) */
+.status-icon { display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; color: var(--white); font-size: 46px; font-weight: 800; line-height: 1; }
+.status-icon.is-timeout { background: #e5322d; }
+.status-icon.is-done { background: var(--magenta); }
+.timeout-copy { margin: 0; color: #ece6ff; font-size: 16px; }
+.hint-pill { margin: 0; padding: 12px 22px; border-radius: 999px; background: var(--indigo); font-size: 15px; }
+
+/* Pistas encontradas (página 50) */
+.found-box { display: flex; flex-direction: column; gap: 12px; align-self: stretch; padding: 14px 14px 18px; border-radius: 26px; background: var(--magenta); }
+.found-box h2 { margin: 0; padding: 4px 0 6px; font-size: clamp(22px, 5vw, 30px); font-weight: 800; }
+.found-list { display: flex; flex-direction: column; gap: 10px; }
+.found-row { display: flex; align-items: center; gap: 12px; padding: 8px 16px 8px 8px; border-radius: 999px; background: var(--indigo-dark); text-align: left; }
+.found-thumb { display: grid; place-items: center; flex: none; width: 46px; height: 46px; overflow: hidden; border-radius: 50%; background: var(--indigo); }
+.found-thumb img, .found-thumb svg { width: 100%; height: 100%; object-fit: cover; }
+.found-text { display: flex; flex-direction: column; min-width: 0; }
+.found-text b { font-size: 12px; letter-spacing: .05em; }
+.found-text small { color: #ded4fb; font-size: 12px; line-height: 1.35; }
+.found-empty { margin: 0; padding: 14px; border-radius: 18px; background: var(--indigo-dark); }
+
+/* Preguntas (páginas 7 a 9) */
+.question-card { display: flex; flex-direction: column; align-self: stretch; padding: 16px; border-radius: 22px; background: var(--indigo); }
+.question-card .answers { margin: 0; }
+.question-card .answers[hidden] { display: none; }
+.question-card .answers button { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; border: 0; border-radius: 999px; color: #2b2550; background: var(--white); box-shadow: none; font-size: 16px; font-weight: 600; text-align: left; }
+.question-card .answers button.selected { color: #2b2550; background: var(--white); box-shadow: none; }
+.radio-dot { display: grid; place-items: center; flex: none; width: 26px; height: 26px; border: 2px solid #c9c4dc; border-radius: 50%; font-style: normal; }
+.answers button.selected .radio-dot { border-color: var(--magenta); color: var(--magenta); }
+.answers button.selected .radio-dot::after { content: "✓"; font-size: 16px; font-weight: 800; line-height: 1; }
+.attention-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 190px; padding: 24px; border: 3px solid var(--white); border-radius: 22px; color: var(--white); background: linear-gradient(135deg, var(--magenta), var(--purple)); cursor: pointer; }
+.attention-box[hidden] { display: none; }
+.attention-box strong { font-size: 24px; }
+.attention-box span { font-size: 15px; font-weight: 700; }
+
+/* Resultados (página 51) */
+.result-box { align-self: stretch; padding: 20px 22px; border-radius: 20px; background: var(--indigo); text-align: left; }
+.result-box p, .result-box h3 { margin: 0; }
+.result-lead { font-size: 17px; }
+.result-conclusion { font-size: 18px; font-weight: 800; }
+.result-title { margin-top: 12px !important; color: var(--magenta); font-size: 15px; }
+.result-explanation { margin-top: 6px !important; color: #ece6ff; font-size: 15px; line-height: 1.55; }
+.result-progress { margin-top: 12px !important; padding-top: 10px; border-top: 1px solid #ffffff33; color: #cfc6f5; font-size: 13px; }
+.flow-screen .mission-card strong { flex: none; white-space: nowrap; }
+
+
+/* ============================================================
+   APPS.JS — estilos adicionales de las aplicaciones
+   ============================================================ */
+/* WhatsApp: barra de mensaje (solo ilustrativa) */
+.chat-input { flex: 0 0 auto; margin-top: 8px; padding: 10px 14px; border-radius: 999px; color: #c0b0d6; background: #37235a; font-size: 12px; }
+/* Instagram: modo oscuro y cuadrícula de búsqueda */
+.instagram-live { background: linear-gradient(145deg,#1a0f3d,#090522) !important; color: #fff !important; }
+.instagram-live .app-header, .instagram-live .app-tabs { border-color: #3b2a6b; }
+.instagram-live .content-row { border-color: #3b2a6b; }
+.instagram-live .content-row small, .instagram-live .post-copy small, .instagram-live .real-post header small { color: #c0b0d6; }
+.instagram-live .real-post { border-color: #3b2a6b; }
+.instagram-live .app-tabs button { color: #c0b0d6; }
+.instagram-live .app-tabs button.active { color: #ff4fa8; background: transparent; }
+.ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.ig-grid button { padding: 0; border: 0; aspect-ratio: 1; background: #2a1d55; }
+.ig-grid img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Teléfono: teclado */
+.dial-display { min-height: 44px; margin: 10px 0; font-size: 28px; text-align: center; letter-spacing: .06em; }
+.dial-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; justify-items: center; }
+.dial-pad button { width: 100%; max-width: 70px; aspect-ratio: 1; border: 0; border-radius: 50%; background: #e9e2f4; color: #23183b; font-size: 22px; }
+.dial-actions { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 14px; }
+.dial-call { width: 64px; height: 64px; border: 0; border-radius: 50%; background: #2fbf5b; font-size: 26px; }
+.dial-del { border: 0; background: transparent; font-size: 24px; color: inherit; }
+.contact-actions button span { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #e9e2f4; font-size: 18px; }
+.app-view.live-app h3 { margin: 14px 0 6px; font-size: 14px; }
+/* Calendario */
+.cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; text-transform: capitalize; }
+.cal-nav button { width: 32px; height: 32px; border: 0; border-radius: 50%; color: #fff; background: #6300b1; font-size: 22px; line-height: 1; }
+.cal-week, .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cal-week span { font-size: 10px; font-weight: 800; color: #79619d; }
+.cal-day { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; aspect-ratio: 1; border: 0; border-radius: 50%; background: transparent; color: inherit; font-size: 12px; }
+.cal-day.selected { color: #fff; background: #e6007f; }
+.event-card { margin-top: 10px; }
+/* Ajustes: filas con botón */
+button.settings-row span { flex: 1; text-align: left; }
+button.settings-row em { font-style: normal; color: #9667bf; }
+
+/* Instagram: estética de etapa 12. Historias deslizables sin scrollbar visible. */
+.instagram-live .profile-strip { flex-wrap: nowrap; gap: 12px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -ms-overflow-style: none; padding: 9px 0 15px; overscroll-behavior-x: contain; }
+.instagram-live .profile-strip::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.instagram-live .profile-strip .ig-story { flex: 0 0 58px; width: 58px; min-width: 58px; padding: 0; gap: 5px; }
+.ig-story-ring { display: grid; place-items: center; width: 58px; height: 58px; padding: 3px; border-radius: 50%; background: linear-gradient(145deg,#934dff,#e6007f); }
+.ig-story-ring img { width: 100%; height: 100%; border: 2px solid #130927; border-radius: 50%; object-fit: cover; object-position: center 25%; }
+.instagram-live .profile-strip small { width: 58px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 9px; }
+.instagram-live .real-post { margin-bottom: 8px; border-top: 1px solid #4a2c83; }
+.instagram-live .real-post header { padding: 11px 0; }
+.instagram-live .real-post .avatar { border: 2px solid #e6007f; width: 33px; height: 33px; }
+.instagram-live .post-photo { display: block; width: 100%; height: auto; max-height: 330px; object-fit: cover; border-radius: 3px; }
+.instagram-live .ig-post-actions { display: flex; gap: 13px; padding-bottom: 7px; }
+.ig-post-actions button { display: grid; place-items: center; border: 0; color: #e6007f; background: transparent; padding: 0; width: 24px; height: 24px; font-size: 24px; }
+.ig-post-actions svg, .instagram-tabs svg { display: block; width: 23px; height: 23px; }
+.instagram-live .instagram-tabs { padding: 11px 0 4px; background: #100825; border-top: 1px solid #3e2377; }
+.instagram-live .instagram-tabs button { display: grid; place-items: center; padding: 5px; color: #9f53f5; }
+.instagram-live .instagram-tabs button.active { color: #e6007f; }
+.instagram-live .instagram-tabs button[data-value="messages"] { border-radius: 50%; background: linear-gradient(150deg,#920067,#e6007f); color: #fff; max-width: 38px; height: 38px; margin: 0 10px; }
+.ig-real-summary { display: flex; align-items: center; gap: 12px; padding: 17px 0; }
+.ig-real-summary > .avatar { width: 70px; height: 70px; border: 3px solid #e6007f; }
+.ig-real-summary > div { flex: 1; text-align: center; }
+.ig-real-summary b, .ig-real-summary small { display: block; }
+.ig-real-summary small { margin-top: 6px; font-size: 8px; }
+.ig-profile-bio { padding: 0 0 15px; font-size: 12px; }
+.ig-profile-bio p { color: #c1afd9; margin: 5px 0; }
+.ig-grid-heading { padding: 9px; border-top: 1px solid #4b2c80; border-bottom: 1px solid #4b2c80; text-align: center; color: #e6007f; font-size: 23px; }
+.ig-grid button span { display: block; padding: 8px; color: #ddd1ed; font-size: 10px; }
+
+/* WhatsApp: sus pestañas y detalles de llamadas nunca abren Teléfono. */
+.wa-local-tabs { justify-content: space-around; border-radius: 17px 17px 0 0; background: #24144e; }
+.wa-local-tabs button { display: grid; place-items: center; gap: 5px; color: #c68afb; }
+.wa-local-tabs button span { font-size: 23px; }
+.wa-local-tabs button small { font-size: 9px; }
+.wa-local-tabs button.active { color: #e6007f; background: transparent; }
+.wa-empty-calls { text-align: center; padding: 28px 10px; color: #cbb7e6; }
+.wa-empty-calls > span { display: inline-block; width: 45px; color: #ac71e8; }
+.wa-empty-calls svg { display: block; width: 45px; height: 45px; }
+.wa-empty-calls p { font-size: 12px; line-height: 1.6; }
+
+/* APPS A PANTALLA COMPLETA: cubren el fondo interior del teléfono.
+   La barra de estado y el temporizador quedan encima de todas las apps. */
+.phone-shell:has(.app-view.open) > .phone-status { position: absolute; z-index: 20; top: 39px; left: 23px; right: 23px; pointer-events: none; }
+.phone-shell:has(.app-view.open) > .dynamic-island { z-index: 30; }
+.phone-shell .app-view.live-app { inset: 0; top: 0; border-radius: 0; padding: 70px 18px 18px; box-shadow: none; }
+.phone-shell .app-view.live-app .app-header { padding-bottom: 12px; }
+.wa-local-tabs { border-radius: 0; padding: 10px 0 3px; }
+.wa-local-tabs button { min-height: 59px; gap: 5px; padding: 3px; }
+.wa-local-tabs .wa-tab-icon { display: block; width: 30px; height: 30px; object-fit: contain; margin: 0 auto; }
+.wa-local-tabs small { font-size: 10px; line-height: 1.3; }
+.wa-local-tabs button.active { border-bottom: 3px solid #e6007f; }
+.app-scroll { scrollbar-width: thin; scrollbar-color: #7452a2 transparent; }
+.app-scroll::-webkit-scrollbar { width: 4px; }
+.app-scroll::-webkit-scrollbar-thumb { background: #7452a2; border-radius: 9px; }
+@media(max-height:650px) {
+ .phone-shell .app-view.live-app { padding: 67px 16px 13px; }
+ .phone-shell:has(.app-view.open) > .phone-status { top: 38px; left: 22px; right: 22px; }
+ .wa-local-tabs button { min-height: 55px; }
+}
+@media(max-width:700px) {
+ .phone-shell .app-view.live-app { padding: 73px 18px 18px; }
+ .phone-shell:has(.app-view.open) > .phone-status { top: 42px; }
+}
+
+/* PRESENTACIÓN EN COMPUTADORA: expediente amplio, contexto en columnas
+   y cuatro protagonistas visibles en una sola fila. El celular mantiene su escala. */
+@media(min-width:900px) {
+ #case-card-screen, #briefing-screen, #characters-screen, #clue-screen { align-items: center; padding: 40px 6vw; }
+ #case-card-screen .flow-panel { width: min(1060px,100%); display: grid; grid-template-columns: 1fr 2fr; gap: 35px 50px; align-items: center; }
+ #case-card-screen .brand-mark { grid-row: 1 / 3; }
+ #case-card-screen .brand-icon { width: 140px; height: 140px; border-radius: 30px; }
+ #case-card-screen .brand-mark h1 { font-size: clamp(48px,5vw,78px); }
+ #case-card-screen .expediente-card { grid-template-columns: minmax(170px,38%) 1fr; padding: 25px; gap: 25px; border-radius: 26px; }
+ #case-card-screen .expediente-card h2 { font-size: clamp(28px,3vw,40px); }
+ #case-card-screen .expediente-card p:not(.expediente-n) { font-size: 16px; line-height: 1.65; }
+ #case-card-screen #expediente-button { grid-column: 2; }
+ #briefing-screen .flow-panel { width: min(1060px,100%); display: grid; grid-template-columns: minmax(260px,42%) 1fr; gap: 20px 45px; align-items: start; }
+ #briefing-screen .flow-head { grid-column: 1 / -1; }
+ #briefing-screen .situation-banner { grid-column: 1; grid-row: 2 / 7; height: 100%; min-height: 350px; aspect-ratio: auto; border-radius: 24px; }
+ #briefing-screen .case-title, #briefing-screen .situation-label, #briefing-screen .situation-context, #briefing-screen .mission-card, #briefing-screen #characters-button { grid-column: 2; }
+ #briefing-screen .case-title { font-size: 42px; }
+ #briefing-screen .situation-context { font-size: 17px; }
+ #briefing-screen .mission-card { flex-direction: column; font-size: 15px; line-height: 1.55; }
+ #characters-screen .flow-panel { width: min(1160px,100%); gap: 26px; }
+ #characters-screen .character-grid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 22px; }
+ #characters-screen .character-photo { aspect-ratio: 4 / 5; max-height: 290px; }
+ #characters-screen #characters-more-button { width: min(480px,100%); align-self: flex-end; }
+ #clue-screen .flow-panel { width: min(900px,100%); display: grid; grid-template-columns: 1fr 1fr; gap: 30px 50px; align-items: center; }
+ #clue-screen .flow-head { grid-column: 1 / -1; }
+ #clue-screen .screen-title { grid-column: 2; grid-row: 2; font-size: 42px; }
+ #clue-screen .ticket { grid-column: 1; grid-row: 2 / 4; width: 300px; justify-self: center; padding: 35px 22px; font-size: 14px; }
+ #clue-screen #start-investigation-button { grid-column: 2; grid-row: 3; align-self: start; }
+}
+
+/* EXPEDIENTE — composición vertical de la página 11 de etapa 12.
+   Logo y nombre centrados arriba; tarjeta y botón debajo. */
+#case-card-screen { align-items: center; padding: 30px 24px; }
+#case-card-screen .flow-panel { display: flex; flex-direction: column; width: min(900px,100%); gap: 22px; }
+#case-card-screen .brand-mark { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 16px; }
+#case-card-screen .brand-icon { width: 82px; height: 82px; border-radius: 18px; box-shadow: none; }
+#case-card-screen .brand-mark h1 { font-size: clamp(38px,4.3vw,58px); }
+#case-card-screen .expediente-card { width: 100%; grid-template-columns: 150px minmax(0,1fr); gap: 24px; padding: 28px 32px; border: 2px solid #100a24; border-radius: 32px; box-shadow: none; }
+#case-card-screen .expediente-card h2 { font-size: clamp(26px,3vw,38px); }
+#case-card-screen .expediente-card p:not(.expediente-n) { font-size: 16px; }
+#case-card-screen #expediente-button { width: 100%; border-radius: 999px; background: linear-gradient(110deg,#e6007f,#6300b1); box-shadow: none; }
+@media(max-height:650px) and (min-width:900px) {
+ #case-card-screen { padding: 20px 24px; }
+ #case-card-screen .flow-panel { width: min(820px,100%); gap: 15px; }
+ #case-card-screen .brand-mark { margin-bottom: 8px; gap: 6px; }
+ #case-card-screen .brand-icon { width: 70px; height: 70px; }
+ #case-card-screen .brand-mark h1 { font-size: 45px; }
+ #case-card-screen .expediente-card { grid-template-columns: 125px minmax(0,1fr); padding: 23px 28px; }
+}
+@media(max-width:700px) {
+ #case-card-screen .brand-icon { width: 68px; height: 68px; }
+ #case-card-screen .expediente-card { grid-template-columns: 90px minmax(0,1fr); padding: 17px; gap: 15px; border-radius: 23px; }
+ #case-card-screen .expediente-card h2 { font-size: 24px; }
+ #case-card-screen .expediente-card p:not(.expediente-n) { font-size: 13px; }
+}
+
+/* PÁGINA 11: logo y textura extraídos del PDF de identidad visual.
+   La fuente incrustada se usa en CAUGHT!, cuyos caracteres están en ese PDF. */
+
+#case-card-screen .flow-panel { width: min(900px,78vw); gap: 18px; }
+#case-card-screen .brand-mark { gap: 13px; margin-bottom: 32px; }
+#case-card-screen .brand-icon { width: 82px; height: 82px; border-radius: 20px; background: #000; }
+#case-card-screen .brand-icon img { width: 100%; height: 100%; object-fit: contain; }
+#case-card-screen .brand-mark h1 { font-family: Arial,sans-serif; font-size: 54px; font-weight: 700; letter-spacing: -.015em; line-height: 1; }
+#case-card-screen .expediente-card { grid-template-columns: 145px minmax(0,1fr); padding: 30px 36px; gap: 20px; background: #fff url("../img/fondos/tarjeta-etapa12.png") center / cover; border: 2px solid #000; border-radius: 35px; color: #000; }
+#case-card-screen .expediente-card .scene { width: 145px; aspect-ratio: 1; }
+#case-card-screen .expediente-n { color: #111; font-size: 12px; margin-bottom: 7px; }
+#case-card-screen .expediente-card h2 { font-family: Arial,sans-serif; font-weight: 800; color: #000; font-size: clamp(25px,2.5vw,33px); margin-bottom: 8px; }
+#case-card-screen .expediente-card p:not(.expediente-n) { font-size: 14px; color: #111; line-height: 1.6; max-width: 540px; }
+#case-card-screen #expediente-button { border: 2px solid #000; font-size: 25px; font-weight: 700; padding: 16px 30px; background: linear-gradient(105deg,#e6007f 0%,#b9008d 45%,#6300b1 100%); }
+@media(min-width:900px) and (max-height:650px) {
+ #case-card-screen .flow-panel { width: min(900px,78vw); gap: 16px; }
+ #case-card-screen .brand-mark { gap: 12px; margin-bottom: 26px; }
+ #case-card-screen .brand-icon { width: 75px; height: 75px; }
+ #case-card-screen .brand-mark h1 { font-size: 50px; }
+ #case-card-screen .expediente-card { grid-template-columns: 125px minmax(0,1fr); padding: 25px 30px; }
+ #case-card-screen .expediente-card .scene { width: 125px; }
+ #case-card-screen #expediente-button { padding: 14px 27px; font-size: 23px; }
+}
+@media(max-width:700px) {
+ #case-card-screen .flow-panel { width: 100%; }
+ #case-card-screen .brand-mark { margin-bottom: 15px; }
+ #case-card-screen .brand-icon { width: 68px; height: 68px; }
+ #case-card-screen .brand-mark h1 { font-size: 44px; }
+ #case-card-screen .expediente-card { grid-template-columns: 85px minmax(0,1fr); gap: 15px; padding: 18px; border-radius: 25px; }
+ #case-card-screen .expediente-card .scene { width: 85px; }
+ #case-card-screen .expediente-card h2 { font-size: 23px; }
+ #case-card-screen .expediente-card p:not(.expediente-n) { font-size: 12px; }
+ #case-card-screen #expediente-button { font-size: 20px; padding: 14px 20px; }
+}
+
+/* SITUACIÓN — composición horizontal de la imagen y texto debajo, página 12.
+   En computadora se mantiene una columna amplia, sin recortar la ilustración. */
+#briefing-screen {align-items:center;padding:22px 6vw;}
+#briefing-screen .flow-panel {display:flex;flex-direction:column;width:min(870px,100%);gap:12px;}
+#briefing-screen .situation-banner {width:100%;height:auto;min-height:0;aspect-ratio:4/1;border-radius:18px;}
+#briefing-screen .case-title {font-size:30px;margin:0;}
+#briefing-screen .situation-context {font-size:15px;line-height:1.5;margin:0;}
+#briefing-screen .situation-label {margin:0;}
+#briefing-screen .mission-card {flex-direction:row;margin:0;font-size:14px;line-height:1.4;padding:13px 18px;background:#f9f7fc;color:#201653;}
+#briefing-screen .mission-card strong,#briefing-screen .mission-card span {color:#201653;}
+/* BOTONES — degradado de magenta claro a violeta oscuro, como el modelo. */
+#characters-button,#characters-more-button,#start-investigation-button {width:100%;background:linear-gradient(105deg,#e6007f,#6300b1);border-radius:999px;}
+/* PROTAGONISTAS — retratos más pequeños y botón completo debajo. */
+#characters-screen .flow-panel {width:min(900px,100%);gap:20px;}
+#characters-screen .character-grid {gap:18px;}
+#characters-screen .character-photo {width:100%;height:150px;max-height:150px;aspect-ratio:auto;object-fit:cover;object-position:center 25%;}
+#characters-screen #characters-more-button {width:100%;align-self:stretch;}
+/* PISTA — encabezado y título arriba; el botón queda debajo del ticket. */
+#clue-screen {padding:22px 6vw;}
+#clue-screen .flow-panel {width:min(870px,100%);display:grid;grid-template-columns:1fr 1fr;gap:14px 30px;}
+#clue-screen .flow-head {grid-column:1/-1;grid-row:1;}
+#clue-screen .screen-title {grid-column:1/-1;grid-row:2;font-size:30px;margin:0;}
+#clue-screen .ticket {grid-column:1;grid-row:3;width:230px;padding:25px 17px;font-size:12px;justify-self:center;}
+#clue-screen #start-investigation-button {grid-column:1/-1;grid-row:4;}
+/* BARRA DE ESTADO — contraste oscuro en apps claras, claro en apps oscuras. */
+.phone-shell:has(.app-view.open) .phone-status {color:#17102b;}
+.phone-shell:has(.whatsapp-live,.instagram-live,.notes-live) .phone-status {color:white;}
+.phone-status .status-icons {color:inherit;}
+/* WHATSAPP — símbolos propios de las pestañas, sin los discos de otras apps. */
+.wa-local-tabs {background:#1b103a;border-top:1px solid #443160;}
+.wa-local-tabs .wa-tab-icon {width:27px;height:27px;}
+.wa-tab-icon svg {width:100%;height:100%;display:block;}
+/* MAPA — fondo extraído de página 35 y búsqueda de recientes de página 36. */
+.phone-shell .app-view.map-live {padding:0;background:#efe8ff;}
+.map12-scene {position:relative;flex:1;min-height:0;background:url('../img/fondos/mapa-etapa12.png') center/cover;}
+.map12-searchbar {display:flex;align-items:center;gap:8px;margin:76px 12px 0;color:#4b338d;}
+.map12-searchbar button {border:0;cursor:pointer;}
+.map12-back {background:transparent;color:inherit;font-size:28px;padding:0 4px;}
+.map12-search,.map12-searchbar label {display:flex;align-items:center;justify-content:center;gap:10px;flex:1;background:#f5f3f9dd;border-radius:10px;padding:10px;color:#655d73;}
+.map12-searchbar svg {width:20px;height:20px;}
+.map12-searchbar .avatar {width:27px;height:27px;}
+.map12-searchbar input {width:100%;border:0;background:transparent;outline:none;font:inherit;min-width:0;color:#21133f;}
+.map12-home {position:absolute;bottom:25px;left:calc(50% - 23px);width:46px;height:46px;border:0;border-radius:50%;background:#e6007f;color:white;padding:12px;}
+.map12-home svg {width:100%;height:100%;}
+.map12-place {position:absolute;bottom:85px;left:14px;right:14px;padding:14px;border-radius:14px;background:white;color:#21133f;font-size:13px;}
+.map12-searchscreen {display:flex;flex-direction:column;height:100%;color:#2b2142;background:#fff;}
+.map12-searchscreen h3 {margin:25px 20px 8px;font-size:16px;}
+.map12-recents {padding:0 20px;}
+.map12-recent {display:flex;align-items:center;gap:13px;width:100%;background:none;color:#332342;border:0;border-bottom:1px solid #ded8e8;padding:17px 0;text-align:left;cursor:pointer;}
+.map12-recent>span {font-size:27px;color:#7142b1;}
+.map12-recent b,.map12-recent small {display:block;}
+.map12-recent small {font-size:11px;margin-top:5px;color:#6f6879;}
+/* PISTAS Y RESOLUCIÓN — proporción de computadora y centrado vertical.
+   La pregunta y sus respuestas caben sin barra de desplazamiento a 572px. */
+#found-screen,#resolution-screen {align-items:center;justify-content:center;padding:24px;min-height:100dvh;}
+#found-screen .flow-panel {width:min(760px,100%);gap:22px;}
+#found-screen .found-box {width:100%;padding:25px;box-sizing:border-box;}
+#found-screen #found-list {width:100%;}
+#resolution-screen .flow-panel {width:min(720px,100%);gap:16px;}
+#resolution-screen h2 {font-size:28px;line-height:1.2;margin:0;padding:20px 24px;}
+#resolution-screen .question-card {width:100%;box-sizing:border-box;padding:16px;}
+#resolution-screen .answers {gap:10px;}
+#resolution-screen .answers button {padding:13px 16px;font-size:15px;min-height:49px;}
+#resolution-screen .attention-box {min-height:150px;}
+@media(max-width:700px){
+ #briefing-screen .mission-card {flex-direction:column;}
+ #characters-screen .character-photo {height:120px;}
+ #clue-screen .flow-panel {grid-template-columns:1fr;}
+ #resolution-screen h2 {font-size:23px;}
+}
+
+/* MAPA — cuatro marcadores del expediente; el seleccionado se resalta. */
+.map12-marker {position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;color:#5f32ad;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px;z-index:2;}
+.map12-marker>span {display:grid;place-items:center;width:25px;height:25px;background:#733eb9;color:white;border:3px solid white;border-radius:50%;box-shadow:0 2px 5px #49307866;}
+.map12-marker b {max-width:100px;border-radius:5px;padding:3px 5px;background:#ffffffec;color:#43206e;font-size:9px;line-height:1.2;}
+.map12-marker.selected>span {background:#e6007f;transform:scale(1.2);}
+.map12-marker.selected b {color:#b40065;}
+.map12-place {z-index:3;}
+/* INSTAGRAM — compositor accesible al pie del chat, enviar o pulsar Enter. */
+.ig-compose {display:flex;align-items:center;gap:8px;border:1px solid #694899;border-radius:24px;padding:7px 10px;margin-top:10px;flex-shrink:0;}
+.ig-compose label {flex:1;min-width:0;}
+.ig-compose input {width:100%;box-sizing:border-box;border:0;outline:none;background:transparent;color:white;padding:5px;font:inherit;font-size:12px;}
+.ig-compose button {border:0;background:transparent;color:#ec42bb;font-weight:bold;font-size:12px;cursor:pointer;}
+/* TIEMPO EN PANTALLA — tarjetas claras, columnas magenta y lista con barras. */
+.phone-shell .settings-live:has(.usage12) {background:#e0e2e7;color:#111;}
+.settings-live:has(.usage12) .app-header {border:0;gap:10px;background:#fafafa;margin:-2px -16px 0;padding:10px 12px 17px;}
+.settings-live:has(.usage12) .app-header h2 {font-size:14px;}
+.settings-live:has(.usage12) .app-header .text-button {font-size:11px;color:#111;padding:0;white-space:nowrap;}
+.usage12 {padding:15px 2px 0;}
+.usage12-chart,.usage12-list {border-radius:28px;background:#ffffffed;padding:18px;}
+.usage12-chart {position:relative;height:172px;box-sizing:border-box;}
+.usage12-chart>small {display:block;font-weight:bold;color:#999;font-size:11px;}
+.usage12-chart>strong {display:block;margin-top:7px;font-size:22px;}
+.usage12-bars {display:flex;gap:7px;align-items:end;height:93px;margin-top:7px;}
+.usage12-bars>div {height:100%;flex:1;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:7px;}
+.usage12-bar {width:100%;background:#e6007f;border-radius:20px;min-height:2px;max-height:73px;}
+.usage12-bars small {font-size:10px;}
+.usage12 h3 {font-size:17px;margin:20px 14px 14px;}
+.usage12-row {display:flex;align-items:center;gap:8px;padding:9px 0;}
+.usage12-icon {display:grid;place-items:center;flex-shrink:0;width:35px;height:35px;border-radius:50%;background:#cfd2d8;color:#615475;font-size:16px;}
+.usage12-row>div {flex:1;min-width:0;}
+.usage12-row b {font-size:10px;}
+.usage12-row>small {font-size:9px;}
+.usage12-track {height:6px;border-radius:9px;background:#d0d3d8;margin-top:7px;overflow:hidden;}
+.usage12-track i {display:block;height:100%;background:#e6007f;border-radius:9px;}
+/* TIEMPO AGOTADO — panel de computadora centrado en ambos ejes. */
+#timeout-screen {align-items:center;justify-content:center;min-height:100dvh;padding:24px;}
+#timeout-screen .flow-panel {width:min(780px,100%);gap:22px;}
+#timeout-screen h2 {font-size:clamp(28px,3.5vw,44px);}
+#timeout-screen .soft-pill {width:min(560px,100%);box-sizing:border-box;}
+/* RESULTADOS — composición de etapa 12, ampliada para computadora.
+   Mantiene las tarjetas del modelo y centra el conjunto en ambos ejes. */
+#result-screen {align-items:center;justify-content:center;min-height:100dvh;padding:24px;}
+#result-screen .flow-panel {width:min(780px,100%);gap:18px;}
+#result-screen .title-pill {width:100%;box-sizing:border-box;font-size:clamp(25px,3vw,36px);padding:19px 24px;}
+#result-screen .result-box {padding:20px 26px;}
+#result-screen .result-explanation {line-height:1.6;}
+#result-screen #restart-button {min-width:240px;}
+@media(max-width:700px){#result-screen {padding:24px 18px;}#result-screen .result-box {padding:18px;}#result-screen #restart-button {min-width:200px;}}
+
+/* INSTAGRAM — + central decorativo; mensajes y búsqueda a sus lados.
+   Actividad se consulta desde el corazón de la cabecera principal. */
+.instagram-live .instagram-tabs button[data-value="messages"] {background:transparent;border-radius:0;max-width:none;height:auto;margin:0;color:#9f53f5;}
+.instagram-live .instagram-tabs button[data-value="messages"].active {color:#e6007f;}
+.instagram-live .instagram-tabs button[data-value="create"] {border-radius:50%;background:linear-gradient(150deg,#920067,#e6007f);color:white;max-width:38px;height:38px;margin:0 10px;}
+.ig-header-activity {margin-left:auto;border:0;background:transparent;color:#e6007f;cursor:pointer;padding:3px;}
+.ig-header-activity svg {width:24px;height:24px;display:block;}
+/* PISTAS — calendario con contraste y trazo blanco, como Instagram. */
+.found-calendar svg g[stroke] {stroke:white;}
+.found-calendar svg g[fill] {fill:white;}
+
+/* ESTADO DEL TELÉFONO — igual especificidad para fondos oscuros y claros.
+   Hora, wifi y batería heredan el contraste correcto en cada aplicación. */
+.phone-shell:has(.app-view.open.whatsapp-live) > .phone-status,
+.phone-shell:has(.app-view.open.instagram-live) > .phone-status,
+.phone-shell:has(.app-view.open.notes-live) > .phone-status {color:#fff;}
+.phone-shell:has(.app-view.open) > .phone-status .status-icons {color:inherit;}
+/* WHATSAPP — barra de etapa 12, símbolos suaves y subrayado corto activo. */
+.wa-local-tabs {background:linear-gradient(120deg,#171328,#211b40);border-top:0;border-radius:18px 18px 0 0;padding:9px 0 3px;}
+.wa-local-tabs button {position:relative;color:#bca9ee;border:0!important;gap:6px;}
+.wa-local-tabs .wa-tab-icon {width:25px;height:25px;}
+.wa-tab-icon svg {stroke-width:1.5;}
+.wa-local-tabs button.active {color:#f03796;}
+.wa-local-tabs button.active:after {content:'';position:absolute;bottom:0;left:28%;right:28%;height:3px;border-radius:5px;background:#f03796;}
+.wa-local-tabs button.active[data-value="calls"] svg {fill:currentColor;stroke-width:1;}
+.wa-local-tabs small {font-size:10px;letter-spacing:.15px;}
+
+/* PISTAS — la lista se muestra al terminar; el hallazgo usa un aviso superior.
+   No tapa la hora, wifi, batería ni el temporizador y no bloquea la aplicación. */
+#case-file-button {display:none!important;}
+.clue-notice {position:absolute;z-index:40;top:70px;left:14px;right:14px;display:flex;align-items:center;justify-content:center;gap:9px;padding:13px 10px;border-radius:16px;background:linear-gradient(105deg,#e6007f,#6300b1);box-shadow:0 4px 15px #0005;color:white;font-size:16px;font-weight:700;opacity:0;transform:translateY(-12px);transition:opacity .2s,transform .2s;pointer-events:none;}
+.clue-notice.show {opacity:1;transform:translateY(0);}
+.clue-notice>span {display:grid;place-items:center;border:2px solid white;border-radius:50%;width:23px;height:23px;font-size:15px;}
+
+/* CELULAR — mismo marco en todas las apps, con contenido dentro de sus límites. */
+.phone-shell {isolation:isolate;overflow:hidden;}
+.phone-shell > .phone-status {position:absolute;z-index:20;top:32px;left:22px;right:22px;}
+.phone-shell:has(.app-view.open) > .phone-status {top:32px;}
+.phone-shell .app-view.live-app {min-width:0;max-width:100%;box-sizing:border-box;}
+/* TELÉFONO — teclado completo y botón de llamada visibles sin desplazar. */
+.phone-live:has(.dial-pad) .app-scroll {display:flex;flex-direction:column;justify-content:center;overflow:hidden;}
+.phone-live .dial-display {min-height:30px;margin:4px 0;font-size:24px;}
+.phone-live .dial-pad {gap:7px;}
+.phone-live .dial-pad button {width:min(100%,54px);height:54px;aspect-ratio:1;flex-shrink:0;font-size:21px;}
+.phone-live .dial-actions {margin-top:10px;}
+.phone-live .dial-call {width:48px;height:48px;font-size:23px;}
+/* CALCULADORA — teclas circulares y operación encima del resultado. */
+.functional-calculator {min-height:0;min-width:0;}
+.functional-calculator .calc-expression {display:block;min-height:22px;text-align:right;font-size:17px;color:#736c83;padding:0 4px;}
+.functional-calculator button {aspect-ratio:1!important;width:100%;height:auto!important;max-height:none!important;border-radius:50%;font-size:18px;}
+.functional-calculator > div {gap:7px;}
+@media(max-height:650px){.functional-calculator > div {width:235px;max-width:100%;align-self:center;margin:0 auto;}.functional-calculator button {max-width:54px;}.phone-live .dial-pad button {width:49px;height:49px;}}
+@media(max-width:700px){.phone-shell > .phone-status,.phone-shell:has(.app-view.open) > .phone-status {top:35px;}}
+.functional-calculator .calc-expression {margin-top:auto;}
+.functional-calculator output {flex:0;padding:8px 0 15px;}
+
+/* INICIO — repone el espacio que ocupaba la barra de estado en el flujo.
+   La hora, wifi y batería conservan su posición superior independiente. */
+.phone-shell > .weather-card {margin-top:calc(3dvh + 16px);}
+@media(max-height:650px){.phone-shell > .weather-card {margin-top:calc(2dvh + 16px);}}
+/* WHATSAPP — compositor de etapa 12: +, campo violeta y envío magenta.
+   El + es decorativo; el botón de envío mantiene clic y tecla Enter. */
+.wa-compose.ig-compose {border:0;border-radius:0;background:#1c1635;gap:8px;padding:9px 0 2px;margin-top:8px;}
+.wa-compose-add {display:grid;place-items:center;width:31px;height:31px;flex:0 0 31px;border-radius:50%;background:#40316d;color:white;font-size:27px;font-weight:400;}
+.wa-compose label {display:flex;align-items:center;height:36px;border-radius:22px;background:linear-gradient(110deg,#322653,#3e2c68);padding:0 10px;box-sizing:border-box;}
+.wa-compose input {padding:0;color:white;font-size:12px;}
+.wa-compose input::placeholder {color:#c09bd8;}
+.wa-compose button {display:grid;place-items:center;width:33px;height:33px;flex:0 0 33px;border-radius:50%;background:#e52a91;color:white;padding:7px;}
+.wa-compose button svg {width:100%;height:100%;}
+
+/* ETAPA 12 — indicadores arriba del cronómetro, a ambos lados del teléfono. */
+.phone-shell > .phone-status,.phone-shell:has(.app-view.open) > .phone-status {top:9px;left:22px;right:22px;z-index:50;}
+.phone-shell > .dynamic-island {top:19px;height:35px;z-index:50;}
+.phone-shell > .weather-card {margin-top:calc(2dvh + 35px);}
+.phone-shell .app-view.live-app {padding-top:82px;}
+.phone-shell .app-view.map-live {padding:0;}
+#case-file-button,#conclusion-button {display:none!important;}
+/* Aviso del ejemplo: banda magenta superior, bordes inferiores redondeados. */
+.phone-shell .clue-notice {top:0;left:0;right:0;height:132px;box-sizing:border-box;padding:65px 12px 18px;border-radius:0 0 35px 35px;background:#e6007f;box-shadow:none;font-size:25px;text-align:center;z-index:40;}
+.phone-shell:has(.clue-notice.show) > .phone-status {color:#111;}
+/* Mensaje importante: resaltado directamente, sin opción Revisar evidencia. */
+.message.message-evidence,.whatsapp-live .message.message-evidence {background:#e6007f;color:white;border:2px solid #ff8bcc;box-shadow:0 0 0 2px #e6007f33;}
+.message.message-evidence small {color:#fff;}
+.evidence-mark {display:block;height:8px;border-radius:5px;background:#e6007f;margin-top:8px;}
+
+/* CRONÓMETRO — vuelve a la isla pegada al borde superior de etapa 12.
+   Este ajuste no cambia la hora, wifi, batería ni las aplicaciones. */
+.phone-shell > .dynamic-island {top:0;height:36px;}
+
+/* APPS — reduce el espacio superior vacío y amplía el área de contenido.
+   Mantiene libres la barra de estado y el cronómetro. */
+.phone-shell .app-view.live-app {padding-top:56px;}
+.phone-shell .app-view.map-live {padding:0;}
+
+/* TELÉFONO — ícono vectorial estable, sin emoji de sistema. */
+.phone-live .dial-call {display:grid;place-items:center;background:#e6007f;color:white;padding:12px;box-shadow:none;}
+.phone-live .dial-call svg {display:block;width:100%;height:100%;}
+/* INSTAGRAM — cuatro perfiles completos dentro del ancho disponible.
+   El resto se consulta deslizando; el ajuste evita fotos cortadas al inicio. */
+.instagram-live .profile-strip {display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 24px)/4);gap:8px;padding:10px 0 15px;scroll-snap-type:x mandatory;}
+.instagram-live .profile-strip .ig-story {width:100%;min-width:0;display:flex;flex-direction:column;align-items:center;scroll-snap-align:start;}
+.instagram-live .ig-story-ring {width:min(54px,100%);height:auto;aspect-ratio:1;box-sizing:border-box;}
+.instagram-live .profile-strip small {width:100%;text-align:center;}
+
+/* CORREO — composición blanca y lista del modelo de etapa 12. */
+.phone-shell .email-live {background:#fff;color:#111;}
+.mail12-header {display:flex;align-items:center;justify-content:space-between;flex-shrink:0;padding:8px 3px 19px;}
+.mail12-header h2 {margin:0;font-size:22px;font-weight:400;}
+.mail12-header button {border:0;background:transparent;color:#111;cursor:pointer;}
+.mail12-close {font-size:32px;line-height:1;}
+.mail12-menu {font-size:22px;}
+.mail12-row {display:flex;align-items:center;gap:10px;width:100%;border:0;border-bottom:2px solid #777;background:white;text-align:left;padding:10px 0;color:#111;cursor:pointer;}
+.mail12-avatar {width:43px;height:43px;flex:0 0 43px;border-radius:50%;overflow:hidden;}
+.mail12-avatar svg {display:block;width:100%;height:100%;}
+.mail12-copy {flex:1;min-width:0;}
+.mail12-copy b,.mail12-copy small {display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mail12-copy b {font-size:12px;}
+.mail12-copy small {font-size:9px;margin-top:4px;}
+.mail12-row time {font-size:9px;color:#777;align-self:flex-end;margin-bottom:5px;}
+
+/* PÁGINAS 28–35 — vistas claras y tamaños adaptados al celular. */
+.calendar-live,.phone-live {background:white!important;color:#111!important;}
+.header-spacer {width:22px;}
+.mail12-initial {display:grid;place-items:center;background:#d6ccf6;color:#493075;font-size:23px;font-weight:700;}
+.mail12-initial.netflix-initial {background:#111;color:#e50914;}
+.mail-detail-tools {display:flex;justify-content:space-between;align-items:center;padding:9px 0 20px;}
+.mail-detail-tools button {font-size:30px;color:#111;}
+.mail-detail12 h2 {font-size:19px;font-weight:400;margin:8px 0 20px;}
+.mail-detail-sender {display:flex;align-items:center;gap:9px;margin-bottom:13px;}
+.mail-detail-sender>div {flex:1;min-width:0;}
+.mail-detail-sender small {display:block;font-size:9px;overflow-wrap:anywhere;}
+.mail-detail-sender b {font-size:11px;}
+.mail-detail-sender time,.mail-detail12>small {font-size:9px;color:#777;}
+.mail-detail12 p {font-size:13px;line-height:1.8;margin-top:25px;}
+.mail-reply12 {display:flex;justify-content:space-between;padding:13px 0;gap:15px;}
+.mail-reply12 button {border:1px solid #555;border-radius:18px;background:white;padding:8px 15px;font-size:11px;cursor:pointer;}
+.mail-drawer12 {position:absolute;z-index:10;top:75px;bottom:0;left:0;width:78%;background:white;box-shadow:80px 0 0 #60708133;}
+.mail-account12 {display:flex;align-items:center;gap:8px;background:#e6e9ee;padding:16px 10px;margin-bottom:18px;font-size:12px;}
+.mail-account12 small {display:block;font-size:8px;margin-top:4px;}
+.mail-account12 .avatar {width:40px;height:40px;}
+.mail-drawer12>button {display:flex;align-items:center;gap:12px;width:100%;padding:12px;border:0;background:white;text-align:left;font-size:12px;cursor:pointer;}
+.mail-drawer12>button span {font-size:18px;width:20px;}
+.cal12-header {display:flex;flex-direction:column;align-items:flex-start;gap:4px;}
+.cal12-heading {width:100%;}
+.cal12-heading>small {font-size:14px;font-weight:700;}
+.cal12-heading>div {display:flex;align-items:center;justify-content:space-between;}
+.cal12-heading h2 {font-size:23px;margin:2px 0 10px;}
+.cal12-grid {flex:1;min-height:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(var(--weeks),1fr);}
+.cal12-day {border:0;border-top:1px solid #eee;background:white;padding:5px 0;display:flex;flex-direction:column;align-items:center;color:#111;cursor:pointer;}
+.cal12-day b {font-size:12px;font-weight:500;}
+.cal12-day:nth-child(7n),.cal12-day:nth-child(7n-1) {color:#999;}
+.cal12-day small {width:100%;font-size:6px;overflow:hidden;background:#e6007f;color:white;border-radius:4px;padding:2px 0;margin-top:4px;}
+.cal12-day.selected b {color:#e6007f;font-weight:800;}
+.cal12-bottom {flex-shrink:0;padding-top:10px;}
+.cal12-event {display:block;width:100%;box-sizing:border-box;background:#e6007f;border:0;border-radius:25px;padding:14px;text-align:left;color:#111;font-size:13px;font-weight:700;cursor:pointer;}
+.cal12-event .evidence-mark {margin:0;height:2px;}
+.phone12-row {display:flex;align-items:center;width:100%;gap:10px;padding:10px 0;background:white;border:0;border-bottom:1px solid #cad1db;text-align:left;cursor:pointer;}
+.phone12-row .avatar {width:36px;height:36px;}
+.phone12-row>span {flex:1;min-width:0;}
+.phone12-row b,.phone12-row small {display:block;font-weight:400;}
+.phone12-row b {font-size:12px;}
+.phone12-row small {font-size:10px;margin-top:3px;}
+.phone12-row .phone12-date {font-size:8px;color:#777;}
+.phone12-row i {width:21px;height:21px;color:#111;}
+.phone12-row svg {width:100%;height:100%;}
+.phone12-letter {font-size:19px;margin:7px 0 0;}
+.phone12-mycard {display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #cad1db;font-size:13px;}
+.phone12-tabs button {display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px;color:#111;}
+.phone12-tabs button>span {font-size:21px;line-height:1;}
+.phone12-tabs button>small {font-size:9px;}
+.phone12-tabs button.active {color:#e6007f;background:#f0edf1;border-radius:20px;}
+.phone-live .dial-pad {gap:10px;width:220px;max-width:100%;margin:0 auto;}
+.phone-live .dial-pad button {background:#fff;color:#111;box-shadow:0 4px 16px #0000000d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
+.phone-live .dial-pad button b {font-size:23px;font-weight:400;}
+.phone-live .dial-pad button small {font-size:7px;letter-spacing:1px;}
+.phone-live .dial-call {background:#2bcc57;}
+.phone-live .dial-actions {position:relative;}
+.phone-live .dial-del {position:absolute;left:calc(50% + 48px);}
+.phone-shell .phone-live:has(.contact12-card) {padding:0;background:linear-gradient(155deg,#597ead,#a7c4d4 64%,#076394)!important;}
+.contact12-card {display:flex;flex-direction:column;align-items:center;padding:65px 20px 20px;color:white;flex:1;}
+.contact12-card header {align-self:flex-start;}
+.contact12-card header button {color:white;font-size:30px;}
+.contact12-card>img {width:108px;height:108px;object-fit:cover;border-radius:50%;margin-top:12px;}
+.contact12-card h2 {font-size:25px;margin:12px 0 16px;}
+.contact12-actions {display:flex;justify-content:center;gap:10px;width:100%;}
+.contact12-actions button {display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;color:white;padding:0;cursor:pointer;}
+.contact12-actions img {width:30px;height:30px;object-fit:contain;}
+.contact12-actions small {font-size:9px;}
+.contact12-number {display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;padding:12px;border-radius:17px;background:#ffffff35;margin-top:28px;}
+.contact12-number>span {width:21px;height:21px;}
+.contact12-number svg {width:100%;height:100%;}
+.contact12-number small,.contact12-number b {display:block;font-size:11px;font-weight:400;}
+.phone-shell:has(.contact12-card)>.phone-status {color:white;}
+.phone-shell:has(.app-view.open.phone-live):has(.contact12-card)>.phone-status {color:white;}
+
+/* CORREO — cuenta completa sobre el menú lateral, sin cortar su cabecera. */
+.mail-drawer12 {top:56px;overflow:visible;}
+.mail-account12 {width:128.205%;box-sizing:border-box;min-height:90px;padding:18px 14px;align-items:center;}
+.mail-account12>.avatar {width:49px;height:49px;flex-shrink:0;object-fit:cover;}
+.mail-account12>span {flex:1;min-width:0;}
+.mail-account12 .text-button {margin-left:auto;flex-shrink:0;}
+.mail-brand-avatar {background:white;padding:5px;box-sizing:border-box;}
+.mail-brand-avatar svg {width:100%;height:100%;display:block;}
+/* TELÉFONO — restaura las pestañas de texto y la selección rosa anterior. */
+.phone12-tabs button {display:block;padding:10px 4px;color:#65448d;font-size:10px;}
+.phone12-tabs button.active {color:#e6007f;background:#f1e1ef;border-radius:9px;font-weight:700;}
+
+/* TELÉFONO — teclado más amplio y centrado; conserva todos los controles visibles. */
+.phone-live .dial-pad {width:100%;max-width:265px;gap:10px 14px;}
+.phone-live .dial-pad button {width:clamp(50px,10dvh,68px);height:clamp(50px,10dvh,68px);max-width:68px;}
+.phone-live .dial-display {min-height:35px;margin:4px 0 10px;}
+.phone-live .dial-actions {margin-top:15px;}
+.phone-live .dial-call {width:54px;height:54px;}
+.phone12-tabs button {display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 4px;}
+.phone-tab-vector {display:block;width:22px;height:22px;}
+.phone-tab-vector svg {display:block;width:100%;height:100%;}
+.phone12-tabs button small {font-size:9px;}
+/* NOTAS — fondo blanco y contraste oscuro en lista, editor y barra de estado. */
+.phone-shell .app-view.notes-live {background:#fff!important;color:#21182e!important;}
+.notes-live .content-row,.notes-live .app-header {border-color:#ded9e5;}
+.notes-live .content-row small,.notes-live .app-header small {color:#71677d;}
+.notes-live .notes-tools .text-button {color:#7038a1;}
+.notes-live .note-editor input,.notes-live .note-editor textarea {background:#f7f5fa;color:#21182e;border-color:#d9d0e4;}
+.phone-shell:has(.app-view.open.notes-live)>.phone-status {color:#17102b;}
+.phone-shell:has(.app-view.open.notes-live):has(.clue-notice.show)>.phone-status {color:#111;}
+/* INICIO — sube el widget 12px manteniendo separación del cronómetro. */
+.phone-shell>.weather-card {margin-top:calc(2dvh + 23px);}
+@media(max-height:520px){.phone-live .dial-pad button {width:45px;height:45px;}.phone-live .dial-pad {gap:6px;}.phone-live .dial-call {width:43px;height:43px;}}
+
+/* CONTACTOS — círculos vectoriales sin fondos cuadrados ni bordes ajenos. */
+.contact12-actions button {border:0!important;outline:0;background:transparent!important;box-shadow:none!important;}
+.contact-action-vector {width:31px;height:31px;display:block;color:white;}
+/* CORREO — menú de página 30: cabecera completa y filas compactas. */
+.mail-drawer12 {background:#fff;}
+.mail-account12 {background:#e1e6eb;margin-bottom:17px;min-height:83px;}
+.mail-drawer12>button {padding:9px 13px;gap:11px;font-size:11px;color:#333;background:#fff;min-height:34px;}
+.mail-drawer12>button>span {width:18px;height:18px;display:block;flex-shrink:0;}
+.mail-drawer12>button svg {display:block;width:100%;height:100%;}
+.mail-account12 .text-button {font-size:18px;color:#555;}
+
+/* INVESTIGACIÓN — reloj vectorial junto al cronómetro y progreso del hallazgo. */
+.phone-shell>.dynamic-island {display:flex;align-items:center;justify-content:center;gap:8px;color:white;}
+.timer-clock {display:block;width:22px;height:22px;flex-shrink:0;}
+.phone-shell .clue-notice {flex-direction:column;gap:4px;}
+.clue-notice .clue-notice-title {display:block;border:0;border-radius:0;width:auto;height:auto;font-size:25px;}
+.clue-notice-count {font-size:17px;font-weight:700;line-height:1;}
+/* CRONÓMETRO — centra el conjunto reloj/hora dentro de la franja negra. */
+.phone-shell>.dynamic-island {box-sizing:border-box;padding-top:3px;gap:6px;}
+.dynamic-island #timer {line-height:1;margin:0;}
+.dynamic-island .timer-clock {width:20px;height:20px;}
+
+/* CADRE DEL TELÉFONO — botones exteriores decorativos, como en etapa 12. */
+.phone-hardware {position:relative;flex-shrink:0;isolation:isolate;}
+.hardware-key {position:absolute;display:block;background:#e8c8ad;border-radius:3px;z-index:-1;width:5px;}
+.hardware-silent {left:-7px;top:18%;height:22px;}
+.hardware-volume-up {left:-7px;top:26%;height:44px;}
+.hardware-volume-down {left:-7px;top:36%;height:44px;}
+.hardware-power {right:-7px;top:28%;height:65px;}
+/* El grupo completo se centra geométricamente en ambos ejes de la isla. */
+.phone-shell>.dynamic-island {padding:0;display:block;}
+.dynamic-island .timer-group {position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;gap:7px;height:22px;white-space:nowrap;}
+.dynamic-island .timer-clock {width:20px;height:20px;flex:0 0 20px;}
+.dynamic-island #timer {display:block;line-height:20px;font-variant-numeric:tabular-nums;letter-spacing:0;width:36px;text-align:center;}
+/* INSTAGRAM — símbolo centrado dentro de su botón circular. */
+.app-icon.instagram>span {display:flex;align-items:center;justify-content:center;padding:0;}
+.app-icon.instagram>span>svg {width:72%;height:72%;margin:0;transform:none;flex-shrink:0;}
+/* TELÉFONO — teléfono, agenda y matriz de marcación en SVG. */
+.phone12-tabs {border-top:1px solid #ded6e9;gap:6px;padding:7px 0 0;}
+.phone12-tabs button {flex:1;padding:7px 3px;border:0;color:#76618f;}
+.phone12-tabs button.active {background:#f2e5f0;color:#e6007f;border-radius:16px;}
+.phone-tab-vector {width:24px;height:24px;}
+/* AJUSTES FINOS — WhatsApp centrado y cierre de calendario a la izquierda. */
+.dock button[data-app="whatsapp"] {display:flex;align-items:center;justify-content:center;padding:0;}
+.dock button[data-app="whatsapp"]>svg {width:76%;height:76%;display:block;margin:0;transform:translateX(1px);flex-shrink:0;}
+.cal12-header>.mail12-close {align-self:flex-start;width:28px;min-width:28px;margin:0;padding:0;border:0;background:transparent;color:#111;text-align:left;font-size:28px;line-height:1;cursor:pointer;}
+/* CALENDARIO — título blanco sobre la reserva magenta. */
+.cal12-event {color:#fff;}
+/* HALLAZGO — el aviso queda debajo de la isla, con reloj y tiempo visibles. */
+.phone-shell:has(.clue-notice.show)>.dynamic-island {z-index:60;color:#fff;}
+.phone-shell:has(.clue-notice.show)>.dynamic-island #timer {color:#fff;}
+.phone-shell:has(.clue-notice.show)>.dynamic-island .timer-clock {color:#fff;opacity:1;visibility:visible;}
+/* CALENDARIO — reserva en blanco en todas sus apariciones. */
+.phone-shell .calendar-live .cal12-event,
+.phone-shell .calendar-live .cal12-event *,
+.phone-shell .calendar-live .cal12-day small {color:#fff!important;}
+
+/* PRESENTACIÓN — fotografía aportada: pareja en la tarjeta y collage completo en el contexto. */
+#case-card-screen .case-photo {object-fit:cover;object-position:center;height:auto;}
+#briefing-screen .situation-photo {object-fit:contain;background:#b19a7b;}
+
+/* Imágenes iniciales completas: el contenedor sigue las proporciones de cada imagen. */
+#case-card-screen .case-photo {object-fit:contain;aspect-ratio:1;}
+#briefing-screen .situation-photo {width:100%;height:auto;aspect-ratio:1408 / 768;object-fit:contain;background:transparent;flex-shrink:0;}
+#briefing-screen {overflow-y:auto;}
+@media (min-width:700px) and (max-height:800px) {
+ #briefing-screen .situation-photo {width:min(100%,calc((100dvh - 315px) * 1.833333));align-self:center;}
+}
+
+/* SITUACIÓN — ocupar todo el rectángulo señalado, sin recortar la imagen. */
+#briefing-screen .situation-photo {width:100%;height:clamp(150px,36dvh,260px);aspect-ratio:auto;object-fit:fill;align-self:stretch;}
+
+/* CHATS PRIVADOS — Martín siempre a la derecha; el contacto a la izquierda. */
+.thread>.message.sent {align-self:flex-end;}
+.thread>.message.received {align-self:flex-start;}
+
+/* AJUSTES — iconos aportados, con recorte circular del fondo exterior azul. */
+.settings-row .settings-label {display:flex;align-items:center;gap:10px;}
+.settings-reference-icon {display:block;width:34px;height:34px;object-fit:fill;clip-path:circle(46% at 50% 50%);flex:0 0 34px;}
+
+/* AJUSTES — recorte interior que excluye por completo el borde azul de las capturas. */
+.settings-reference-icon {clip-path:circle(42% at 50% 47%);}
+
+/* AJUSTES — compensación óptica de los tres iconos señalados. */
+.settings-reference-icon[src$="/tiempo.png"],
+.settings-reference-icon[src$="/wifi.png"],
+.settings-reference-icon[src$="/avion.png"] {transform:translate(1px,1px);}
+
+/* WHATSAPP — barra de escritura de la referencia, con iconos vectoriales. */
+.wa-compose.wa-reference-compose {display:grid;grid-template-columns:25px minmax(0,1fr) 26px 36px;gap:7px;padding:10px 0 7px;background:#1c1635;}
+.wa-reference-compose label {min-width:0;height:36px;background:#38285a;border:1px solid #4a376c;padding:0 6px 0 11px;}
+.wa-reference-compose input {width:100%;min-width:0;background:transparent;}
+.wa-reference-compose input::placeholder {color:#c9b7df;}
+.wa-reference-compose button.wa-tool {width:25px;height:30px;padding:0;border-radius:0;background:transparent;color:#f5f5f5;}
+.wa-reference-compose button.wa-sticker {flex:0 0 22px;width:22px;height:24px;}
+.wa-reference-compose button.wa-primary {width:36px;height:36px;padding:8px;background:#38285a;color:#f5f5f5;}
+.wa-reference-compose .wa-primary span {display:block;width:100%;height:100%;}
+.wa-reference-compose .wa-primary span[hidden] {display:none;}
+
+/* WHATSAPP — fondo de la barra hasta los laterales y el borde inferior. */
+.phone-shell .app-view.whatsapp-live:has(.wa-reference-compose) {padding-bottom:0;}
+.wa-compose.wa-reference-compose {margin:8px -18px 0;padding:10px 18px 18px;border-radius:0;}
+@media(max-height:650px) {
+ .wa-compose.wa-reference-compose {margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px;padding-bottom:13px;}
+}
+
+/* TIEMPO AGOTADO — reintento disponible solo cuando faltan pistas. */
+#retry-investigation-button[hidden] {display:none;}
+
+#questions-button[hidden] {display:none;}
+
+/* ETAPAS — encabezados laterales como en las pantallas iniciales. */
+#timeout-screen .flow-panel>.eyebrow,#found-screen .flow-panel>.eyebrow {align-self:flex-start;text-align:left;}
+#resolution-screen .flow-head {align-self:stretch;text-align:left;}
+
+/* Mini títulos de etapa consistentes con las pantallas iniciales. */
+.flow-screen .flow-head {align-self:stretch;justify-content:flex-start;text-align:left;}
+#result-screen .flow-panel>.eyebrow {align-self:flex-start;text-align:left;}
+
+/* MINI TÍTULOS — centrados sobre el contenido, como la referencia de pistas. */
+.flow-screen .flow-panel>.eyebrow,
+#timeout-screen .flow-panel>.eyebrow,
+#found-screen .flow-panel>.eyebrow,
+#result-screen .flow-panel>.eyebrow {width:100%;align-self:stretch;text-align:center;}
+.flow-screen .flow-head {display:grid;grid-template-columns:36px minmax(0,1fr) 36px;align-items:center;width:100%;box-sizing:border-box;}
+.flow-screen .flow-head>.eyebrow {grid-column:2;text-align:center;}
+.flow-screen .flow-head>.back-button {grid-column:1;grid-row:1;justify-self:start;}
+
+/* INICIO — separar el teléfono del título y bajarlo ligeramente. */
+@media(min-width:701px) {#start-screen .landing-art {right:9%;bottom:10%;}}
+
+/* ETAPAS — mini títulos al costado izquierdo en todas las pantallas. */
+.flow-screen .flow-panel>.eyebrow,
+#timeout-screen .flow-panel>.eyebrow,
+#found-screen .flow-panel>.eyebrow,
+#result-screen .flow-panel>.eyebrow {width:100%;align-self:stretch;text-align:left;}
+.flow-screen .flow-head {display:flex;align-items:center;justify-content:flex-start;text-align:left;}
+.flow-screen .flow-head>.eyebrow {text-align:left;}
+
+/* TRANSICIONES — pantallas alineadas en una fila, con altura estable y centro común. */
+.experience {position:relative;overflow-x:clip;min-height:100dvh;}
+.experience>.screen {box-sizing:border-box;height:100dvh;min-height:100dvh;overflow-y:auto;overflow-x:hidden;}
+.experience>.screen.active {position:relative;}
+.experience>.flow-screen {align-items:safe center;justify-content:center;}
+.experience>.screen.screen-leaving {display:flex;position:absolute;inset:0;width:100%;z-index:2;pointer-events:none;}
+body.screen-transitioning {overflow:hidden;}
+body.screen-transitioning .experience>.screen {pointer-events:none;will-change:transform;}
+
+/* CARGA — tres corazones en una fila fija, con saltos sucesivos solo hacia arriba. */
+.screen-loader {position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#23185d;opacity:0;visibility:hidden;pointer-events:none;}
+.screen-loader.is-loading {opacity:1;visibility:visible;pointer-events:auto;}
+.loading-hearts {display:flex;align-items:center;justify-content:center;gap:18px;height:64px;}
+.loading-hearts span {display:block;width:34px;height:34px;color:#e6007f;animation:heart-loading .9s ease-in-out infinite;animation-delay:calc(var(--heart-index) * .15s);}
+.loading-hearts span:nth-child(2) {color:#ec42bb;}
+.loading-hearts span:nth-child(3) {color:#a258ed;}
+.loading-hearts svg {display:block;width:100%;height:100%;}
+@keyframes heart-loading {0%,45%,100% {transform:translateY(0);}22% {transform:translateY(-14px);}}
+@media(prefers-reduced-motion:reduce) {.loading-hearts span {animation:none;}}
+
+/* Carga de tres segundos y avance manual. */
+.screen-loader {display:flex;flex-direction:column;justify-content:center;align-items:center;gap:24px;}
+#loader-continue[hidden] {display:none;}
+#loader-continue {font-size:17px;}
+/* Pistas: filas estables, reveladas consecutivamente de arriba hacia abajo. */
+.found-row {position:relative;}
+.found-row.found-loading>.found-thumb,.found-row.found-loading>.found-text {visibility:hidden;}
+.found-row.found-loading::after {content:'Cargando pista…';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#e2c9f5;background:linear-gradient(100deg,#23185d,#473278,#23185d);background-size:200% 100%;border-radius:16px;animation:pista-loading 1s linear infinite;}
+@keyframes pista-loading {to {background-position:200% 0;}}
+#found-next-button:disabled {opacity:.45;cursor:wait;}
+@media(prefers-reduced-motion:reduce) {.found-row.found-loading::after {animation:none;}}
+
+/* Tiempo final visible durante la carga y en el resumen de pistas. */
+.final-timer {display:flex;align-items:center;justify-content:center;gap:8px;margin:0;color:#fff;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;}
+.final-timer svg {width:22px;height:22px;}
+.final-timer[hidden] {display:none;}

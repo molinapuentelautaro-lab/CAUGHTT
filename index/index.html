@@ -1,215 +1,117 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#111027">
-    <title>Caught! | Caso 01</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <style>.brand-mark{width:64px;height:64px;display:block;overflow:hidden;border-radius:17px;background:#000;transform:rotate(-4deg)}.brand-mark img{width:100%;height:100%;display:block;object-fit:cover}.couple-portraits{display:grid;grid-template-columns:1fr 1fr;height:100%;background:#201d3c}.couple-portraits img{width:100%;height:100%;object-fit:cover}.couple-portraits img:first-child{object-position:48% 28%}.couple-portraits img:last-child{object-position:50% 25%}</style>
-    <main class="app-shell" aria-live="polite">
-      <section id="start-screen" class="screen start-screen">
-        <div class="grain">
-        </div>
-        <p class="eyebrow">MISTERIO INTERACTIVO · CASO 01</p>
-        <div class="brand-lockup">
-          <span class="brand-mark">
-            <img src="./img/logo.jpeg" alt="Logo de Caught: teléfono y lupa blancos con corazón rosa sobre fondo negro">
-          </span>
-          <h1>CAUGHT<span>!</span>
-        </h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#23185D">
+  <title>CAUGHT! | El ticket de las 23:15</title>
+  <meta name="description" content="El ticket de las 23:15 de CAUGHT!.">
+  
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div id="screen-loader" class="screen-loader is-loading" role="status" aria-label="Cargando"><p id="loader-time" class="final-timer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg><span id="loader-timer">05:00</span></p><div class="loading-hearts" aria-hidden="true"><span style="--heart-index:0"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 28S2 19 2 10a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 9-14 18-14 18Z" fill="currentColor"/></svg></span><span style="--heart-index:1"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 28S2 19 2 10a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 9-14 18-14 18Z" fill="currentColor"/></svg></span><span style="--heart-index:2"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 28S2 19 2 10a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 9-14 18-14 18Z" fill="currentColor"/></svg></span></div></div>
+  <main class="experience" aria-live="polite">
+    <svg class="symbols" width="0" height="0" aria-hidden="true" focusable="false"><symbol id="scene" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><rect width="320" height="180" fill="#9fd3f2"/><circle cx="238" cy="50" r="20" fill="#f6c453"/><ellipse cx="72" cy="46" rx="28" ry="9" fill="#fff"/><ellipse cx="96" cy="40" rx="18" ry="8" fill="#fff"/><path d="M0 132Q64 70 144 110T320 96V180H0Z" fill="#8cb82e"/><path d="M0 152Q92 108 192 140T320 130V180H0Z" fill="#5d8f1e"/></symbol></svg>
+    <section id="start-screen" class="screen landing active">
+      <div class="landing-copy">
+        <h1>CAUGHT!</h1><p>¿Podés descubrir la verdad?</p>
+        <button id="start-button" class="button button-start">Comenzar historia</button>
       </div>
-      <p class="tagline">Nada es lo que parece. Todo deja una pista.</p>
-      <article class="case-preview">
-        <div class="preview-photo">
-<img src="./img/IMG_5711.JPG.jpeg" alt="Martín y Lucía frente a la ciudad">        </div>
-        <div class="case-preview-copy">
-          <p class="case-number">EXPEDIENTE 01</p>
-          <h2>El ticket de las 23:15</h2>
-          <p>Una cena cancelada, una mentira y una prueba que parece imposible de explicar.</p>
-          <div class="case-meta">
-            <span>◷ 03:00 min</span>
-            <span>⌕ Deducción</span>
-          </div>
-        </div>
-      </article>
-      <button id="start-button" class="button button-primary">Ver expediente <span>→</span>
-    </button>
-    <p class="fiction-note">Caso y personajes ficticios. Investigá hechos, no suposiciones.</p>
-  </section>
-  <section id="briefing-screen" class="screen briefing-screen hidden">
-    <button class="icon-button back-to-start" aria-label="Volver al inicio">←</button>
-    <div class="scene-image couple-portraits">
-  <img src="./img/IMG_5729.JPG.jpeg" alt="Lucía">
-    <img src="./img/IMG_5730.JPG.jpeg" alt="Martín">
-    </div>
-    <p class="eyebrow">01 · LA SITUACIÓN</p>
-    <h2>Una ausencia que no encaja.</h2>
-    <p class="briefing-copy">Hoy era el aniversario de Lucía y Martín. Él canceló a último momento: dijo que seguía en la oficina cerrando un balance. A la mañana siguiente, Lucía encuentra un ticket de Bar Central, emitido a las <strong>23:15</strong>, para una mesa de dos.</p>
-    <aside class="tip">
-      <span>✦</span>
-      <span>
-        <strong>Tu misión</strong> · Reconstruí la noche comparando horarios, mensajes y fotos. Una sospecha no es una prueba.</span>
-      </aside>
-      <button id="characters-button" class="button button-primary">Conocer protagonistas <span>→</span>
-    </button>
-  </section>
-  <section id="characters-screen" class="screen characters-screen hidden">
-    <button class="icon-button back-to-briefing" aria-label="Volver a la situación">←</button>
-    <p class="eyebrow">02 · PERSONAJES</p>
-    <h2>¿Quiénes forman parte del caso?</h2>
-    <div class="character-grid">
-      <article class="character-card featured">
-      <img src="./img/IMG_5730.JPG.jpeg" alt="Retrato de Martín">
-        <div>
-          <p class="character-role">PERSONA INVESTIGADA</p>
-          <h3>Martín</h3>
-          <p>Canceló la cena. Asegura que estuvo trabajando hasta tarde.</p>
-        </div>
-      </article>
-      <article class="character-card">
-      <img src="./img/IMG_5729.JPG.jpeg" alt="Retrato de Lucía">
-        <div>
-          <p class="character-role">JUGADORA</p>
-          <h3>Lucía</h3>
-          <p>Encontró el ticket y quiere entender qué ocurrió.</p>
-        </div>
-      </article>
-      <article class="character-card">
-    <img src="./img/IMG_5724.JPG.jpeg" alt="Retrato de Nico">
-        <div>
-          <p class="character-role">CONTACTO CLAVE</p>
-          <h3>Nico</h3>
-          <p>Hermano de Lucía. Tiene un chat con Martín.</p>
-        </div>
-      </article>
-      <article class="character-card">
-    <img src="./img/IMG_5731.JPG.jpeg" alt="Retrato de Valentina">
-        <div>
-          <p class="character-role">AMIGA EN COMÚN</p>
-          <h3>Valentina</h3>
-          <p>Es amiga de Lucía y Martín desde hace años.</p>
-        </div>
-      </article>
-    </div>
-    <button id="enter-case-button" class="button button-primary">Iniciar investigación <span>→</span>
-  </button>
-</section>
-<section id="game-screen" class="screen game-screen hidden">
-  <header class="game-header">
-    <div>
-      <p class="case-number">CASO 01 · EN CURSO</p>
-      <h2>El ticket de las 23:15</h2>
-    </div>
-    <div id="timer" class="timer" aria-label="Tiempo restante">03:00</div>
-  </header>
-  <div class="progress-wrap">
-    <div id="progress-bar" class="progress-bar">
-    </div>
-  </div>
-  <p id="objective" class="objective">Revisá las pistas antes de emitir una conclusión. El tiempo ya empezó.</p>
-  <nav class="tabs" aria-label="Secciones del caso">
-    <button class="tab active" data-panel="evidence-panel">Pistas <b id="clue-count">0/3</b>
-  </button>
-  <button class="tab" data-panel="dialogue-panel">Preguntar <b>!</b>
-</button>
-<button class="tab" data-panel="notes-panel">Libreta</button>
-</nav>
-<section id="evidence-panel" class="panel active">
-  <p class="section-label">ELEMENTOS INVESTIGABLES</p>
-  <div class="evidence-list">
-    <button class="evidence-card" data-clue="ticket">
-      <span class="evidence-icon receipt-icon">≡</span>
-      <span>
-        <strong>Ticket de Bar Central</strong>
-        <small>Consumo para dos · 23:15</small>
-      </span>
-      <i>→</i>
-    </button>
-    <button class="evidence-card" data-clue="chat">
-      <span class="evidence-icon chat-icon">•••</span>
-      <span>
-        <strong>Chat recuperado</strong>
-        <small>Martín y Nico · 22:41</small>
-      </span>
-      <i>›</i>
-    </button>
-    <button class="evidence-card image-evidence" data-clue="photo">
-  <img src="./img/evidencia.jpeg" alt="Fotografía encontrada en la galería">
+      <svg class="landing-art" viewBox="-55 -50 420 470" role="img" aria-label="Teléfono con lupa y corazón partido"><g transform="rotate(18 150 185)"><rect x="55" y="20" width="180" height="330" rx="28" fill="#000" stroke="#fff" stroke-width="12"/><path d="M112 22H178V33Q178 43 168 43H122Q112 43 112 33Z" fill="#fff"/><circle cx="155" cy="175" r="78" fill="#000" stroke="#fff" stroke-width="12"/><path d="M211 231L279 299" stroke="#fff" stroke-width="28" stroke-linecap="round"/><path d="M155 150C137 121 103 132 103 160C103 188 133 214 155 230C177 214 207 188 207 160C207 132 173 121 155 150Z" fill="#E6007F"/><path d="M155 146L148 166L160 179L150 196L159 210L155 231" stroke="#000" stroke-width="6"/></g></svg>
+    </section>
 
-  <span>
-        <strong>Foto de la galería</strong>
-        <small>Parque Central · 18:12</small>
-      </span>
-      <i>›</i>
-    </button>
-  </div>
-  <button id="solve-button" class="button button-secondary" disabled>Presentar conclusión <span>→</span>
-</button>
-</section>
-<section id="dialogue-panel" class="panel">
-  <p class="section-label">CONVERSACIONES</p>
-  <div id="dialogue-log" class="dialogue-log">
-    <div class="message message-other">
-      <span>Martín</span>
-      <p>Perdón por cancelar. Seguía en la oficina cerrando el balance.</p>
-      <time>23:22</time>
-    </div>
-  </div>
-  <div id="dialogue-options" class="dialogue-options">
-    <button data-dialogue="office">¿Por qué el ticket dice 23:15?</button>
-    <button data-dialogue="nico">Preguntarle a Nico por el chat.</button>
-  </div>
-</section>
-<section id="notes-panel" class="panel">
-  <p class="section-label">TU LIBRETA</p>
-  <div id="notes-empty" class="notes-empty">Abrí una pista para registrar una observación.</div>
-  <ul id="notes-list" class="notes-list">
-  </ul>
-</section>
-</section>
-<section id="result-screen" class="screen result-screen hidden">
-  <div id="result-symbol" class="result-symbol">✓</div>
-  <p id="result-kicker" class="eyebrow">CASO RESUELTO</p>
-  <h2 id="result-title">Miraste todos los detalles.</h2>
-  <p id="result-copy">
-  </p>
-  <div id="result-summary" class="result-summary">
-  </div>
-  <button id="restart-button" class="button button-primary">Jugar otra vez <span>↻</span>
-</button>
-</section>
-</main>
-<div id="clue-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-  <div class="modal-card">
-    <button id="close-modal" class="icon-button" aria-label="Cerrar">×</button>
-    <p id="modal-type" class="eyebrow">EVIDENCIA</p>
-    <h2 id="modal-title">
-    </h2>
-    <div id="modal-content">
-    </div>
-    <button id="save-clue-button" class="button button-primary">Guardar en libreta</button>
-  </div>
-</div>
-<div id="conclusion-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="conclusion-title">
-  <div class="modal-card conclusion-card">
-    <button id="close-conclusion" class="icon-button" aria-label="Cerrar">×</button>
-    <p class="eyebrow">CONCLUSIÓN FINAL</p>
-    <h2 id="conclusion-title">¿Qué ocurrió esa noche?</h2>
-    <p>Elegí la explicación que mejor coincida con todas las pistas.</p>
-    <div class="conclusion-options">
-      <button data-answer="accuse">Martín se reunió con otra persona y mintió sobre la oficina.</button>
-      <button data-answer="surprise">Martín y Nico se reunieron para organizar una sorpresa de aniversario.</button>
-      <button data-answer="work">Martín estuvo toda la noche trabajando.</button>
-    </div>
-  </div>
-</div>
-<script src="script.js">
-</script>
+    <section id="case-card-screen" class="screen flow-screen">
+      <div class="flow-panel">
+        <div class="brand-mark"><span class="brand-icon"><img src="../img/interfaz/logo-etapa12.png" alt="Logo de CAUGHT!"></span><h1>CAUGHT!</h1></div>
+        <article class="expediente-card"><img class="scene case-photo" src="../img/evidencias/ticket-presentacion.svg" alt="Ticket ilustrado de las 23:15"><div><p class="expediente-n">Expediente N.º 01</p><h2 id="card-title">Título del caso</h2><p id="card-intro">Introducción del caso</p></div></article>
+        <button id="expediente-button" class="button button-primary">Ver expediente <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="briefing-screen" class="screen flow-screen">
+      <div class="flow-panel">
+        <div class="flow-head"><button class="back-button" data-screen="case-card-screen" aria-label="Volver">‹</button><p class="eyebrow">01 · La situación</p></div>
+        <img class="scene situation-banner situation-photo" src="../img/evidencias/martin-lucia-presentacion.jpg" alt="Martín y Lucía juntos, con sus retratos a ambos lados">
+        <h2 id="situation-title" class="case-title">Título del caso</h2>
+        <p class="situation-label">Contexto</p><p id="situation-context" class="situation-context">Contexto del caso.</p>
+        <div class="mission-card"><strong>Tu misión</strong><span id="mission-text">• Objetivo</span></div>
+        <button id="characters-button" class="button button-primary">Conocer protagonistas <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="characters-screen" class="screen flow-screen">
+      <div class="flow-panel wide">
+        <div class="flow-head"><button class="back-button" data-screen="briefing-screen" aria-label="Volver">‹</button><p class="eyebrow">02 · Personajes</p></div>
+        <h2 class="screen-title">¿Quiénes forman parte del caso?</h2>
+        <div class="character-grid" aria-label="Tarjetas de personajes"></div>
+        <button id="characters-more-button" class="button button-primary">Conocer más <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="clue-screen" class="screen flow-screen">
+      <div class="flow-panel">
+        <div class="flow-head"><button class="back-button" data-screen="characters-screen" aria-label="Volver">‹</button><p class="eyebrow">03 · Pista principal / contenido</p></div>
+        <h2 class="screen-title">¿Qué encontraste?</h2>
+        <div id="ticket" class="ticket" role="img" aria-label="Ticket encontrado"></div>
+        <button id="start-investigation-button" class="button button-primary">Iniciar investigación <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="game-screen" class="screen phone-stage">
+      <div class="phone-hardware"><span class="hardware-key hardware-silent" aria-hidden="true"></span><span class="hardware-key hardware-volume-up" aria-hidden="true"></span><span class="hardware-key hardware-volume-down" aria-hidden="true"></span><span class="hardware-key hardware-power" aria-hidden="true"></span><div class="phone-shell"><div id="clue-notice" class="clue-notice" role="status" aria-live="polite" aria-atomic="true">¡Pista encontrada!</div><div class="dynamic-island"><span class="timer-group"><svg class="timer-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg><span id="timer" aria-label="Tiempo restante">05:00</span></span></div><header class="phone-status"><span id="clock">09:41</span><span class="status-icons" role="img" aria-label="Wi-Fi conectado y batería cargada"><svg class="status-wifi" viewBox="0 0 24 18" fill="none" aria-hidden="true"><path d="M2 5c5.5-5 14.5-5 20 0M5 8.5c4-3.7 10-3.7 14 0M8.5 12c2-1.9 5-1.9 7 0" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor"/></svg><svg class="status-battery" viewBox="0 0 30 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="25" height="14" rx="3" stroke="currentColor" stroke-width="1.2"/><rect x="3" y="3" width="20" height="10" rx="1.5" fill="currentColor"/><path d="M28 5v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></header><div class="weather-card"><span class="sun">☀</span><div><b>Lugar</b><strong>Grados</strong></div></div><div id="app-grid" class="app-grid" aria-label="Aplicaciones del teléfono"></div><div class="dock"><button data-app="gallery" aria-label="Abrir Galería">▧</button><button data-app="phone" aria-label="Abrir Teléfono">●</button><button data-app="whatsapp" aria-label="Abrir WhatsApp">◔</button></div><section id="app-view" class="app-view" aria-live="polite"></section><button id="case-file-button" class="case-file" hidden>Pistas encontradas <b>0/5</b></button><button id="conclusion-button" hidden class="button button-primary conclusion-button">Sacar conclusión <span>→</span></button></div></div>
+    </section>
+
+    <section id="timeout-screen" class="screen flow-screen">
+      <div class="flow-panel center-panel">
+        <p id="timeout-eyebrow" class="eyebrow">04 · Tiempo agotado</p>
+        <div id="timeout-icon" class="status-icon is-timeout" aria-hidden="true">✕</div>
+        <h2 id="timeout-title" class="case-title">Se acabó el tiempo</h2>
+        <p id="timeout-copy" class="timeout-copy"></p>
+        <p class="hint-pill">Es hora de que saques tu conclusión</p>
+        <button id="questions-button" class="button button-pill">Siguiente <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <section id="found-screen" class="screen flow-screen">
+      <div class="flow-panel center-panel">
+        <p class="eyebrow">05 · Pistas encontradas</p>
+        <div class="found-box"><h2>Pistas encontradas</h2><div id="found-list" class="found-list"></div></div>
+        <button id="found-next-button" class="button button-pill">Siguiente <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <section id="resolution-screen" class="screen flow-screen">
+      <div class="flow-panel center-panel">
+        <div class="flow-head"><button class="back-button" aria-label="Volver">‹</button><p class="eyebrow">06 · Preguntas</p></div>
+        <h2 id="question-title" class="title-pill">Pregunta</h2>
+        <div class="question-card">
+          <div class="answers" role="radiogroup" aria-label="Opciones de respuesta"></div>
+          <button type="button" id="form-error" class="attention-box" role="alert" hidden><strong>¡Atención!</strong><span>Elegí una opción para continuar.</span></button>
+        </div>
+        <button id="confirm-button" class="button button-pill">Siguiente <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <section id="result-screen" class="screen flow-screen">
+      <div class="flow-panel center-panel">+
+        <p class="eyebrow">07 · Resultados</p>
+        <h2 class="title-pill">¡Caso Completado!</h2>
+        <div class="result-box"><p class="result-lead">Tu conclusión fue…</p></div>
+        <div class="result-box">
+          <p id="result-conclusion" class="result-conclusion">Respuesta a la conclusión</p>
+          <h3 id="result-title" class="result-title"></h3>
+          <p id="result-explanation" class="result-explanation"></p>
+          <p id="result-progress" class="result-progress"></p>
+        </div>
+        <button id="restart-button" class="button button-pill">Reintentar <span aria-hidden="true">↻</span></button>
+      </div>
+    </section>
+  </main>
+  <dialog id="clue-dialog" aria-labelledby="clue-title"></dialog><div id="toast" class="toast" role="status"></div>
+  <!-- Orden: datos, lógica general y aplicaciones. -->
+<script src="../data/casos.js" defer></script>
+<script src="../js/script.js?v=orden-corregido" defer></script>
+<script src="../js/apps/apps.js?v=orden-corregido" defer></script>
 </body>
 </html>
