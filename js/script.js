@@ -1,74 +1,348 @@
 'use strict';
-// Nueva copia: conserva las pantallas y estilos base, amplía las aplicaciones.
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const state={saved:new Set(),visited:new Set(),asked:new Set(),app:null,clue:null,pending:null,confirmed:null,remaining:180,paused:false,finished:false,started:false,timer:null,returnFocus:null};
-const people={
- martin:{name:'Martín',role:'Pareja de Lucía',photo:'IMG_5730.JPG.jpeg',intro:'Perdón por cancelar la cena. Seguía en la oficina con el balance.',q:'¿Por qué encontré un ticket de Bar Central?',reply:'Pasé por el bar. Tendría que haberte dicho la verdad sobre la oficina.'},
- lucia:{name:'Lucía',role:'Pareja de Martín · protagonista',photo:'IMG_5729.JPG.jpeg',intro:'A las 23:00 Martín me dijo que seguía en la oficina.',q:'Revisar lo que ocurrió',reply:'Al día siguiente encontré el ticket en su campera. Necesito entender la contradicción.'},
- nico:{name:'Nico',role:'Hermano de Lucía y amigo de Martín',photo:'IMG_5724.JPG.jpeg',intro:'¿Qué necesitás saber? No sé nada de lo que hizo Martín ese viernes.',q:'¿Hablaste con Martín ese viernes?',reply:'No hablé con él ese día. No tengo idea de lo que hizo.'},
- valentina:{name:'Valentina Ríos',role:'Amiga en común · asesora de viajes',photo:'IMG_5731.JPG.jpeg',intro:'Lo nuestro ya está confirmado. Que Lucía no se entere todavía.',q:'¿Puedo ver tu conversación con Martín?',clue:'chat'},
- ricardo:{name:'Ricardo Acosta',role:'Dueño de Bar Central',photo:'person_01.png',intro:'Martín viene al bar de vez en cuando.',q:'¿Reconocés este ticket de las 23:15?',reply:'Sí, corresponde a una mesa para dos. Martín pagó. Paula atendió esa mesa.'},
- nicolas:{name:'Nicolás Peralta',role:'Compañero de oficina de Martín',photo:'person_03.png',intro:'Trabajamos juntos en el balance.',q:'¿A qué hora terminó el trabajo?',reply:'El balance se envió a las 20:40. Vi salir a Martín a las 21:05. No sé adónde fue.'},
- camila:{name:'Camila Torres',role:'Amiga de Lucía y Martín',photo:'person_06.png',intro:'Vi a Martín con una mujer cerca de la oficina.',q:'¿Cuándo? ¿Viste la foto completa?',reply:'A las 18:30. Al mirar la foto completa reconocí a Sofía, su supervisora. No era una foto del bar.'},
- sofia:{name:'Sofía Méndez',role:'Supervisora de Martín',photo:'person_07.png',intro:'Martín y yo hablamos de la entrega del balance.',q:'¿Le pediste quedarse hasta la noche?',reply:'No. Hablamos a las 18:30, antes de que yo saliera. La entrega era antes de las 21:00.'},
- diego:{name:'Diego Salas',role:'Amigo de Martín desde la escuela',photo:'person_08.png',intro:'Conozco a Martín desde la escuela.',q:'¿Por qué conoce Bar Central?',reply:'Le recomendé ese bar porque se puede conversar tranquilo. No sabía con quién iba a reunirse.'},
- paula:{name:'Paula Benítez',role:'Encargada de Bar Central',photo:'person_09.png',intro:'Conozco a Martín como cliente.',q:'¿A quién atendiste esa noche?',reply:'Atendí a Martín y a una mujer. Ella tenía folletos de viaje y hablaban de fechas. Los reconocería si los viera de nuevo.'},
- julian:{name:'Julián Costa',role:'Compañero de Martín en fotografía',photo:'person_10.png',intro:'Compartimos un taller de fotografía.',q:'¿Sabés algo de la noche del viernes?',reply:'Pasé cerca de Bar Central a las 23:10. Vi a Martín por la ventana, pero no pude identificar a la otra persona.'}
-};
-const evidence={
- ticket:{title:'Ticket de Bar Central',type:'DOCUMENTO',html:'<div class="receipt">BAR CENTRAL<br>VIERNES · 23:15<br>--------------------<br>Mesa para dos: $12.800<br>Dos bebidas: $5.400<br>--------------------<br>PAGO APROBADO</div><p class="modal-explanation">Encontrado en la campera de Martín. Comparalo con el mensaje en el que dijo seguir en la oficina.</p>'},
- chat:{title:'Conversación con Valentina',type:'CHAT COMPLETO',html:'<div class="chat-preview"><div class="bubble">Martín · 22:41<br>¿Podés llegar antes de las once? Nos vemos en Bar Central.</div><div class="bubble right">Valentina · 22:41<br>Sí, traigo las opciones del viaje. Revisamos la reserva para vos y Lucía.</div><div class="bubble">Martín · 22:42<br>No le digas nada todavía. Quiero que sea sorpresa de aniversario.</div></div><p class="modal-explanation">Valentina comparte la conversación archivada. No había sido eliminada.</p>'},
- reservation:{title:'Reserva confirmada',type:'CORREO',html:'<p><strong>De:</strong> Valentina Ríos<br><strong>Para:</strong> Martín<br><strong>Viernes · 17:18</strong></p><p class="modal-explanation">Martín: la reserva del viaje para vos y Lucía quedó confirmada. Nos vemos esta noche en Bar Central para cerrar los últimos detalles.</p><div class="receipt">RESERVA CONFIRMADA<br>Pasajeros: Martín y Lucía</div><p class="modal-explanation">¡Que disfruten la sorpresa de aniversario!<br>Valentina</p>'},
- photo:{title:'Foto clave del parque',type:'FOTOGRAFÍA',html:'<img class="modal-photo key-evidence-photo" src="img/evidencia.jpeg" alt="Fotografía del parque encontrada en la galería"><p class="modal-explanation"><strong>Parque Central · viernes · 18:12</strong></p><p class="modal-explanation">La hora sitúa esta imagen en la tarde. No corresponde al encuentro del bar a las 23:15 ni demuestra dónde estaban sus protagonistas por la noche. Compará su contexto con el chat y la reserva.</p>'}
+/* SCRIPT.JS — lógica general, navegación, temporizador y resolución.
+   Los datos están en data.js y las aplicaciones en apps.js.
+   Orden de carga: data.js, script.js, apps.js, todos con defer. */
 
+/* ============================================================
+   ÍCONOS
+   Dibuja los logos vectoriales aprobados.
+   ============================================================ */
+const svg = body => `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true">${body}</svg>`;
+const brandIcons = {
+calendar: svg('<g stroke="#30436a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="15" width="40" height="38" rx="4"/><path d="M12 26h40M22 10v10M42 10v10"/></g><g fill="#30436a"><rect x="20" y="32" width="5" height="5" rx="1"/><rect x="30" y="32" width="5" height="5" rx="1"/><rect x="40" y="32" width="5" height="5" rx="1"/><rect x="20" y="42" width="5" height="5" rx="1"/><rect x="30" y="42" width="5" height="5" rx="1"/><rect x="40" y="42" width="5" height="5" rx="1"/></g>'),
+
+calculator: svg('<rect x="15" y="7" width="34" height="50" rx="7" fill="#242424" stroke="#fff" stroke-width="2"/><rect x="21" y="13" width="22" height="10" rx="2" fill="#dedede"/><g fill="#a5a5a5"><circle cx="24" cy="31" r="4"/><circle cx="34" cy="31" r="4"/><circle cx="24" cy="41" r="4"/><circle cx="34" cy="41" r="4"/><rect x="20" y="47" width="18" height="5" rx="2.5"/></g><rect x="41" y="27" width="5" height="25" rx="2.5" fill="#ff9f0a"/>'),
+email: svg('<path d="M10 49V19l22 17 22-17v30" stroke="#fff" stroke-width="8" stroke-linejoin="round"/><path d="M10 19l22 17 22-17" stroke="#fff" stroke-width="8" stroke-linecap="round"/>'),
+map: svg('<path d="M32 7c-12 0-21 9-21 21 0 15 21 31 21 31s21-16 21-31C53 16 44 7 32 7Z" fill="#fff"/><circle cx="32" cy="27" r="8" fill="#77629c"/>'),
+instagram: svg('<rect x="11" y="11" width="42" height="42" rx="13" stroke="#fff" stroke-width="5"/><circle cx="32" cy="32" r="10" stroke="#fff" stroke-width="5"/><circle cx="45" cy="19" r="3" fill="#fff"/>'),
+whatsapp: svg('<path d="M32 9a21 21 0 0 1 0 42c-4 0-8-1-11-3l-10 3 3-10A21 21 0 0 1 32 9Z" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/><path d="M25 20c-2-1-5 3-4 6 2 8 8 14 16 16 3 1 7-2 6-4l-6-3c-2-1-3 2-4 2-4-2-6-4-8-8-1-1 2-2 2-4l-2-5Z" fill="#fff"/>'),
+gallery: svg('<rect x="11" y="13" width="42" height="38" rx="3" stroke="#fff" stroke-width="3"/><circle cx="22" cy="24" r="4" stroke="#fff" stroke-width="3"/><path d="M12 48l17-18 11 11 6-6 7 8" stroke="#fff" stroke-width="3"/>'),
+phone: svg('<path d="M19 11l8 12-6 6c4 8 8 12 16 16l6-6 12 8c-1 9-7 10-13 8C24 49 15 40 9 22c-2-6 0-11 10-11Z" fill="#fff"/>')
 };
-const gallery=['IMG_5711.JPG.jpeg','IMG_5724.JPG.jpeg','IMG_5725.JPG.jpeg','IMG_5726.JPG.jpeg','IMG_5728.JPG.jpeg','IMG_5729.JPG.jpeg','IMG_5730.JPG.jpeg','IMG_5731.JPG.jpeg','evidencia.jpeg'];
-const icons={messages:'<path d="M4 5h24v17H13l-7 6v-6H4z"/><path d="M9 11h14M9 16h10"/>',gallery:'<rect x="4" y="4" width="24" height="24" rx="4"/><circle cx="11" cy="11" r="2"/><path d="m5 25 8-9 5 5 4-6 6 9"/>',camera:'<path d="M3 9h6l3-4h8l3 4h6v18H3z"/><circle cx="16" cy="18" r="6"/>',instagram:'<rect x="4" y="4" width="24" height="24" rx="7"/><circle cx="16" cy="16" r="6"/><circle cx="24" cy="8" r="1"/>',mail:'<rect x="3" y="6" width="26" height="20" rx="3"/><path d="m4 8 12 10L28 8"/>',phone:'<path d="M6 4h6l2 7-4 3c2 4 4 6 8 8l3-4 7 2v6c-1 6-11 2-17-4S0 6 6 4z"/>',calculator:'<rect x="6" y="3" width="20" height="26" rx="3"/><path d="M10 8h12M10 15h3M19 15h3M10 21h3M19 21h3"/>',maps:'<path d="m3 7 8-3 10 4 8-3v22l-8 3-10-4-8 3zM11 4v22M21 8v22"/>',notes:'<rect x="6" y="3" width="20" height="26" rx="2"/><path d="M11 10h10M11 16h10M11 22h7"/>'};
-const apps=[['messages','Chats','#24a566'],['gallery','Galería','#ef5769'],['camera','Cámara','#546575'],['instagram','Instagram','#d42b9c'],['mail','Mail','#168ed1'],['phone','Teléfono','#25aa70'],['calculator','Calculadora','#687286'],['maps','Maps','#65a850'],['notes','Notas','#d9a622']];
-function showScreen(id){if(id==='resolution-screen'&&state.saved.size!==4)return;$$('.screen').forEach(e=>e.classList.toggle('active',e.id===id));const isPhone=['game-screen','resolution-screen'].includes(id);$('.phone-frame').classList.toggle('game-mode',isPhone);document.body.classList.toggle('investigating',isPhone);document.body.classList.toggle('character-mode',id==='characters-screen');}
-function update(){ $('#clue-count').textContent=`${state.saved.size}/4`;$('#case-file-button').setAttribute('aria-label',`${state.saved.size} de 4 pistas guardadas`);$('#solve-button').disabled=state.saved.size!==4;$('#solve-button').innerHTML=state.saved.size===4?'Sacar conclusión <span>→</span>':'Sacar conclusión <span>🔒</span>';$('#objective').textContent=state.saved.size===4?'Ya podés comparar las pruebas y sacar tu conclusión.':'Explorá las aplicaciones y guardá las pistas que encuentres.';}
-function toast(s){$('#toast').textContent=s;$('#toast').classList.add('show');clearTimeout(state.toastTimer);state.toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),2100);}
-function reset(){clearInterval(state.timer);state.saved.clear();state.visited.clear();state.asked.clear();Object.assign(state,{app:null,clue:null,pending:null,confirmed:null,remaining:180,paused:false,finished:false,started:false});$$('.modal-overlay').forEach(e=>e.classList.remove('open'));$('#confirm-bar').hidden=true;$$('[data-answer]').forEach(e=>e.classList.remove('selected'));$('#pause-label').textContent='Pausar';$('#pause-timer').setAttribute('aria-label','Pausar tiempo');closeApp();update();renderTimer();showScreen('start-screen');}
-function beginCase(){if(state.started)return;state.started=true;showScreen('game-screen');state.timer=setInterval(()=>{if(state.paused||state.finished)return;state.remaining=Math.max(0,state.remaining-1);renderTimer();if(!state.remaining){state.pending=null;finish('timeout');}},1000);}
-function renderTimer(){$('#timer').textContent=`${Math.floor(state.remaining/60)}:${String(state.remaining%60).padStart(2,'0')}`;$('#timer').classList.toggle('urgent',state.remaining<=60);}
-function head(title,sub=''){return `<header class="app-view-header"><button class="btn-icon" data-action="home" aria-label="Volver al inicio del teléfono">←</button><div><h3>${title}</h3><p>${sub}</p></div></header>`;}
-function shell(title,sub,body){return head(title,sub)+`<div class="app-view-body">${body}</div>`;}
-function personRow(id){let p=people[id];return `<button class="person-button" data-person="${id}"><img src="img/${p.photo}" alt=""><span><strong>${p.name}</strong><small>${p.role}</small></span><i>›</i></button>`;}
-function clueButton(id,label){return `<button class="btn btn-primary" data-clue="${id}">${label||evidence[id].title} <span>→</span></button>`;}
-function closeApp(){state.app=null;$('.phone-frame').classList.remove('app-open');$('#app-home').classList.remove('hidden');$('#app-view').classList.remove('active');$('#app-view').innerHTML='';}
-function openApp(id){if(!apps.some(a=>a[0]===id))return;state.app=id;$('.phone-frame').classList.add('app-open');$('#app-home').classList.add('hidden');$('#app-view').classList.add('active');const renderers={
- messages:()=>shell('Chats','Conversaciones', ['nico','martin','valentina','nicolas','camila','sofia','diego','ricardo','paula','julian','lucia'].map(personRow).join('')),
- gallery:()=>shell('Galería','Recientes · 9 imágenes',`<div class="photo-grid">${gallery.map((f,i)=>`<button data-photo="${i}" class="${i===8?'key-gallery-photo':''}" aria-label="${i===8?'Abrir foto clave del parque':'Abrir foto '+(i+1)}"><img src="img/${f}" alt="Foto ${i+1}">${i===8?'<span>Foto del parque · 18:12</span>':''}</button>`).join('')}</div><p class="muted">Abrí una imagen para verla completa.</p>`),
- notes:()=>shell('Notas','Registro de Lucía',`<div class="notes-paper"><h4>La cena cancelada</h4><p>“A las 23:00 Martín dijo que seguía en la oficina. Encontré un ticket en su campera al día siguiente.”</p></div><p></p>${clueButton('ticket','Ver ticket encontrado')}<p class="muted">Pistas guardadas: ${state.saved.size}/4. Una pista repetida no suma otra vez.</p>`),
- phone:()=>shell('Teléfono','Contactos del caso',Object.keys(people).map(personRow).join('')),
- mail:()=>shell('Mail','Bandeja de entrada',`<button class="person-button" data-clue="reservation"><span class="avatar avatar-violet">V</span><span><strong>Valentina Ríos</strong><small>Confirmación · viernes 17:18</small></span><i>›</i></button><button class="person-button" data-mail="balance"><span class="avatar avatar-violet">N</span><span><strong>Nicolás Peralta</strong><small>Balance enviado · 20:40</small></span><i>›</i></button><button class="person-button" data-mail="sofia"><span class="avatar avatar-violet">S</span><span><strong>Sofía Méndez</strong><small>Horario de entrega</small></span><i>›</i></button>`),
- camera:()=>shell('Cámara','Cámara del juego',`<div class="camera-preview"><div><span style="font-size:52px">◎</span><p>Un ticket sobre la mesa.</p><p>Registrá el documento para examinarlo.</p></div></div><p></p><button class="btn btn-primary" data-action="capture">Fotografiar ticket <span>◎</span></button><p class="muted">Escena ficticia. No se utiliza la cámara de tu dispositivo.</p>`),
- instagram:()=>shell('Instagram','Publicaciones de contactos',`<article class="instagram-post"><h4>valentina.viajes</h4><img src="img/IMG_5731.JPG.jpeg" alt="Valentina"><p>Preparando escapadas especiales.</p><p class="photo-meta">Viernes · 18:01</p><button class="question" data-person="valentina">Consultar a Valentina</button></article><article class="instagram-post"><h4>martin.fotos</h4><img src="img/IMG_5711.JPG.jpeg" alt="Martín y Lucía"><p>Momentos compartidos.</p><button class="question" data-photo="0">Ver imagen completa</button></article><button class="person-button" data-person="camila"><span><strong>Mensaje de Camila</strong><small>Una foto cerca de la oficina.</small></span><i>›</i></button>`),
- calculator:()=>shell('Calculadora','',`<output id="calc-display" class="calculator-display" aria-live="polite">0</output><div class="calc-grid">${['C','⌫','%','÷','7','8','9','×','4','5','6','−','1','2','3','+','0','.','='].map(s=>`<button class="${'÷×−+=C'.includes(s)?'op':''}" data-calc="${s}">${s}</button>`).join('')}</div>`),
- maps:()=>shell('Maps','Lugares del caso',`<div class="map-surface" role="group" aria-label="Mapa ficticio"><button data-map="bar">Bar Central</button><button data-map="office">Oficina</button></div><div class="map-details" id="map-details"><strong>Elegí un lugar</strong><p>Explorá las ubicaciones mencionadas en las conversaciones.</p></div><p class="muted">Mapa ficticio. Una ubicación guardada no demuestra presencia.</p>`)
-};$('#app-view').innerHTML=renderers[id]();if(id==='calculator')calcExpression='';}
-function openPerson(id){const p=people[id];if(!p)return;const asked=state.asked.has(id);$('#app-view').innerHTML=shell(p.name,p.role,`<div class="contact-heading"><img class="contact-portrait" src="img/${p.photo}" alt="${p.name}"></div><div class="bubble">${p.intro}</div>${asked&&p.reply?`<div class="bubble right">${p.q}</div><div class="bubble">${p.reply}</div>`:''}${p.clue?clueButton(p.clue,p.q):`<button class="question" data-question="${id}" ${asked?'disabled':''}>${asked?'✓ Conversación revisada':p.q}</button>`}<button class="question" data-action="contacts">Volver a ${state.app==='phone'?'contactos':'chats'}</button>`);}
-function photoView(i){if(!gallery[i])return;$('#app-view').innerHTML=shell('Fotografía',i===8?'Parque Central · viernes 18:12':'Archivo personal',`<div class="photo-detail"><img class="full-photo" src="img/${gallery[i]}" alt="${i===8?'Foto del parque':'Fotografía del archivo personal'}"><p class="neutral">${i===8?'Esta imagen corresponde a la tarde. No demuestra dónde estuvieron sus protagonistas a las 23:15.':'Una foto aislada necesita contexto. Contrastá las imágenes con los mensajes y horarios.'}</p>${i===8?clueButton('photo',state.saved.has('photo')?'Revisar pista guardada':'Examinar foto clave'):''}<button class="question" data-action="gallery">Volver a la galería</button></div>`);}
-function openClue(id){if(!evidence[id]||state.finished)return;state.visited.add(id);state.clue=id;state.returnFocus=document.activeElement;$('#modal-title').textContent=evidence[id].title;$('#modal-type').textContent=evidence[id].type;$('#modal-content').innerHTML=evidence[id].html;$('#save-clue-button').disabled=state.saved.has(id);$('#save-clue-button').textContent=state.saved.has(id)?'Pista ya guardada':'Guardar pista +';$('#clue-modal').classList.add('open');$('#clue-modal [data-close]').focus();}
-function closeModal(){ $('#clue-modal').classList.remove('open');state.clue=null;if(state.returnFocus?.isConnected)state.returnFocus.focus();}
-function save(){if(!state.clue||!state.visited.has(state.clue)||state.finished)return;let id=state.clue;let before=state.saved.size;state.saved.add(id);update();closeModal();toast(state.saved.size===before?'Esta pista ya estaba guardada.':`Pista guardada · ${state.saved.size}/4`);}
-function finish(answer){state.finished=true;clearInterval(state.timer);closeModal();$('#confirm-bar').hidden=true;const result={surprise:['CASO RESUELTO','El detalle hacía la diferencia.','Martín se reunió con Valentina para organizar en secreto un viaje sorpresa de aniversario para Lucía.','El chat y la reserva explican el motivo. La foto de las 18:12 no corresponde al encuentro nocturno. El testimonio de Paula corrobora que la acompañante era una mujer con folletos de viaje. La sorpresa no elimina el daño de la mentira ni de la cena cancelada.'],accuse:['TEORÍA INCOMPLETA','Descubriste la mentira, pero no el motivo.','Martín sí mintió y sí estuvo con alguien esa noche, pero no fue una infidelidad.','La persona que lo acompañaba era Valentina Ríos, asesora de viajes y amiga en común. Estaban organizando juntos el viaje sorpresa de aniversario para Lucía. El chat y la reserva lo confirman.'],work:['CONCLUSIÓN INCORRECTA','Los horarios no coinciden.','Martín no estuvo toda la noche trabajando.','El balance se envió a las 20:40 y Nicolás lo vio salir a las 21:05. El ticket de las 23:15 y el testimonio de Paula lo vinculan con el bar.'],timeout:['TIEMPO AGOTADO','La investigación quedó pendiente.','Se terminó el tiempo antes de confirmar una conclusión.','Volvé a investigar y contrastá la información de las aplicaciones. También podés pausar el tiempo mientras revisás las pruebas.']}[answer];if(!result)return;$('#result-kicker').textContent=result[0];$('#result-title').textContent=result[1];$('#result-copy').textContent=result[2];$('#result-summary').textContent=result[3];$('#result-symbol').textContent=answer==='surprise'?'✓':'×';$('#result-symbol').classList.toggle('fail',answer!=='surprise');$('#result-answer').textContent=answer==='timeout'?'No confirmaste ninguna respuesta.':`Tu conclusión: ${state.confirmed}`;let e=180-state.remaining;$('#result-stats').innerHTML=`<div class="stat"><b>${state.saved.size}/4</b><span>Pistas guardadas</span></div><div class="stat"><b>${Math.floor(e/60)}:${String(e%60).padStart(2,'0')}</b><span>Tiempo empleado</span></div>`;showScreen('result-screen');$('.phone-frame').classList.remove('app-open');}
-let calcExpression='';
-function calculate(input){const tokens=input.match(/\d*\.?\d+|[+\-*/]/g);if(!tokens||tokens.join('')!==input)throw Error();let i=0;const number=()=>{let sign=1;if(tokens[i]==='-'){sign=-1;i++;}const n=Number(tokens[i++]);if(!Number.isFinite(n))throw Error();return n*sign;};const term=()=>{let n=number();while(['*','/'].includes(tokens[i])){let op=tokens[i++],v=number();if(op==='/'&&v===0)throw Error();n=op==='*'?n*v:n/v;}return n;};let n=term();while(['+','-'].includes(tokens[i])){let op=tokens[i++],v=term();n=op==='+'?n+v:n-v;}if(i!==tokens.length||!Number.isFinite(n))throw Error();return String(Number(n.toPrecision(12)));}
-function calc(key){try{if(key==='C')calcExpression='';else if(key==='⌫')calcExpression=calcExpression.slice(0,-1);else if(key==='=')calcExpression=calculate(calcExpression);else if(key==='%')calcExpression=String(Number(calculate(calcExpression))/100);else if(calcExpression.length<32)calcExpression+=({'×':'*','÷':'/','−':'-'}[key]||key);$('#calc-display').textContent=calcExpression||'0';}catch{$('#calc-display').textContent='Error';calcExpression='';}}
-document.addEventListener('DOMContentLoaded',()=>{
- $('#app-home').innerHTML=apps.map(([id,label,color])=>`<button class="app-icon ${id}" data-app="${id}" style="--app-color:${color}"><span><svg viewBox="0 0 32 32" aria-hidden="true">${icons[id]}</svg></span><b>${label}</b></button>`).join('');
- $('#character-cards').innerHTML=Object.values(people).map(p=>`<article class="character-card"><img src="img/${p.photo}" alt="${p.name}"><div><h3>${p.name}</h3><small>${p.role}</small></div></article>`).join('');reset();$('#loading-screen').classList.add('hide');
- $('#start-button').onclick=()=>showScreen('briefing-screen');$('#characters-button').onclick=()=>showScreen('characters-screen');$('#enter-case-button').onclick=beginCase;$$('[data-screen]').forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
- $$('[data-app]').forEach(b=>b.onclick=()=>openApp(b.dataset.app));$('#case-file-button').onclick=()=>toast(`${state.saved.size}/4 pistas guardadas. ${state.saved.size===4?'Ya podés sacar tu conclusión.':'Seguí investigando.'}`);
- $('#pause-timer').onclick=()=>{state.paused=!state.paused;$('#pause-label').textContent=state.paused?'Continuar':'Pausar';$('#pause-timer').setAttribute('aria-label',state.paused?'Reanudar tiempo':'Pausar tiempo');toast(state.paused?'Tiempo pausado. Podés seguir explorando.':'Tiempo reanudado.');};
- $('#solve-button').onclick=()=>{if(state.saved.size!==4||state.finished)return;showScreen('resolution-screen');};
- $$('[data-answer]').forEach(b=>b.onclick=()=>{if(state.saved.size!==4||state.finished)return;state.pending=b.dataset.answer;$$('[data-answer]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b));});$('#confirm-bar').hidden=false;});
- $('#cancel-answer-button').onclick=()=>{state.pending=null;$('#confirm-bar').hidden=true;$$('[data-answer]').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false');});};
- $('#confirm-answer-button').onclick=()=>{if(!state.pending||state.saved.size!==4||state.finished)return;state.confirmed=$(`[data-answer="${state.pending}"]`).textContent;finish(state.pending);};
- $('#restart-button').onclick=reset;$('#save-clue-button').onclick=save;$$('[data-close]').forEach(b=>b.onclick=closeModal);$('#clue-modal').onclick=e=>{if(e.target===$('#clue-modal'))closeModal();};
- document.addEventListener('keydown',e=>{if(!$('#clue-modal').classList.contains('open'))return;if(e.key==='Escape')closeModal();if(e.key==='Tab'){const els=[...$('#clue-modal').querySelectorAll('button:not(:disabled)')];let first=els[0],last=els.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
- $('#app-view').onclick=e=>{let b=e.target.closest('button');if(!b)return;let d=b.dataset;if(d.clue)openClue(d.clue);if(d.person)openPerson(d.person);if(d.question){state.asked.add(d.question);openPerson(d.question);}if(d.photo!==undefined)photoView(Number(d.photo));if(d.calc)calc(d.calc);if(d.map){$('#map-details').innerHTML=d.map==='bar'?'<strong>Bar Central</strong><p>El lugar del ticket. Diego se lo recomendó a Martín para conversar.</p>':'<strong>Oficina</strong><p>El balance se envió a las 20:40. Contrastá la salida con Nicolás.</p>';}
- if(d.mail){$('#app-view').innerHTML=shell(d.mail==='balance'?'Balance enviado':'Horario de entrega','Correo laboral',`<p><strong>${d.mail==='balance'?'Nicolás Peralta · viernes 20:40':'Sofía Méndez · viernes 18:25'}</strong></p><p>${d.mail==='balance'?'Martín, el balance quedó enviado. Gracias por la ayuda.':'La entrega del balance es antes de las 21:00. No hace falta quedarse después de terminar.'}</p><button class="question" data-action="mail">Volver a Mail</button>`);}
- if(d.action==='home')closeApp();if(d.action==='contacts')openApp(state.app==='phone'?'phone':'messages');if(d.action==='gallery')openApp('gallery');if(d.action==='mail')openApp('mail');if(d.action==='capture')openClue('ticket');};
-});
+
+/* ============================================================
+   COMPONENTES DE INTERFAZ
+   Funciones compartidas para mensajes, contactos, botones, fechas, avatares y escape de texto.
+   ============================================================ */
+'use strict';
+Caught.ui = {
+  $: selector => document.querySelector(selector),
+  escape: value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])),
+  date: value => value ? value.slice(0,10).split('-').reverse().join('/') : 'Sin fecha',
+  time: value => value ? value.slice(11,16) : '',
+  person: id => Caught.data.personajes.find(p => p.id_personaje === Number(id)),
+  avatar: person => person ? `<img class="avatar" src="${person.imagen}" alt="${Caught.ui.escape(person.nombre)}">` : '',
+  icon: (name, alt='') => `<img class="ui-icon" src="../img/interfaz/${name}.png" alt="${alt}">`,
+  button: (action,label,value='',className='') => `<button type="button" class="${className}" data-action="${action}" data-value="${value}">${label}</button>`,
+  header: (title,subtitle='') => `<header class="app-header">${Caught.ui.button('close',Caught.ui.icon('volver'),'','icon-button')}<div><h2>${Caught.ui.escape(title)}</h2>${subtitle ? `<small>${Caught.ui.escape(subtitle)}</small>` : ''}</div></header>`,
+  row: (action,value,title,subtitle,avatar='') => Caught.ui.button(action,`${avatar}<span><b>${Caught.ui.escape(title)}</b><small>${Caught.ui.escape(subtitle)}</small></span><em>›</em>`,value,'content-row'),
+  evidence: id => id ? `<span class="evidence-mark" data-evidence="${Number(id)}" aria-label="Evidencia del caso"></span>` : '',
+  message: (m,sent) => `<article class="message ${sent ? 'sent' : 'received'} ${m.id_pista ? 'message-evidence' : ''}" ${m.id_pista ? `data-evidence="${Number(m.id_pista)}"` : ''}><p>${Caught.ui.escape(m.contenido)}</p><small>${Caught.ui.date(m.fecha_hora)} · ${Caught.ui.time(m.fecha_hora)}</small></article>`,
+  toast(message) {
+    const t=this.$('#toast');t.textContent=message;t.classList.add('show');
+    clearTimeout(this.toastTimer);this.toastTimer=setTimeout(()=>t.classList.remove('show'),2300);
+  },
+  // Descubre la evidencia cuando aparece visible, incluso al desplazarse por el chat.
+  mount(html) {
+    this.evidenceObserver?.disconnect();this.$('#app-view').innerHTML=html;
+    this.evidenceObserver=new IntersectionObserver(entries=>{
+      entries.filter(x=>x.isIntersecting).forEach(x=>{if(Caught.game.state?.phase==='investigation')Caught.game.openClue(x.target.dataset.evidence);});
+    },{root:this.$('#app-view'),threshold:0.65});
+    this.$('#app-view').querySelectorAll('[data-evidence]').forEach(el=>this.evidenceObserver.observe(el));
+  },
+  refresh() { Caught.ui.mount(Caught.apps[Caught.currentApp].render()); }
+};
+
+/* ============================================================
+   ESTADO DE LA PARTIDA
+   Controla los cinco minutos, las pistas encontradas, su libreta y la finalización de la investigación.
+   ============================================================ */
+'use strict';
+Caught.game = {
+  state: null, interval: null,
+  reset() {
+    clearInterval(this.interval);this.interval=null;clearTimeout(this.completionTimer);
+    this.clearClueNotice();this.state={phase:'intro',caseId:1,remaining:300,deadline:null,activeClue:null,openedClues:new Set(),answers:[],usage:{},appStarted:null};
+    Object.values(Caught.apps).forEach(app=>app.reset?.());
+    if(Caught.dialogos){Caught.dialogos.selected=null;Caught.dialogos.index=0;Caught.dialogos.questions=[];}
+    this.update();
+  },
+  start() {
+    this.reset();this.state.phase='investigation';
+    this.state.remaining=Caught.data.casos[0].tiempo_limite;
+    this.state.deadline=performance.now()+this.state.remaining*1000;
+    Caught.main.showScreen('game-screen');this.update();
+    this.interval=setInterval(()=>this.tick(),250);
+  },
+  tick() {
+    if(Caught.main.loadingGame)return;
+    if(this.state.completing)return;
+    if(this.state.phase!=='investigation') return;
+    this.state.remaining=Math.max(0,Math.ceil((this.state.deadline-performance.now())/1000));
+    this.update();if(this.state.remaining===0)this.finish(true);
+  },
+  update() {
+    if(!this.state)return;
+    const timer=Caught.ui.$('#timer');if(timer)timer.textContent=`${String(Math.floor(this.state.remaining/60)).padStart(2,'0')}:${String(this.state.remaining%60).padStart(2,'0')}`;
+    const count=Caught.ui.$('#case-file-button b');if(count)count.textContent=`${this.state.openedClues.size}/${Caught.data.casos[0].total_pistas}`;
+  },
+  track(app) {
+    const now=performance.now();
+    if(this.state.appStarted) {
+      const {id,at}=this.state.appStarted;
+      this.state.usage[id]=(this.state.usage[id]||0)+(now-at)/1000;
+    }
+    this.state.appStarted=app?{id:app,at:now}:null;
+  },
+  usage(id) {return (this.state.usage[id]||0)+(this.state.appStarted?.id===id?(performance.now()-this.state.appStarted.at)/1000:0);},
+  clueContent(id) {
+    const U=Caught.ui,D=Caught.data;
+    if(id===1) return D.mensaje_instagram.filter(m=>m.id_chat_ig===1).map(m=>U.message({...m,id_pista:null},m.id_perfil===1)).join('');
+    if(id===2||id===3) return D.mensaje.filter(m=>m.id_chat===(id===2?4:5)).map(m=>U.message({...m,id_pista:null},m.id_personaje===1)).join('');
+    if(id===4) return `<img class="clue-photo" src="../img/evidencias/bar.jpg" alt="Tres vasos en el bar"><img class="clue-photo" src="../img/evidencias/evidencia.jpg" alt="Personas reunidas"><p>La fotografía del bar tiene fecha del 26/09/2026 a las 23:20. La imagen complementaria no incluye fecha.</p>`;
+    const e=D.evento_calendario[0];return `<h3>${e.titulo}</h3><p>${U.date(e.fecha)} · ${e.hora}</p>`;
+  },
+  openClue(id,review=false) {
+    id=Number(id);if(this.state.phase!=='investigation'&&!review)return;
+    const clue=Caught.data.pistas.find(c=>c.id_pista===id);if(!clue)return;
+    // Durante la investigación se registra la pista sin abrir la lista ni interrumpir la app.
+    const isNew=!this.state.openedClues.has(id);
+    this.state.activeClue=id;this.state.openedClues.add(id);this.update();
+    if(!review){
+      if(isNew){
+        this.notifyClue();
+        // Cinco pistas: guarda el tiempo de hallazgo y muestra el último aviso
+        // antes de pasar a la lista final y las preguntas de conclusión.
+        if(Caught.data.pistas.every(p=>this.state.openedClues.has(p.id_pista))){
+          this.tickBeforeFinish();clearInterval(this.interval);
+          this.state.completing=true;
+          this.completionTimer=setTimeout(()=>{
+            if(this.state.phase!=='investigation'||!this.state.completing)return;
+            this.finish(false);
+          },3000);
+        }
+      }
+      return;
+    }
+    this.openDialog(`<p class="eyebrow">PISTA ${id} · ${clue.tipo}</p><h2 id="clue-title">Pista encontrada</h2><p>${Caught.ui.escape(clue.descripcion)}</p><div class="clue-content">${this.clueContent(id)}</div>`);
+  },
+  // Aviso superior temporal. Una pista repetida no vuelve a anunciarse.
+  notifyClue() {
+    const notice=Caught.ui.$('#clue-notice');
+    notice.innerHTML='<span class="clue-notice-title">¡Pista encontrada!</span><small class="clue-notice-count">'+this.state.openedClues.size+'/'+Caught.data.casos[0].total_pistas+'</small>';
+    clearTimeout(this.noticeTimer);notice.classList.add('show');
+    this.noticeTimer=setTimeout(()=>notice.classList.remove('show'),3000);
+  },
+  clearClueNotice() {
+    clearTimeout(this.noticeTimer);Caught.ui.$('#clue-notice').classList.remove('show');
+  },
+  notebook() {
+    if(this.state.phase==='investigation')return;
+    const D=Caught.data,U=Caught.ui;
+    this.openDialog(`<p class="eyebrow">EXPEDIENTE N.º 01</p><h2 id="clue-title">Pistas encontradas</h2><p>${this.state.openedClues.size} de ${D.pistas.length} evidencias</p><div class="notebook-list">${D.pistas.map(p=>this.state.openedClues.has(p.id_pista)?U.row('review-clue',p.id_pista,p.tipo,p.descripcion):`<div class="locked-clue"><b>Pista ${p.id_pista}</b><small>Pendiente de descubrir</small></div>`).join('')}</div>`);
+  },
+  openDialog(content) {
+    const d=Caught.ui.$('#clue-dialog');d.innerHTML=`${Caught.ui.button('close-dialog','×','','dialog-close')}${content}`;if(!d.open)d.showModal();
+  },
+  finish(expired=false) {
+    if(this.state.phase!=='investigation')return;
+    clearTimeout(this.completionTimer);this.clearClueNotice();if(!this.state.completing)this.tickBeforeFinish();this.state.phase='questions';clearInterval(this.interval);this.track(null);
+    Caught.ui.$('#clue-dialog').close();Caught.main.closeApp();
+    const U=Caught.ui,icon=U.$('#timeout-icon');
+    icon.textContent=expired?'✕':'✓';icon.className='status-icon '+(expired?'is-timeout':'is-done');
+    U.$('#timeout-eyebrow').textContent=expired?'04 · Tiempo agotado':'04 · Investigación finalizada';
+    U.$('#timeout-title').textContent=expired?'Se acabó el tiempo':'Investigación finalizada';
+    U.$('#timeout-copy').textContent=`Encontraste ${this.state.openedClues.size} de ${Caught.data.casos[0].total_pistas} pistas.`;
+    U.$('#questions-button').hidden=false;
+    U.$('#timeout-screen .hint-pill').textContent='Es hora de que saques tu conclusión';
+    if(expired)Caught.main.showScreen('timeout-screen');
+    else {Caught.main.renderFound();Caught.main.showScreen('found-screen');}
+  },
+  tickBeforeFinish() {this.state.remaining=Math.max(0,Math.ceil((this.state.deadline-performance.now())/1000));this.update();}
+};
+
+/* ============================================================
+   PREGUNTAS Y RESULTADOS
+   Selecciona respuestas, avanza por seis preguntas y muestra la conclusión elegida.
+   ============================================================ */
+'use strict';
+Caught.dialogos = {
+  index:0, selected:null, questions:[],
+  // Preguntas específicas solo para evidencias encontradas; conclusión siempre al final.
+  availableQuestions() {return Caught.data.pregunta.filter(q=>q.es_definitiva||Caught.game.state.openedClues.has(q.id_pista)).sort((a,b)=>a.orden-b.orden);},
+  start() {this.questions=this.availableQuestions();this.index=0;this.selected=null;Caught.game.state.answers=[];this.render();Caught.main.showScreen('resolution-screen');},
+  // Texto del botón según la pantalla de la Etapa 12: "Siguiente" sin selección, "Confirmar" con selección.
+  label() {Caught.ui.$('#confirm-button').innerHTML=this.selected===null?'Siguiente <span aria-hidden="true">→</span>':'Confirmar <span aria-hidden="true">✓</span>';},
+  // Alterna entre las opciones y el cuadro "¡Atención!" (pantalla "Pregunta con mensaje de error").
+  showError(show) {const U=Caught.ui;U.$('#form-error').hidden=!show;U.$('.answers').hidden=show;},
+  render() {
+    const D=Caught.data,U=Caught.ui,q=this.questions[this.index];this.selected=null;
+    U.$('#resolution-screen .eyebrow').textContent=`06 · Preguntas · ${this.index+1}/${this.questions.length}`;
+    U.$('#question-title').textContent=q.texto_pregunta;
+    U.$('.answers').innerHTML=D.opcion.filter(o=>o.id_pregunta===q.id_pregunta).map(o=>`<button role="radio" aria-checked="false" data-answer="${o.id_opcion}"><span>${U.escape(o.texto)}</span><i class="radio-dot" aria-hidden="true"></i></button>`).join('');
+    this.showError(false);this.label();
+    U.$('#resolution-screen .back-button').hidden=false;
+  },
+  choose(id) {
+    this.selected=Number(id);
+    document.querySelectorAll('[data-answer]').forEach(b=>{const selected=Number(b.dataset.answer)===this.selected;b.classList.toggle('selected',selected);b.setAttribute('aria-checked',String(selected));});
+    this.showError(false);this.label();
+  },
+  confirm() {
+    if(this.selected===null){this.showError(true);return;}
+    const option=Caught.data.opcion.find(o=>o.id_opcion===this.selected);
+    Caught.game.state.answers[this.index]=option.id_opcion;
+    if(option.consecuencia==='siguiente'){this.index++;this.render();return;}
+    const c=Caught.data.conclusion.find(c=>c.id_conclusion===option.id_conclusion),st=Caught.game.state,U=Caught.ui;
+    st.phase='result';
+    st.correctConclusion=c.es_correcta;
+    U.$('#restart-button').innerHTML=c.es_correcta?'Volver al inicio <span aria-hidden="true">↻</span>':'Reintentar <span aria-hidden="true">↻</span>';
+    const used=Math.max(0,Caught.data.casos[0].tiempo_limite-st.remaining),mmss=`${String(Math.floor(used/60)).padStart(2,'0')}:${String(used%60).padStart(2,'0')}`;
+    U.$('#result-conclusion').textContent=c.texto;
+    U.$('#result-title').textContent=c.es_correcta?'¡Tu conclusión es correcta!':'Tu conclusión es incorrecta.';
+    U.$('#result-explanation').textContent=c.texto_resultado;
+    U.$('#result-progress').textContent=`Pistas encontradas: ${st.openedClues.size}/${Caught.data.casos[0].total_pistas} · Tiempo empleado: ${mmss}`;
+    Caught.main.showScreen('result-screen');
+  },
+  // El aviso se cierra primero para poder elegir una opción en la misma pregunta.
+  back() {if(!Caught.ui.$('#form-error').hidden){this.showError(false);return;}if(this.index>0){this.index--;this.render();const previous=Caught.game.state.answers[this.index];if(previous)this.choose(previous);}else Caught.main.showScreen('found-screen');}
+};
+
+/* ============================================================
+   NAVEGACIÓN GENERAL
+   Cambia pantallas, muestra los cuatro protagonistas y dirige clics y búsquedas a apps.js.
+   ============================================================ */
+
+'use strict';
+Caught.main = {
+ appList:[['email','Email'],['map','Mapa'],['calendar','Calendario'],['instagram','Instagram'],['notes','Notas'],['calculator','Calculadora'],['settings','Ajustes']],
+ // Todas las etapas comparten la misma transición horizontal, sin desplazamiento vertical.
+ waitForLoader(){
+  return new Promise(resolve=>setTimeout(resolve,1500));
+ },
+ revealFound(){
+  const rows=Array.from(document.querySelectorAll('#found-list .found-row'));
+  const button=document.getElementById('found-next-button');
+  button.disabled=rows.length>0;
+  rows.forEach((row,index)=>{row.classList.add('found-loading');row.setAttribute('aria-busy','true');setTimeout(()=>{row.classList.remove('found-loading');row.removeAttribute('aria-busy');if(index===rows.length-1)button.disabled=false;},(index+1)*750);});
+ },
+ showScreen(id){
+  const next=document.getElementById(id);if(!next)return;
+  const previous=document.querySelector('.screen.active');if(previous===next)return;
+  const serial=this.screenTransition=(this.screenTransition||0)+1;
+  const loader=document.getElementById('screen-loader');
+  const loaderTime=document.getElementById('loader-time');
+  loaderTime.hidden=!['found-screen','timeout-screen'].includes(id);
+  if(!loaderTime.hidden)document.getElementById('loader-timer').textContent=document.getElementById('timer').textContent;
+  loader?.classList.add('is-loading');
+  this.loadingGame=id==='game-screen';
+  (this.screenAnimations||[]).forEach(a=>a.cancel());this.screenAnimations=[];
+  document.querySelectorAll('.screen-leaving').forEach(s=>s.classList.remove('screen-leaving'));
+  const screens=Array.from(document.querySelectorAll('.screen'));
+  const direction=previous&&screens.indexOf(next)<screens.indexOf(previous)?-1:1;
+  screens.forEach(s=>s.classList.toggle('active',s===next));
+  document.body.classList.toggle('phone-open',id==='game-screen');
+  window.scrollTo(0,0);next.scrollTop=0;
+  const finish=()=>{
+   if(this.screenTransition!==serial)return;
+   loader?.classList.remove('is-loading');
+   if(this.loadingGame&&Caught.game.state.phase==='investigation')Caught.game.state.deadline=performance.now()+Caught.game.state.remaining*1000;
+   this.loadingGame=false;
+   previous?.classList.remove('screen-leaving');
+   document.body.classList.remove('screen-transitioning');
+   this.screenAnimations=[];
+   if(id!=='game-screen')this.closeApp();
+   if(id==='found-screen')this.revealFound();
+  };
+  if(!previous||!next.animate||window.matchMedia('(prefers-reduced-motion: reduce)').matches){this.waitForLoader().then(finish);return;}
+  previous.classList.add('screen-leaving');document.body.classList.add('screen-transitioning');
+  const options={duration:420,easing:'cubic-bezier(.22,.61,.36,1)'};
+  const outgoing=previous.animate([{transform:'translateX(0)'},{transform:`translateX(${-direction*100}%)`}],options);
+  const incoming=next.animate([{transform:`translateX(${direction*100}%)`},{transform:'translateX(0)'}],options);
+  this.screenAnimations=[outgoing,incoming];
+  Promise.allSettled([...this.screenAnimations.map(a=>a.finished),this.waitForLoader()]).then(finish);
+ },
+ openApp(id){
+  if(Caught.game.state.phase!=='investigation'||!Caught.apps[id])return;
+  Caught.game.tick();if(Caught.game.state.phase!=='investigation')return;
+  Caught.currentApp=id;Caught.game.track(id);
+  const el=Caught.ui.$('#app-view');el.className='app-view open live-app '+id+'-live';
+  Caught.ui.mount(Caught.apps[id].render());
+ },
+ closeApp(){if(Caught.game.state)Caught.game.track(null);Caught.currentApp=null;const el=Caught.ui.$('#app-view');el.className='app-view';el.innerHTML='';},
+ renderCharacters(){
+  const U=Caught.ui;
+  U.$('.character-grid').innerHTML=Caught.data.personajes.filter(p=>[1,2,3,4].includes(p.id_personaje)).map(p=>`<article><img class="character-photo" src="${p.imagen}" alt="${U.escape(p.nombre)}"><p>${U.escape(p.rol)}</p><h3>${U.escape(p.nombre)}</h3><small>${U.escape(p.relacion_con_martin)}</small></article>`).join('');
+ },
+ // Pantalla "¿Qué encontraste?": ticket con los campos de Caught.data.ticket.
+ renderTicket(){
+  const U=Caught.ui,t=Caught.data.ticket,e=U.escape;
+  U.$('#ticket').innerHTML=`<b>${e(t.restaurante)}</b><span>${e(t.ubicacion)}</span><hr><p><span>Fecha: ${e(t.fecha)}</span><span>Hora: ${e(t.hora)}</span></p><hr><p><span>Consumición</span><span>${e(t.consumicion)}</span></p><hr><p><b>TOTAL</b><b>${e(t.total)}</b></p><hr><p><span>Nota: ${e(t.nota)}</span></p>`;
+ },
+ // Pantalla "Pistas encontradas": lista de las pistas abiertas durante la investigación.
+ // Reintentar vuelve al celular y empieza una investigación nueva desde cero.
+ restartCase(){
+  const solved=Caught.game.state.correctConclusion===true;
+  Caught.ui.evidenceObserver?.disconnect();
+  Caught.game.reset();this.loadingGame=false;
+  Caught.ui.$('#clue-dialog').close();this.closeApp();
+  Caught.ui.$('#found-list').innerHTML='';
+  for(const id of ['result-conclusion','result-title','result-explanation','result-progress'])Caught.ui.$('#'+id).textContent='';
+  Caught.ui.$('#resolution-screen .answers').innerHTML='';
+  Caught.dialogos.showError(false);
+  Caught.ui.$('#found-next-button').disabled=false;
+  if(solved)this.showScreen('start-screen');else Caught.game.start();
+ },
+ renderFound(){
+  const U=Caught.ui,D=Caught.data,found=D.pistas.filter(p=>Caught.game.state.openedClues.has(p.id_pista));
+  U.$('#found-next-button').innerHTML=found.length?'Siguiente <span aria-hidden="true">→</span>':'Revisar de nuevo <span aria-hidden="true">↻</span>';
+  const thumb=p=>p.id_pista===4?'<img src="../img/evidencias/bar.jpg" alt="">':(brandIcons[p.origen==='galeria'?'gallery':p.origen==='calendario'?'calendar':p.origen]||'');
+  U.$('#found-list').innerHTML=found.map(p=>`<div class="found-row"><span class="found-thumb ${p.origen==='calendario'?'found-calendar':''}">${thumb(p)}</span><span class="found-text"><b>${U.escape(p.tipo)}</b><small>${U.escape(p.descripcion)}</small></span></div>`).join('')||'<p class="found-empty">No encontraste pistas.</p>';
+ },
+ init(){
+  const U=Caught.ui,c=Caught.data.casos[0];
+  U.$('#card-title').textContent=c.titulo;U.$('#card-intro').textContent=c.descripcion;
+  U.$('#situation-title').textContent=c.titulo;
+  U.$('#situation-context').textContent=c.descripcion+' Sospechás que Martín está ocultando algo. Revisá su teléfono para reconstruir lo que pasó.';
+  U.$('#mission-text').textContent='• Tenés cinco minutos para investigar, descubrir cinco pistas y sacar tu conclusión.';
+  this.renderTicket();
+  U.$('#app-grid').innerHTML=this.appList.map(([id,name])=>`<button class="app-icon ${id}" data-app="${id}" aria-label="Abrir ${name}"><span aria-hidden="true">${brandIcons[id]||{notes:'✎',settings:'⚙'}[id]}</span><b>${name}</b></button>`).join('');
+  document.querySelectorAll('.dock [data-app]').forEach(b=>b.innerHTML=brandIcons[b.dataset.app]);
+  U.$('.weather-card b').textContent='Buenos Aires';U.$('.weather-card strong').textContent='18°';
+  this.renderCharacters();Caught.game.reset();
+  U.$('#start-button').onclick=()=>this.showScreen('case-card-screen');
+  U.$('#expediente-button').onclick=()=>this.showScreen('briefing-screen');
+  U.$('#characters-button').onclick=()=>this.showScreen('characters-screen');
+  U.$('#characters-more-button').onclick=()=>this.showScreen('clue-screen');
+  U.$('#start-investigation-button').onclick=()=>Caught.game.start();
+  U.$('#conclusion-button').onclick=()=>Caught.game.finish();
+  U.$('#case-file-button').onclick=()=>Caught.game.notebook();
+  U.$('#questions-button').onclick=()=>{this.renderFound();this.showScreen('found-screen');};
+  U.$('#found-next-button').onclick=()=>{if(Caught.game.state.openedClues.size===0)Caught.game.start();else Caught.dialogos.start();};
+  U.$('#form-error').onclick=()=>Caught.dialogos.showError(false);
+  U.$('#confirm-button').onclick=()=>Caught.dialogos.confirm();
+  U.$('#restart-button').onclick=()=>this.restartCase();
+  U.$('#resolution-screen .back-button').onclick=()=>Caught.dialogos.back();
+  document.querySelectorAll('[data-screen]').forEach(b=>{if(!b.closest('#resolution-screen'))b.onclick=()=>this.showScreen(b.dataset.screen);});
+  document.addEventListener('click',e=>{
+   const app=e.target.closest('[data-app]');if(app){this.openApp(app.dataset.app);return;}
+   const answer=e.target.closest('[data-answer]');if(answer){Caught.dialogos.choose(answer.dataset.answer);return;}
+   const b=e.target.closest('[data-action]');if(!b)return;
+   const a=b.dataset.action,v=b.dataset.value;
+   if(a==='close')this.closeApp();
+   else if(a==='close-dialog'){U.$('#clue-dialog').close();Caught.game.state.activeClue=null;}
+   else if(a==='clue'){Caught.game.tick();Caught.game.openClue(v);}
+   else if(a==='review-clue'){if(Caught.game.state.openedClues.has(Number(v)))Caught.game.openClue(v,true);}
+   else Caught.apps[Caught.currentApp]?.handle(a,v);
+  });
+  U.$('#app-view').addEventListener('input',e=>Caught.apps[Caught.currentApp]?.input?.(e.target));
+  U.$('#clue-dialog').addEventListener('click',e=>{if(e.target===U.$('#clue-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
+  U.$('#clue-dialog').addEventListener('close',()=>{Caught.game.state.activeClue=null;});
+  const clock=()=>{U.$('#clock').textContent=new Intl.DateTimeFormat('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());};
+  clock();setInterval(clock,30000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)Caught.game.tick();});
+ }
+};
+document.addEventListener('DOMContentLoaded',()=>Caught.main.init());
+/* La misma animación acompaña la primera carga del videojuego. */
+window.addEventListener('load',()=>{if(!Caught.main.screenAnimations?.length)Caught.main.waitForLoader().then(()=>document.getElementById('screen-loader')?.classList.remove('is-loading'));});
