@@ -155,6 +155,7 @@ Caught.game = {
     U.$('#timeout-copy').textContent=`Encontraste ${this.state.openedClues.size} de ${Caught.data.casos[0].total_pistas} pistas.`;
     U.$('#questions-button').hidden=false;
     U.$('#timeout-screen .hint-pill').textContent='Es hora de que saques tu conclusión';
+    Caught.main.finishedWithTimeout=expired;
     if(expired)Caught.main.showScreen('timeout-screen');
     else {Caught.main.renderFound();Caught.main.showScreen('found-screen');}
   },
@@ -177,7 +178,7 @@ Caught.dialogos = {
   showError(show) {const U=Caught.ui;U.$('#form-error').hidden=!show;U.$('.answers').hidden=show;},
   render() {
     const D=Caught.data,U=Caught.ui,q=this.questions[this.index];this.selected=null;
-    U.$('#resolution-screen .eyebrow').textContent=`06 · Preguntas · ${this.index+1}/${this.questions.length}`;
+    U.$('#resolution-screen .eyebrow').textContent=`${Caught.main.finishedWithTimeout ? "06" : "05"} · Preguntas · ${this.index+1}/${this.questions.length}`;
     U.$('#question-title').textContent=q.texto_pregunta;
     U.$('.answers').innerHTML=D.opcion.filter(o=>o.id_pregunta===q.id_pregunta).map(o=>`<button role="radio" aria-checked="false" data-answer="${o.id_opcion}"><span>${U.escape(o.texto)}</span><i class="radio-dot" aria-hidden="true"></i></button>`).join('');
     this.showError(false);this.label();
@@ -227,12 +228,15 @@ Caught.main = {
   rows.forEach((row,index)=>{row.classList.add('found-loading');row.setAttribute('aria-busy','true');setTimeout(()=>{row.classList.remove('found-loading');row.removeAttribute('aria-busy');if(index===rows.length-1)button.disabled=false;},(index+1)*750);});
  },
  showScreen(id){
+  const timedOut=Boolean(this.finishedWithTimeout);
+  if(id==='found-screen')document.querySelector('#found-screen .eyebrow').textContent=`${timedOut?'05':'04'} · Pistas encontradas`;
+  if(id==='result-screen')document.querySelector('#result-screen .eyebrow').textContent=`${timedOut?'07':'06'} · Resultados`;
   const next=document.getElementById(id);if(!next)return;
   const previous=document.querySelector('.screen.active');if(previous===next)return;
   const serial=this.screenTransition=(this.screenTransition||0)+1;
   const loader=document.getElementById('screen-loader');
   const loaderTime=document.getElementById('loader-time');
-  loaderTime.hidden=!['found-screen','timeout-screen'].includes(id);
+  loaderTime.hidden=id!=='timeout-screen';
   if(!loaderTime.hidden)document.getElementById('loader-timer').textContent=document.getElementById('timer').textContent;
   loader?.classList.add('is-loading');
   this.loadingGame=id==='game-screen';
