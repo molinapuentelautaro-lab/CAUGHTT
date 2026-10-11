@@ -215,3 +215,17 @@ El juego no guarda partidas en un servidor ni incluye cuentas de usuario, sincro
 - Veredictos explícitos; las conclusiones incorrectas no revelan la verdad.
 - Retorno a la portada al acertar y al celular al reintentar tras un error.
 - Reinicio completo y cronómetro normal después de las capturas.
+
+# Pruebas finales de CAUGHT!
+
+Rama: feature/resolucion-caso
+Commit del código probado: e7d0abef47290879f8352fc64ea65b597be7a0f4
+
+## Resultados
+- Inicio e investigación: pendiente.
+- Descubrimiento de las cinco pistas: pendiente.
+- Finalización por tiempo agotado: pendiente.
+- Preguntas y confirmación de conclusión: pendiente.
+- Resultado correcto: pendiente.
+- Resultado incorrecto: pendiente.
+- Reinicio del caso: pendiente.
