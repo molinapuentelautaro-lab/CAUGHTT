@@ -214,4 +214,12 @@ El juego no guarda partidas en un servidor ni incluye cuentas de usuario, sincro
 - Corrección del doble cambio de pantalla al completar las cinco pistas.
 - Veredictos explícitos; las conclusiones incorrectas no revelan la verdad.
 - Retorno a la portada al acertar y al celular al reintentar tras un error.
-- Reinicio completo y cronómetro normal después de las capturas.
+- Reinicio completo y cronómetro normal después de las capturas. 
+
+## Entrega definitiva
+
+La entrega definitiva corresponde a la rama `feature/resolucion-caso`.
+El código fuente está disponible en GitHub.
+Las 19 etapas se entregan únicamente en el ZIP, dentro de `PROYECTO Caught!`.
+
+El registro de pruebas finales está disponible en [TESTING_FINAL.md](TESTING_FINAL.md).
