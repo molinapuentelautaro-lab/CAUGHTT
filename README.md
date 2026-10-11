@@ -214,18 +214,12 @@ El juego no guarda partidas en un servidor ni incluye cuentas de usuario, sincro
 - Corrección del doble cambio de pantalla al completar las cinco pistas.
 - Veredictos explícitos; las conclusiones incorrectas no revelan la verdad.
 - Retorno a la portada al acertar y al celular al reintentar tras un error.
-- Reinicio completo y cronómetro normal después de las capturas.
+- Reinicio completo y cronómetro normal después de las capturas. 
 
-# Pruebas finales de CAUGHT!
+## Entrega definitiva
 
-Rama: feature/resolucion-caso
-Commit del código probado: e7d0abef47290879f8352fc64ea65b597be7a0f4
+La entrega definitiva corresponde a la rama `feature/resolucion-caso`.
+El código fuente está disponible en GitHub.
+Las 19 etapas se entregan únicamente en el ZIP, dentro de `PROYECTO Caught!`.
 
-## Resultados
-- Inicio e investigación: pendiente.
-- Descubrimiento de las cinco pistas: pendiente.
-- Finalización por tiempo agotado: pendiente.
-- Preguntas y confirmación de conclusión: pendiente.
-- Resultado correcto: pendiente.
-- Resultado incorrecto: pendiente.
-- Reinicio del caso: pendiente.
+El registro de pruebas finales está disponible en [TESTING_FINAL.md](TESTING_FINAL.md).
