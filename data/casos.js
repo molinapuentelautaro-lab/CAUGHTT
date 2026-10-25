@@ -1344,8 +1344,8 @@ Caught.data.foto=[
     "id_caso": 1,
     "archivo": "../img/evidencias/evidencia.jpg",
     "fecha_hora": null,
-    "es_pista": true,
-    "id_pista": 4,
+    "es_pista": false,
+    "id_pista": null,
     "descripcion": "Imagen de las personas reunidas. Recurso complementario de la evidencia fotográfica; el archivo no incluye fecha."
   }
 ];
