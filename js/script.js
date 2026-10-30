@@ -236,7 +236,9 @@ Caught.main = {
   const serial=this.screenTransition=(this.screenTransition||0)+1;
   const loader=document.getElementById('screen-loader');
   const loaderTime=document.getElementById('loader-time');
-  loaderTime.hidden = true;
+  loaderTime.hidden = id !== 'timeout-screen';
+  document.getElementById('loader-timer').textContent = '';
+  loader?.classList.add('is-loading');
   this.loadingGame=id==='game-screen';
   (this.screenAnimations||[]).forEach(a=>a.cancel());this.screenAnimations=[];
   document.querySelectorAll('.screen-leaving').forEach(s=>s.classList.remove('screen-leaving'));
