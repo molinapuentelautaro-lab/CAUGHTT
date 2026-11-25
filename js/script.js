@@ -274,7 +274,7 @@ Caught.main = {
   feedback.className = 'auth-feedback' + (kind ? ' is-' + kind : '');
 },
 
-submitAuth(mode, form) {
+async submitAuth(mode, form) {
   const data = new FormData(form);
   const name = String(data.get('name') || '').trim();
   const email = String(data.get('email') || '').trim();
@@ -297,17 +297,42 @@ submitAuth(mode, form) {
     return;
   }
 
-  this.authFeedback(
-    feedbackId,
-    mode === 'register'
-      ? 'Cuenta creada. Preparando tu investigación...'
-      : 'Sesión iniciada. Preparando tu investigación...',
-    'success'
-  );
-
-  /* Después se reemplaza por fetch() cuando exista el backend real. */
-  window.setTimeout(() => this.showScreen('case-card-screen'), 1200);
+  try {
+    const response = await fetch(`/api/auth/${mode === 'register' ? 'register' : 'login'}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+    const result = await response.json();
+    if (!response.ok) return this.authFeedback(feedbackId, result.error || 'No se pudo completar la operación.', 'error');
+    localStorage.setItem('caught_session', result.token);
+    localStorage.setItem('caught_user', JSON.stringify(result.user));
+    this.authFeedback(feedbackId, result.message + ' Preparando tu investigación...', 'success');
+    window.setTimeout(() => this.showScreen('case-card-screen'), 1200);
+  } catch {
+    this.authFeedback(feedbackId, 'No se pudo conectar con el servidor. Iniciá el juego con npm start.', 'error');
+  }
 },
+ async requestPasswordReset(){
+  const email=String(Caught.ui.$('#login-email').value||'').trim();
+  if(!email.includes('@'))return this.authFeedback('login-feedback','Escribí tu correo para solicitar el código.','error');
+  try {
+   const response=await fetch('/api/auth/request-reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+   const result=await response.json();
+   Caught.ui.$('#reset-email').value=email;
+   this.showScreen('reset-screen');
+   this.authFeedback('reset-feedback',result.developmentCode?`Código de prueba: ${result.developmentCode}. Copialo para continuar.`:result.message,'success');
+  } catch { this.authFeedback('login-feedback','No se pudo conectar con el servidor. Iniciá el juego con npm start.','error'); }
+ },
+ async resetPassword(form){
+  const data=new FormData(form),email=String(data.get('email')||'').trim(),code=String(data.get('code')||'').trim(),password=String(data.get('password')||'');
+  try {
+   const response=await fetch('/api/auth/reset-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,code,password})});
+   const result=await response.json();
+   if(!response.ok)return this.authFeedback('reset-feedback',result.error||'No se pudo actualizar la contraseña.','error');
+   this.authFeedback('reset-feedback',result.message,'success');
+   window.setTimeout(()=>this.showScreen('login-screen'),1200);
+  } catch { this.authFeedback('reset-feedback','No se pudo conectar con el servidor.','error'); }
+ },
 
  openApp(id){
   if(Caught.game.state.phase!=='investigation'||!Caught.apps[id])return;
@@ -369,6 +394,10 @@ submitAuth(mode, form) {
   event.preventDefault();
   this.submitAuth('register', event.currentTarget);
 });
+  U.$('#auth-reset-form').addEventListener('submit', event => {
+  event.preventDefault();
+  this.resetPassword(event.currentTarget);
+});
 
   document.querySelectorAll('.auth-password-toggle').forEach(button => {
   button.onclick = () => {
@@ -384,13 +413,8 @@ submitAuth(mode, form) {
   };
 });
 
-  U.$('#password-recovery').onclick = () => {
-  this.authFeedback(
-    'login-feedback',
-    'La recuperación estará disponible al conectar el backend.'
-  );
-};
-  U.$('#start-button').onclick=()=>this.showScreen('case-card-screen');
+  U.$('#password-recovery').onclick = () => this.requestPasswordReset();
+  U.$('#request-reset-code').onclick = () => this.requestPasswordReset();
   U.$('#expediente-button').onclick=()=>this.showScreen('briefing-screen');
   U.$('#characters-button').onclick=()=>this.showScreen('characters-screen');
   U.$('#characters-more-button').onclick=()=>this.showScreen('clue-screen');
