@@ -116,6 +116,28 @@
   </div>
  </section>
 
+ <section id="reset-screen" class="screen auth-screen" aria-labelledby="reset-title">
+  <div class="auth-panel">
+    <button class="auth-back" data-screen="login-screen" type="button" aria-label="Volver a iniciar sesión">‹</button>
+    <img class="auth-logo" src="../img/interfaz/logo-etapa12.png" alt="Logo de CAUGHT!">
+    <h1>CAUGHT!</h1>
+    <p class="auth-tagline">Recuperá tu acceso</p>
+    <h2 id="reset-title">Nueva contraseña</h2>
+    <p class="auth-description">Ingresá tu correo, el código recibido y una contraseña nueva.</p>
+    <form id="auth-reset-form" class="auth-form" novalidate>
+      <label for="reset-email">Correo electrónico</label>
+      <div class="auth-input"><span class="auth-input-icon" aria-hidden="true">✉</span><input id="reset-email" name="email" type="email" autocomplete="email" placeholder="nombre@correo.com" required></div>
+      <button id="request-reset-code" class="auth-recovery reset-request" type="button">Solicitar código de recuperación</button>
+      <label for="reset-code">Código de recuperación</label>
+      <div class="auth-input"><span class="auth-input-icon" aria-hidden="true">#</span><input id="reset-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="Código de 6 dígitos" required></div>
+      <label for="reset-password">Nueva contraseña</label>
+      <div class="auth-input"><span class="auth-input-icon" aria-hidden="true">▣</span><input id="reset-password" name="password" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres" minlength="6" required><button class="auth-password-toggle" data-password-target="reset-password" type="button" aria-label="Mostrar contraseña">◉</button></div>
+      <p id="reset-feedback" class="auth-feedback" role="status" hidden></p>
+      <button class="auth-submit" type="submit">Guardar nueva contraseña <span aria-hidden="true">→</span></button>
+    </form>
+  </div>
+ </section>
+
     <section id="case-card-screen" class="screen flow-screen">
       <div class="flow-panel">
         <div class="brand-mark"><span class="brand-icon"><img src="../img/interfaz/logo-etapa12.png" alt="Logo de CAUGHT!"></span><h1>CAUGHT!</h1></div>
@@ -206,7 +228,7 @@
   <dialog id="clue-dialog" aria-labelledby="clue-title"></dialog><div id="toast" class="toast" role="status"></div>
   <!-- Orden: datos, lógica general y aplicaciones. -->
 <script src="../data/casos.js" defer></script>
-<script src="../js/script.js?v=orden-corregido" defer></script>
+<script src="../js/script.js?v=backend-auth-v1" defer></script>
 <script src="../js/apps/apps.js?v=orden-corregido" defer></script>
 </body>
 </html>

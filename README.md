@@ -72,6 +72,20 @@ CAUGHT!/
 
 ## Instrucciones para iniciar el proyecto
 
+### Con acceso de usuarios (backend)
+
+Para probar registro, inicio de sesión y recuperación de contraseña, se necesita **Node.js** instalado. En la terminal de Visual Studio Code, ubicada en la carpeta raíz `CAUGHT!`, ejecutar:
+
+```bash
+npm start
+```
+
+Luego abrir `http://localhost:3000`. El servidor guarda las cuentas en `data/users.json` y cifra las contraseñas con `scrypt`; ese archivo no se sube a GitHub.
+
+La recuperación genera un código temporal que vence en 15 minutos. Durante las pruebas locales el código aparece en la pantalla y también en la terminal. Para producción se debe conectar un proveedor de correo y mantener el código solo en el email.
+
+### Sin backend
+
 1. Descargar y descomprimir el ZIP, o clonar el repositorio.
 2. Abrir en Visual Studio Code la carpeta raíz `CAUGHT!`, que contiene `index`, `css`, `js`, `data`, `img`, `fonts` y este README.
 3. Instalar la extensión **Live Server**, si todavía no está instalada.
@@ -198,7 +212,7 @@ Se comprobaron las rutas de imágenes, la asignación de remitentes en los 16 ch
 
 Estas comprobaciones no equivalen a una prueba visual completa de todos los recorridos en todos los navegadores. La revisión de ortografía, tildes, puntuación y voseo fue realizada; pueden surgir ajustes menores durante las pruebas finales.
 
-El juego no guarda partidas en un servidor ni incluye cuentas de usuario, sincronización entre dispositivos o comunicaciones reales. Al recargar, comienza una sesión nueva.
+El juego incorpora un servidor local opcional para cuentas de usuario. La partida todavía no guarda su progreso en una base de datos ni sincroniza entre dispositivos. Al recargar, comienza una sesión nueva.
 
 ## Últimos cambios incorporados
 
