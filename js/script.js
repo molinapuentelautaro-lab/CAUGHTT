@@ -266,6 +266,49 @@ Caught.main = {
   this.screenAnimations=[outgoing,incoming];
   Promise.allSettled([...this.screenAnimations.map(a=>a.finished),this.waitForLoader()]).then(finish);
  },
+
+ authFeedback(id, message, kind = '') {
+  const feedback = Caught.ui.$('#' + id);
+  feedback.textContent = message;
+  feedback.hidden = false;
+  feedback.className = 'auth-feedback' + (kind ? ' is-' + kind : '');
+},
+
+submitAuth(mode, form) {
+  const data = new FormData(form);
+  const name = String(data.get('name') || '').trim();
+  const email = String(data.get('email') || '').trim();
+  const password = String(data.get('password') || '');
+
+  const feedbackId = mode === 'register'
+    ? 'register-feedback'
+    : 'login-feedback';
+
+  if (
+    (mode === 'register' && name.length < 3) ||
+    !email.includes('@') ||
+    password.length < 6
+  ) {
+    this.authFeedback(
+      feedbackId,
+      'Completá los datos: correo válido y contraseña de al menos 6 caracteres.',
+      'error'
+    );
+    return;
+  }
+
+  this.authFeedback(
+    feedbackId,
+    mode === 'register'
+      ? 'Cuenta creada. Preparando tu investigación...'
+      : 'Sesión iniciada. Preparando tu investigación...',
+    'success'
+  );
+
+  /* Después se reemplaza por fetch() cuando exista el backend real. */
+  window.setTimeout(() => this.showScreen('case-card-screen'), 1200);
+},
+
  openApp(id){
   if(Caught.game.state.phase!=='investigation'||!Caught.apps[id])return;
   Caught.game.tick();if(Caught.game.state.phase!=='investigation')return;
@@ -314,6 +357,39 @@ Caught.main = {
   document.querySelectorAll('.dock [data-app]').forEach(b=>b.innerHTML=brandIcons[b.dataset.app]);
   U.$('.weather-card b').textContent='Buenos Aires';U.$('.weather-card strong').textContent='18°';
   this.renderCharacters();Caught.game.reset();
+  U.$('#start-button').onclick = () => this.showScreen('login-screen');
+  U.$('#create-account-button').onclick = () => {
+  this.showScreen('register-screen');
+};
+  U.$('#auth-login-form').addEventListener('submit', event => {
+  event.preventDefault();
+  this.submitAuth('login', event.currentTarget);
+});
+  U.$('#auth-register-form').addEventListener('submit', event => {
+  event.preventDefault();
+  this.submitAuth('register', event.currentTarget);
+});
+
+  document.querySelectorAll('.auth-password-toggle').forEach(button => {
+  button.onclick = () => {
+    const input = U.$('#' + button.dataset.passwordTarget);
+    const visible = input.type === 'text';
+
+    input.type = visible ? 'password' : 'text';
+    button.setAttribute('aria-pressed', String(!visible));
+    button.setAttribute(
+      'aria-label',
+      visible ? 'Mostrar contraseña' : 'Ocultar contraseña'
+    );
+  };
+});
+
+  U.$('#password-recovery').onclick = () => {
+  this.authFeedback(
+    'login-feedback',
+    'La recuperación estará disponible al conectar el backend.'
+  );
+};
   U.$('#start-button').onclick=()=>this.showScreen('case-card-screen');
   U.$('#expediente-button').onclick=()=>this.showScreen('briefing-screen');
   U.$('#characters-button').onclick=()=>this.showScreen('characters-screen');
