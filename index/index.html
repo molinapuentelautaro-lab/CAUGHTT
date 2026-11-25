@@ -21,6 +21,101 @@
       <svg class="landing-art" viewBox="-55 -50 420 470" role="img" aria-label="Teléfono con lupa y corazón partido"><g transform="rotate(18 150 185)"><rect x="55" y="20" width="180" height="330" rx="28" fill="#000" stroke="#fff" stroke-width="12"/><path d="M112 22H178V33Q178 43 168 43H122Q112 43 112 33Z" fill="#fff"/><circle cx="155" cy="175" r="78" fill="#000" stroke="#fff" stroke-width="12"/><path d="M211 231L279 299" stroke="#fff" stroke-width="28" stroke-linecap="round"/><path d="M155 150C137 121 103 132 103 160C103 188 133 214 155 230C177 214 207 188 207 160C207 132 173 121 155 150Z" fill="#E6007F"/><path d="M155 146L148 166L160 179L150 196L159 210L155 231" stroke="#000" stroke-width="6"/></g></svg>
     </section>
 
+    <!-- Acceso preparado para conectar el backend de usuarios. -->
+<section id="login-screen" class="screen auth-screen" aria-labelledby="login-title">
+  <div class="auth-panel">
+    <button class="auth-back" data-screen="start-screen" type="button" aria-label="Volver al inicio">‹</button>
+
+    <img class="auth-logo" src="../img/interfaz/logo-etapa12.png" alt="Logo de CAUGHT!">
+    <h1>CAUGHT!</h1>
+    <p class="auth-tagline">Tu investigación te espera</p>
+
+    <h2 id="login-title">Iniciar sesión</h2>
+    <p class="auth-description">Guardá tu progreso y continuá desde donde quedaste.</p>
+
+    <form id="auth-login-form" class="auth-form" novalidate>
+      <label for="login-email">Correo electrónico</label>
+      <div class="auth-input">
+        <span class="auth-input-icon" aria-hidden="true">✉</span>
+        <input id="login-email" name="email" type="email" autocomplete="email"
+          placeholder="nombre@correo.com" required>
+      </div>
+
+      <label for="login-password">Contraseña</label>
+      <div class="auth-input">
+        <span class="auth-input-icon" aria-hidden="true">▣</span>
+        <input id="login-password" name="password" type="password"
+          autocomplete="current-password" placeholder="••••••••" minlength="6" required>
+        <button class="auth-password-toggle" data-password-target="login-password"
+          type="button" aria-label="Mostrar contraseña">◉</button>
+      </div>
+
+      <button id="password-recovery" class="auth-recovery" type="button">
+        ¿Olvidaste tu contraseña?
+      </button>
+
+      <p id="login-feedback" class="auth-feedback" role="status" hidden></p>
+
+      <button class="auth-submit" type="submit">
+        Ingresar a la investigación <span aria-hidden="true">→</span>
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      ¿Todavía no tenés una cuenta?
+      <button id="create-account-button" type="button">Crear cuenta</button>
+    </p>
+  </div>
+</section>
+
+<section id="register-screen" class="screen auth-screen" aria-labelledby="register-title">
+  <div class="auth-panel auth-panel-register">
+    <button class="auth-back" data-screen="login-screen" type="button"
+      aria-label="Volver a iniciar sesión">‹</button>
+
+    <img class="auth-logo" src="../img/interfaz/logo-etapa12.png" alt="Logo de CAUGHT!">
+    <h1>CAUGHT!</h1>
+    <p class="auth-tagline">Tu investigación te espera</p>
+
+    <h2 id="register-title">Crear cuenta</h2>
+    <p class="auth-description">Completá tus datos para comenzar tu investigación.</p>
+
+    <form id="auth-register-form" class="auth-form" novalidate>
+      <label for="register-name">Nombre de usuario</label>
+      <div class="auth-input">
+        <span class="auth-input-icon" aria-hidden="true">♙</span>
+        <input id="register-name" name="name" type="text" autocomplete="username"
+          placeholder="Nombre de usuario" minlength="3" required>
+      </div>
+
+      <label for="register-email">Correo electrónico</label>
+      <div class="auth-input">
+        <span class="auth-input-icon" aria-hidden="true">✉</span>
+        <input id="register-email" name="email" type="email" autocomplete="email"
+          placeholder="nombre@correo.com" required>
+      </div>
+
+      <label for="register-password">Contraseña</label>
+      <div class="auth-input">
+        <span class="auth-input-icon" aria-hidden="true">▣</span>
+        <input id="register-password" name="password" type="password"
+          autocomplete="new-password" placeholder="Mínimo 6 caracteres"
+          minlength="6" required>
+        <button class="auth-password-toggle" data-password-target="register-password"
+          type="button" aria-label="Mostrar contraseña">◉</button>
+      </div>
+
+      <p id="register-feedback" class="auth-feedback" role="status" hidden></p>
+
+      <button class="auth-submit" type="submit">
+        Crear cuenta <span aria-hidden="true">→</span>
+      </button>
+    </form>
+
+    <button class="auth-return" data-screen="login-screen" type="button">← Volver</button>
+  </div>
+ </section>
+
     <section id="case-card-screen" class="screen flow-screen">
       <div class="flow-panel">
         <div class="brand-mark"><span class="brand-icon"><img src="../img/interfaz/logo-etapa12.png" alt="Logo de CAUGHT!"></span><h1>CAUGHT!</h1></div>
